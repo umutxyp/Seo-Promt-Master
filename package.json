@@ -1,0 +1,18 @@
+{
+  "name": "url-sniper-v13",
+  "version": "3.0.0",
+  "description": "Umut Bayraktar Discord.js v13 Discord Server URL Sniper Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "UmutBayraktar",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "orio.db": "^3.0.9",
+    "request": "^2.88.2"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
