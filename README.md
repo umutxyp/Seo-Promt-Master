@@ -11,11 +11,5 @@ Facebook: https://facebook.com/1umutda/<br>
 Instagram: https://instagram.com/1umutda/<br>
 Github: https://github.com/1umutda/<br>
 Discord: https://discord.gg/Vpqu746haB<br>
-<hr>
-Other:<br>
-Discord Bot Coding Tutorials: https://bit.ly/3qyhx66<br>
-Creating a Discord Bot Blog: https://bit.ly/3tvN2iR<br>
-
-
 
 
