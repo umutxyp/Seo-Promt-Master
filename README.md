@@ -7,9 +7,9 @@ Discord Developers: https://discord.dev<br>
 Discord Permission: https://bit.ly/3L4RZpi<br>
 <hr>
 Follow Me Social Media<br>
-Facebook: https://facebook.com/1umutda/<br>
-Instagram: https://instagram.com/1umutda/<br>
-Github: https://github.com/1umutda/<br>
+Facebook: https://facebook.com/umutxyp/<br>
+Instagram: https://instagram.com/umutxyp/<br>
+Github: https://github.com/umutxyp/<br>
 Discord: https://discord.gg/Vpqu746haB<br>
 
 
