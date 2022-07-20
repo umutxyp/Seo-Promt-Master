@@ -1,18 +1,25 @@
 {
-  "name": "url-sniper-v13",
+  "name": "vanity-url-sniper-v14",
   "version": "3.0.0",
-  "description": "Umut Bayraktar Discord.js v13 Discord Server URL Sniper Bot",
+  "description": "Umut Bayraktar youtube special discord vanity url sniper bot. Support for d.js v14",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "author": "UmutBayraktar",
-  "dependencies": {
-    "discord.js": "^13.6.0",
-    "orio.db": "^3.0.9",
-    "request": "^2.88.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umutxyp/Discord-Vanity-URL-Sniper.git"
   },
-  "engines": {
-    "node": "16.x"
+  "author": "umutxyp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/umutxyp/Discord-Vanity-URL-Sniper/issues"
+  },
+  "homepage": "https://github.com/umutxyp/Discord-Vanity-URL-Sniper#readme",
+  "dependencies": {
+    "discord.js": "^14.0.3",
+    "fs": "^0.0.1-security",
+    "orio.db": "^3.1.2",
+    "request": "^2.88.2"
   }
 }
