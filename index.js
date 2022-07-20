@@ -34,7 +34,7 @@ delete require.cache[require.resolve(`./events/${file}`)];
 
 
 client.login(config.TOKEN || process.env.TOKEN).catch(e => {
-console.log("Your Bot Toen is Invalid Or Your Bot's INTENTS Are OFF!")
+console.log("Your Bot Token is Invalid Or Your Bot's INTENTS Are OFF!")
 })
 
 const express = require("express");
