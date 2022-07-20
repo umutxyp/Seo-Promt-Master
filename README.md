@@ -1,5 +1,5 @@
 # Discord-Vanity-URL-Sniper
-Discord.js v13 Compatible Discord Custom Vanity Url Sniper Bot Engine and Codes are Now Free With This Infrastructure You Will Know that You Can Get the Custom Url You Want to Your Discord Server with This Infrastructure!
+Discord.js v14 Compatible Discord Custom Vanity Url Sniper Bot Engine and Codes are Now Free With This Infrastructure You Will Know that You Can Get the Custom Url You Want to Your Discord Server with This Infrastructure!
 <hr>
 Youtube: https://bit.ly/3zgizYR<br>
 Download NodeJS: https://nodejs.org/<br>
