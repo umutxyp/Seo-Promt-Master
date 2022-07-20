@@ -1,14 +1,14 @@
 const db = require("orio.db")
 const config = require("../config.js");
 module.exports = async (client) => {
-
+let arr = true
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity(`Umut Bayraktar ♥ Vanity URL Sniper | v3.0.0`, { type: "WATCHING" });
     client.user.setStatus("online");
   
     const creq = require("request")
     db.delete("urlsniper")
-  setInterval(() => {
+  setInterval(async() => {
     if(db.get("urlsniper")){
       
     } else {
@@ -26,7 +26,14 @@ module.exports = async (client) => {
             console.log(config.url +" Named Custom URL Successfully Received and Bot Stopped Working!")
           }
         } else {
-      start()
+         client.fetchInvite(config.url).then(ub => {
+          if(ub == "DiscordAPIError: Unknown Invite"){
+  
+          } else {
+          console.log(`${config.url} Bot Launched To Get Vanity Discord Server URL Named!`)
+          arr = false
+           }
+         }).catch(e => {})
         }
       } else {
         console.log('url in config.js File: Where It Says "" Please Enter Custom URL to Get!')
@@ -41,16 +48,15 @@ module.exports = async (client) => {
       console.log('Status in config.js File to Start Bot: Where It Says "false" You Need To Type true Instead Of False!');
     }
     }
-  }, config.botRun)
-  function start() {
-    console.log(`${config.url} Bot Launched To Get Vanity Discord Server URL Named!`)
-    const url = {
-        url: `https://discord.com/api/v10/guilds/${config.serverID}/vanity-url`,
+
+        if(!arr === false){
+       const url = {
+        url: `https://discord.com/api/v9/guilds/${config.serverID}/vanity-url`,
         body: {
           code: `${config.url}`
         },
         json: true,
-        method: 'PATCH',
+        method: 'patch',
         headers: {
           "Authorization": `Bot ${config.TOKEN}`
         }
@@ -60,6 +66,8 @@ module.exports = async (client) => {
           return console.log(err);
         }
       })
-  }
+        }
+    
+  }, config.botRun)
   
 }
