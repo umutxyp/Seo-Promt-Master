@@ -51,7 +51,7 @@ let arr = true
 
         if(!arr === false){
        const url = {
-        url: `https://discord.com/api/v9/guilds/${config.serverID}/vanity-url`,
+        url: `https://discord.com/api/v10/guilds/${config.serverID}/vanity-url`,
         body: {
           code: `${config.url}`
         },
