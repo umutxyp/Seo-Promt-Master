@@ -7,13 +7,5 @@ Download Visual Studio Code: https://code.visualstudio.com/download<br>
 Discord Developers: https://discord.dev<br>
 Discord Permission: https://bit.ly/3L4RZpi<br>
 <hr>
-Follow Me Social Media<br>
-Twitch Yayınları: https://twitch.com/umutxyp<br>
-Github: https://github.com/umutxyp<br>
-Instagram: https://instagram.com/umutxyp<br>
-Twitter: https://twitter.com/devbayraktar<br>
-Facebook: https://facebook.com/umutxyp<br>
-Pinterest: https://pinterest.com/umutxyp<br>
-TikTok: https://www.tiktok.com/@umutxyp
-
+<h1>Support: https://discord.gg/codes</h1><br>
 
