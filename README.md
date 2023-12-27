@@ -4,7 +4,7 @@ Discord.js v14 Compatible Discord Custom Vanity Url Sniper Bot Engine and Codes 
 <hr>
 <h1><a href="https://codeshare.me/c/mqtvkw691wmmoq35">Buy Discord Vanity URL Sniper Unencrypted and Advanced Version</a></h1>
 <br>
-<h1><a href="https://blog.codeshare.me/2023/12/discord-vanity-url-sniper-usage.html">Discord Vanity Url Sniper Usage?</a></h1>
+<h1><a href="https://blog.codeshare.me/2023/12/discord-vanity-url-sniper-usage.html">Discord Vanity Url Sniper Usage and TOS?</a></h1>
 <br>
 Download NodeJS: https://nodejs.org/<br>
 Download Visual Studio Code: https://code.visualstudio.com/download<br>
