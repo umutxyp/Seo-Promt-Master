@@ -1,7 +1,7 @@
 # Discord-Vanity-URL-Sniper
 Discord.js v14 Compatible Discord Custom Vanity Url Sniper Bot Engine and Codes are Now Free With This Infrastructure You Will Know that You Can Get the Custom Url You Want to Your Discord Server with This Infrastructure!
 <br>
-The free version does not have the following features and has a time limit of 4 seconds.
+<p>The free version does not have the following features and has a time limit of 4 seconds. In the free version, certain parts are encrypted code and not open source.</p>
 <hr>
 <h1><a href="https://codeshare.me/c/mqtvkw691wmmoq35">Buy Discord Vanity URL Sniper Unencrypted and Advanced Version</a></h1>
 <h3>Paid Version Features:</h3>
