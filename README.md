@@ -9,6 +9,7 @@ Discord.js v14 Compatible Discord Custom Vanity Url Sniper Bot Engine and Codes 
 - You can adjust the bot status.<br>
 - There is a log feature that notifies your Discord server. (If the urlyi system receives it, it gives you quick information.)<br>
 - The ability to set the working status alone.
+- Completely open source code.
 <hr>
 <br>
 <h1><a href="https://blog.codeshare.me/2023/12/discord-vanity-url-sniper-usage.html">Discord Vanity Url Sniper Usage and TOS?</a></h1>
