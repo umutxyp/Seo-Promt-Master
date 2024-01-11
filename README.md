@@ -5,9 +5,9 @@ The free version does not have the following features and has a time limit of 4 
 <hr>
 <h1><a href="https://codeshare.me/c/mqtvkw691wmmoq35">Buy Discord Vanity URL Sniper Unencrypted and Advanced Version</a></h1>
 <h3>Paid Version Features:</h3>
-- You can adjust the working speed according to your request. It works at 1 millisecond speed if you want.
-- You can adjust the bot status.
-- There is a log feature that notifies your Discord server. (If the urlyi system receives it, it gives you quick information.)
+- You can adjust the working speed according to your request. It works at 1 millisecond speed if you want.<br>
+- You can adjust the bot status.<br>
+- There is a log feature that notifies your Discord server. (If the urlyi system receives it, it gives you quick information.)<br>
 - The ability to set the working status alone.
 <hr>
 <br>
