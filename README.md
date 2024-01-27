@@ -3,7 +3,7 @@ Discord.js v14 Compatible Discord Custom Vanity Url Sniper Bot Engine and Codes 
 <br>
 <p>The free version does not have the following features and has a time limit of 4 seconds. In the free version, certain parts are encrypted code and not open source.</p>
 <hr>
-<h1><a href="https://codeshare.me/c/t0w76lzdqc3ocnnl">Free Version</a></h1>
+<h1><a href="https://codeshare.me/c/t0w76lzdqc3ocnnl">Click Go Free Version</a></h1>
 <h1><a href="https://codeshare.me/c/mqtvkw691wmmoq35">Buy Discord Vanity URL Sniper Unencrypted and Advanced Version</a></h1>
 <h3>Paid Version Features:</h3>
 - You can adjust the working speed according to your request. It works at 1 millisecond speed if you want.<br>
