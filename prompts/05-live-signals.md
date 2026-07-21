@@ -42,10 +42,11 @@ which pages you picked in the output.
 3. **Live sitemap** (`docs/06`) — confirm the page appears in the deployed sitemap with a
    plausible `lastmod`. Flag any `public-index` page missing from it, or any URL present that
    should be `noindex`/private.
-4. **Site health** (once per domain) — HTTPS enforcement and `robots.txt` configuration.
-   Cross-check against `checklists/infrastructure-checklist.md`'s robots.txt section. If the
-   tool also reports HSTS or other security headers, note them as operational hygiene only —
-   they are not SEO ranking factors and are not sourced as such in this repo's knowledge base.
+4. **Site health** (once per domain) — `robots.txt` configuration. Cross-check against
+   `checklists/infrastructure-checklist.md`'s robots.txt section. If the tool also reports
+   HTTPS enforcement, HSTS, or other security headers, note them as operational hygiene
+   only — they are not SEO ranking factors and are not sourced as such in this repo's
+   knowledge base.
 5. **Prioritization context** (optional, once per domain) — if the tool exposes domain
    authority or backlink data, use it only to help order the Phase 3 backlog (e.g. fix a
    crawl-blocking bug on an already well-linked page before a cosmetic one elsewhere). Never
