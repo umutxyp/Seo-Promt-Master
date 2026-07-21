@@ -35,14 +35,17 @@ which pages you picked in the output.
    canonical, robots meta, and JSON-LD. Diff against the Phase 2 findings for that route in
    `SEO-AUDIT-PROGRESS.md`. A mismatch is a new finding — note the likely cause (redirect
    chain, CDN/edge rewrite, environment-specific config, middleware stripping something).
-2. **Live Core Web Vitals** (`docs/05`) — LCP, CLS, INP, FCP, TTFB (mobile at minimum,
+2. **Live Core Web Vitals** (`docs/05`) — LCP, CLS, INP, and TTFB (mobile at minimum,
    desktop too if the tool and budget allow). Compare against `docs/05`'s thresholds. Anything
-   outside "Good" is a new P2/P3 finding.
+   outside "Good" is a new P2/P3 finding. If the tool also reports FCP, note it for reference
+   only — `docs/05` does not document a "Good" threshold for FCP.
 3. **Live sitemap** (`docs/06`) — confirm the page appears in the deployed sitemap with a
    plausible `lastmod`. Flag any `public-index` page missing from it, or any URL present that
    should be `noindex`/private.
-4. **Site health** (once per domain) — HTTPS enforcement, HSTS, security headers,
-   `robots.txt`. Cross-check against `checklists/infrastructure-checklist.md`.
+4. **Site health** (once per domain) — HTTPS enforcement and `robots.txt` configuration.
+   Cross-check against `checklists/infrastructure-checklist.md`'s robots.txt section. If the
+   tool also reports HSTS or other security headers, note them as operational hygiene only —
+   they are not SEO ranking factors and are not sourced as such in this repo's knowledge base.
 5. **Prioritization context** (optional, once per domain) — if the tool exposes domain
    authority or backlink data, use it only to help order the Phase 3 backlog (e.g. fix a
    crawl-blocking bug on an already well-linked page before a cosmetic one elsewhere). Never

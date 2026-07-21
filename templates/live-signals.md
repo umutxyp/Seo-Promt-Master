@@ -20,7 +20,7 @@ _(repeat per sampled page)_
 
 ## Domain-level
 
-- **Site health:** <HTTPS/HSTS/security headers/robots.txt findings>
+- **Site health:** <HTTPS enforcement & robots.txt findings (scored); HSTS/security headers if noted (informational only)>
 - **Prioritization context (optional):** <domain authority / backlink notes, if used — context
   only, not an issue>
 
