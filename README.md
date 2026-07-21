@@ -51,12 +51,13 @@ Read `docs/` as a clean, current reference for Google SEO. Start at [`docs/READM
 ```
 seo-prompt-master/
 ├── START.md                  ← the bootstrap prompt (AI reads this first)
-├── prompts/                  ← the 5-phase workflow
+├── prompts/                  ← the 5-phase workflow (+ 1 optional)
 │   ├── 00-bootstrap.md          detect stack + load knowledge base
 │   ├── 01-discover-routes.md    enumerate & classify every route
 │   ├── 02-audit-page.md         9-point audit per public page
 │   ├── 03-prioritize-fixes.md   one ordered backlog (infra-first)
-│   └── 04-apply-and-verify.md   fix + typecheck/lint/build + prove it
+│   ├── 04-apply-and-verify.md   fix + typecheck/lint/build + prove it
+│   └── 05-live-signals.md       optional: cross-check against live production via MCP
 ├── docs/                     ← the knowledge base (source of truth)
 │   ├── 01-meta-and-head.md
 │   ├── 02-internationalization.md
@@ -72,7 +73,8 @@ seo-prompt-master/
 │   └── infrastructure-checklist.md
 ├── templates/                ← output files the AI fills in
 │   ├── routes-inventory.md
-│   └── audit-progress.md
+│   ├── audit-progress.md
+│   └── live-signals.md
 └── examples/                 ← a worked example
 ```
 
@@ -88,7 +90,8 @@ START.md
   │                               classify: public-index / public-noindex / private
   ├─ Phase 2  Audit ............. 9-point check per public page → SEO-AUDIT-PROGRESS.md
   ├─ Phase 3  Prioritize ........ one backlog, infra-first (P1 → P2 → P3)
-  └─ Phase 4  Fix & verify ...... change → typecheck/lint/build → prove → tick
+  ├─ Phase 4  Fix & verify ...... change → typecheck/lint/build → prove → tick
+  └─ Phase 5  Live signals ...... optional: cross-check against live production via MCP
 ```
 
 ---
