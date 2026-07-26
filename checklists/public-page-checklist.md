@@ -28,6 +28,7 @@ Run this against **every `public-index` page**. Each item cites its knowledge-ba
 
 ## Rendering & performance
 - [ ] Primary content in server-rendered HTML (not CSR-only) — `docs/05`
+- [ ] Mobile-rendered DOM has the same content, headings, links, and structured data as desktop (mobile-first indexing) — `docs/05`
 - [ ] Real 404 for missing entities (no soft-404) — `docs/05`
 - [ ] LCP image eager + `fetchpriority=high`, not lazy — `docs/05`,`docs/07`
 - [ ] Below-fold images `loading="lazy"` — `docs/07`
