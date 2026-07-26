@@ -17,6 +17,7 @@
 
 - ✅ Use `hreflang` so Search serves the right language/region version. Provide it via HTML `<link rel="alternate" hreflang>`, HTTP `Link` headers (for non-HTML), **or** XML sitemap `xhtml:link`.
 - ✅ **Bidirectional & self-referential:** every version must list **itself** and **all** other versions. If page A links to B but B doesn't link back to A, **Google ignores the annotations**.
+- **How to verify (for an AI agent, not just eyeballing one page):** pick a representative page, collect its full hreflang set, then open each linked locale URL in turn and confirm its own hreflang set lists the original URL back — treat this as a template check (verify it once per locale-template, not on every single page) and flag any locale whose reciprocity breaks.
 - ✅ Codes: ISO 639-1 language + optional ISO 3166-1 Alpha-2 region (`en`, `en-GB`, `de-CH`, `zh-Hans`). A region code **cannot** stand alone. `UK`, `EU`, `UN` are invalid.
 - ✅ URLs must be **fully qualified** (include `https://`), not protocol-relative or root-relative.
 - ✅ Add `x-default` for the fallback when no language matches.

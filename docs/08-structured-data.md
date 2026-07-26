@@ -24,11 +24,11 @@
 | Listing / category | `ItemList` / `CollectionPage` |
 | User / author profile | `ProfilePage` + `Person` |
 | Forum thread | `DiscussionForumPosting` (2024+ recommended) or `QAPage` |
-| FAQ (visible Q&A) | `FAQPage` |
+| FAQ (visible Q&A) | `FAQPage` — ⚠️ since Aug 2023 the **rich result** is restricted to well-known, authoritative government and health sites; other sites can still emit valid `FAQPage` markup, but don't promise a rich-result CTR lift for it |
 | Downloadable app/tool | `SoftwareApplication` / `WebApplication` |
 | Glossary / catalog of terms | `DefinedTermSet` + `DefinedTerm` |
 | Video | `VideoObject` |
-| How-to, recipe, event, etc. | matching type per Google's gallery |
+| How-to, recipe, event, etc. | matching type per Google's gallery — ⚠️ `HowTo` rich results were also deprecated (Sept 2023, desktop); markup is still valid schema.org, just no longer eligible for that rich result |
 
 - ⚠️ Don't invent types. `GameServer`, `Studio`, etc. are **not** real schema.org types and Google ignores them. Check https://schema.org before using a type.
 

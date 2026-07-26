@@ -35,6 +35,12 @@
 - ❌ Don't use JS to point canonical at a **different** URL than the HTML.
 - Pattern: pages reachable by multiple keys (id vs slug, case, tracking params) should canonicalize to **one** URL and 301/redirect the rest.
 
+## Redirects
+
+- ✅ Use **301** (permanent) for URLs that have moved for good — it passes ranking signals to the target and is what Google recrawls to update its index. Use **302** (temporary) only for genuinely short-lived redirects (A/B tests, temporary maintenance) — a 302 left in place for months is a common bug, not a valid long-term pattern.
+- ❌ Avoid **redirect chains** (A → B → C) and **loops** (A → B → A); resolve every internal link and canonical directly to the final URL. Each extra hop adds crawl cost and risk of Google not following the whole chain.
+- ✅ A redirected URL's **content should match the destination's intent** — don't redirect unrelated pages to the homepage as a catch-all; that's frequently treated as a soft-404.
+
 ## Sources
 - SEO Starter Guide — https://developers.google.com/search/docs/fundamentals/seo-starter-guide
 - Title links — https://developers.google.com/search/docs/appearance/title-link
