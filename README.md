@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-78c51c.svg)](LICENSE)
 [![Docs: Google Search Central](https://img.shields.io/badge/docs-Google%20Search%20Central-4285F4.svg)](https://developers.google.com/search)
-[![Works with](https://img.shields.io/badge/works%20with-Claude%20·%20GPT%20·%20Gemini%20·%20Cursor-000.svg)](#-how-to-use)
+[![Works with](https://img.shields.io/badge/works%20with-Claude%20·%20GPT%2FCodex%20·%20Gemini%20·%20Grok%20·%20Cursor-000.svg)](#-how-to-use)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 </div>
@@ -30,13 +30,15 @@ You don't read a 200-page guide and try to remember it. You hand the whole thing
 
 ## 🚀 How to use
 
-### Option A — inside an AI coding tool (Claude Code, Cursor, Copilot, Gemini CLI, …)
+**Not tied to any one AI vendor.** Every phase is a plain markdown prompt — any assistant that can read files and follow instructions can run it.
+
+### Option A — inside an AI coding agent (Claude Code, OpenAI Codex CLI, Cursor, Windsurf, GitHub Copilot, Amp, Gemini CLI, Grok/xAI agents, …)
 1. Copy this folder into your project (or open it alongside your repo).
-2. Tell your assistant:
+2. Most agents auto-discover **`AGENTS.md`** at the repo root and start on their own. If yours doesn't, tell it:
    > **"Read `START.md` and run the workflow on this project."**
 3. It will produce `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md`, then fix issues page by page, verifying as it goes.
 
-### Option B — chat assistant (Claude, ChatGPT, Gemini web)
+### Option B — chat assistant (Claude, ChatGPT, Gemini web, Grok, …)
 1. Paste the contents of `START.md` (and, if it fits, the `docs/`).
 2. Give it your repo (zip, paste files, or connect the tool to your codebase).
 3. Say **"Begin at Phase 0."**
@@ -50,6 +52,7 @@ Read `docs/` as a clean, current reference for Google SEO. Start at [`docs/READM
 
 ```
 seo-prompt-master/
+├── AGENTS.md                 ← universal entry point (auto-discovered by most agents)
 ├── START.md                  ← the bootstrap prompt (AI reads this first)
 ├── prompts/                  ← the 5-phase workflow
 │   ├── 00-bootstrap.md          detect stack + load knowledge base
