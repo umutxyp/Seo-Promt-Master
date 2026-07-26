@@ -20,7 +20,8 @@
 | Any page | `WebPage` + `BreadcrumbList` |
 | Home | + `WebSite` (with `SearchAction`) + `Organization` (add `sameAs` linking to Wikidata/LinkedIn/Crunchbase/official social profiles — the strongest entity-disambiguation signal for both classic knowledge-panel eligibility and GEO cross-engine entity resolution, `docs/10`) |
 | Article / blog post | `Article` / `BlogPosting` / `NewsArticle` |
-| Product / item with ratings | `Product` + `AggregateRating` + `Review` |
+| Product / item with ratings | `Product` + `AggregateRating` + `Review` — required `Product` properties: `name`, `image`, `offers` (with `price`, `priceCurrency`, `availability`). `aggregateRating` needs `ratingValue`, `ratingCount`, `bestRating`/`worstRating`; Google generally wants a **minimum review count (commonly ~10+)** before showing stars, and reviews must **genuinely exist on the page** — don't mark up reviews sourced from elsewhere without attribution, and never mark up incentivized/compensated reviews (a live policy-enforcement area — Google has been actively removing violating reviews and banner-flagging offending listings) |
+| Local business (physical location) | `LocalBusiness` (or a more specific subtype like `ProfessionalService`/`Restaurant` — prefer the specific subtype, it improves rich-result and AI entity-classification eligibility over generic `LocalBusiness`). Required: `name`, `url`; strongly expected: `address`, `telephone`, `openingHours`, `sameAs`. **NAP consistency is critical:** the name/address/phone in this schema must match the Google Business Profile listing **exactly** (same formatting, abbreviations, capitalization) — a mismatch undermines trust signals rather than helping them |
 | Listing / category | `ItemList` / `CollectionPage` |
 | User / author profile | `ProfilePage` + `Person` |
 | Forum thread | `DiscussionForumPosting` (2024+ recommended) or `QAPage` |
@@ -41,3 +42,6 @@
 - Intro to structured data — https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
 - Structured data general policies — https://developers.google.com/search/docs/appearance/structured-data/sd-policies
 - Search gallery (all types) — https://developers.google.com/search/docs/appearance/structured-data/search-gallery
+- Merchant listing / Product structured data — https://developers.google.com/search/docs/appearance/structured-data/merchant-listing
+- Review snippet policies — https://developers.google.com/search/docs/appearance/structured-data/review-snippet
+- Local Business structured data — https://developers.google.com/search/docs/appearance/structured-data/local-business

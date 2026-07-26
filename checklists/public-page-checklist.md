@@ -16,8 +16,10 @@ Run this against **every `public-index` page**. Each item cites its knowledge-ba
 
 ## Structured data
 - [ ] `WebPage` + `BreadcrumbList` — `docs/08`
-- [ ] Type-appropriate schema (Article/Product/ItemList/ProfilePage/FAQPage/…) — `docs/08`
+- [ ] Type-appropriate schema (Article/Product/ItemList/ProfilePage/FAQPage/LocalBusiness/…) — `docs/08`
 - [ ] Reflects **only visible** content; valid schema.org type — `docs/08`
+- [ ] Product pages: `name`/`image`/`offers`(price+currency+availability) present; any `aggregateRating`/`review` reflects real, non-incentivized reviews actually on the page — `docs/08`
+- [ ] Local-business pages: NAP (name/address/phone) matches the Google Business Profile exactly — `docs/08`
 
 ## Structure & links
 - [ ] Exactly one `<h1>` — `docs/04`

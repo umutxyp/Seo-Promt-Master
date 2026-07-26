@@ -14,14 +14,14 @@ This doc turns every other `docs/` section into two **deterministic, out-of-100 
 
 | Category | Points | Source | What earns full points |
 |---|---:|---|---|
-| Indexability & crawl foundation | 25 | `docs/01`, `docs/06` | Correct `index,follow` (no noindex+Disallow conflict), self-referential canonical, no redirect chains/loops, page present in an accurate sitemap |
+| Indexability & crawl foundation | 25 | `docs/01`, `docs/06` | Correct `index,follow` (no noindex+Disallow conflict), self-referential canonical, no redirect chains/loops, single consolidated HTTPS host (no live `www`/non-`www`/`http` duplicate), page present in an accurate sitemap |
 | Rendering & mobile parity | 20 | `docs/05` | Primary content in initial server-rendered HTML, real 404s (no soft-404), mobile-rendered DOM matches desktop content |
 | Structured data | 15 | `docs/08` | Baseline `WebPage`+`BreadcrumbList` present, type-appropriate schema for the page, `Organization`/`Person` entities carry `sameAs` |
 | Metadata quality | 10 | `docs/01` | Unique, descriptive title + description (not boilerplate), complete OG/Twitter tags |
 | Internationalization | 10 | `docs/02` | Bidirectional self-referential `hreflang` + `x-default`, valid ISO codes — **if the project is not multilingual, redistribute these 10 points into Metadata quality (→20 total)**, don't just drop them |
 | Headings, semantics & links | 10 | `docs/03`, `docs/04` | One `<h1>`, semantic landmarks, crawlable internal links with descriptive anchors, real paginated `?page=n` links, correct UGC/sponsored `rel` |
 | Images | 5 | `docs/07` | Descriptive `alt`, explicit `width`/`height`, correct eager/lazy split |
-| Core Web Vitals | 5 | `docs/05` | LCP/CLS/INP scored "Good" — use **real measured values** if Phase 5 ran for that page; otherwise score from the source-code heuristics (eager LCP image, no unbatched long JS tasks, explicit image dimensions) and label this row `(heuristic, not measured)` |
+| Core Web Vitals | 5 | `docs/05` | LCP/CLS/INP scored "Good" — use **real CrUX/field-data values** if Phase 5 (or another live tool) provided them for that page; otherwise score from the source-code heuristics (eager LCP image, no unbatched long JS tasks, explicit image dimensions) and label this row `(heuristic, not measured)` since it is not the same thing as CrUX |
 
 ## GEO Score (0–100, one score per project — mostly domain-level, not per-page)
 

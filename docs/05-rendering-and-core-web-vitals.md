@@ -42,9 +42,16 @@ If a list/detail page fetches its data client-side (`useEffect` + `fetch`) with 
 - **INP:** break up long JS tasks (>50 ms) with yield points (`scheduler.yield()`, `async/await`), code-split, and remove unused JS.
 - **CLS:** set explicit `width`/`height` (or `aspect-ratio`) on images; animate `transform`/`opacity`, not layout properties (`margin`/`top`/`left`).
 
+## Field data vs. lab data (know which one you're actually reporting)
+
+- ⚠️ **Google's ranking-relevant Core Web Vitals come from CrUX field data** — real Chrome users' actual page loads over the trailing 28 days — not from a single simulated Lighthouse/PageSpeed run. A perfect Lighthouse score does **not** guarantee a page passes Core Web Vitals, and a page can fail CrUX while looking fine in one lab run.
+- ✅ Without a live tool (Phase 5, `docs/10`), an audit can only produce **lab-style, source-code-derived heuristics** (is the LCP image eager? are images dimensioned?) — this correlates with but is **not the same measurement** as CrUX. Always label CWV findings from a source-only audit as heuristic estimates, never as "the page's CWV score."
+- ✅ If Phase 5 or another live tool provides real field/CrUX-based numbers, prefer those and say so explicitly — that's the only measurement that reflects what Google actually uses for ranking.
+
 ## Sources
 - JavaScript SEO basics — https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics
 - Dynamic rendering (workaround) — https://developers.google.com/search/docs/crawling-indexing/javascript/dynamic-rendering
 - Rendering on the web — https://developers.google.com/solutions/content-driven/hosting/rendering
 - Core Web Vitals — https://web.dev/articles/vitals · https://web.dev/blog/top-cwv-2023
 - Mobile-first indexing best practices — https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing
+- Chrome UX Report (CrUX) — https://developer.chrome.com/docs/crux
