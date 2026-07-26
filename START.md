@@ -26,7 +26,7 @@ You have been given a knowledge base (`docs/`), a set of step prompts (`prompts/
 
 ---
 
-## The Workflow (5 phases)
+## The Workflow (5 phases + 1 optional)
 
 Execute these in order. Each phase has a dedicated prompt file with the full instructions — open it and follow it.
 
@@ -51,6 +51,9 @@ Turn the findings into a single prioritized backlog: **P1 (indexing/crawl blocke
 ### Phase 4 — Fix & verify  → `prompts/04-apply-and-verify.md`
 Work the backlog top-down. Fix **shared infrastructure first** (metadata helper, sitemap, robots, i18n) because it fixes many pages at once, then per-page items. After each batch: typecheck → lint → build → verify the live/rendered output. Tick each item in `SEO-AUDIT-PROGRESS.md` as you complete it.
 
+### Phase 5 — Live signals (optional)  → `prompts/05-live-signals.md`
+If the project has a live public URL **and** an MCP-connected SEO data tool is available (e.g. [RankParse](https://rankparse.com/docs/mcp)), sample a handful of pages and cross-check them against production: live Core Web Vitals, a live page-SEO scrape, and live sitemap coverage — the things a source-code audit structurally cannot see. Record findings in **`SEO-AUDIT-PROGRESS.md`** using `templates/live-signals.md`, filed into the existing Phase 3 backlog. If no live URL or MCP tool is available, skip this phase and say so.
+
 ---
 
 ## What "done" means
@@ -64,6 +67,7 @@ You are done when **all** of the following are true and you can show evidence fo
 - [ ] Every `private` route is blocked in `robots.txt` and does not leak into the sitemap.
 - [ ] The XML sitemap covers exactly the `public-index` set (no disallowed URLs), with accurate `lastmod`.
 - [ ] Typecheck, lint, and build all pass. You have driven or rendered the changed routes and confirmed the output.
+- [ ] Phase 5 was either run against a sample of live pages, or explicitly skipped with a stated reason (no live URL / no connected MCP SEO tool).
 
 Print a final summary table: page → what changed → verification evidence.
 
