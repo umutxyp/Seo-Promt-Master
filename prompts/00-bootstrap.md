@@ -4,7 +4,9 @@
 
 ## Do this
 
-1. **Read the knowledge base.** Open every file in `docs/` (01–10) and hold the rules in memory. You will cite them by section throughout.
+1. **Read the knowledge base.** Open every file in `docs/` (01–11) and hold the rules in memory. You will cite them by section throughout.
+
+1a. **Match against `verticals/`.** Check `verticals/README.md`'s index — if the project matches one or more of the 24 industry playbooks there (e-commerce, SaaS, marketplace, Discord bot, Minecraft server list, etc.), read the matching file(s) too. These are additive overlays (vertical-specific schema types, pitfalls, GEO notes) on top of the standard audit, not a replacement for it — apply them alongside, not instead of, Phases 1–4.
 
 2. **Detect the stack.** Identify:
    - **Framework & version** (Next.js App/Pages Router, Nuxt, SvelteKit, Astro, Remix, Gatsby, Rails, Django, Laravel, Hugo/Jekyll, plain HTML, …).
@@ -37,5 +39,6 @@ Write a short report (to chat and/or the top of `SEO-AUDIT-PROGRESS.md`):
 - Multilingual? locales + URL strategy
 - Existing SEO infrastructure (what's already there — metadata helper, sitemap, robots, JSON-LD)
 - Verification commands (typecheck / lint / build)
+- Matched vertical(s) from `verticals/`, if any
 
 Then proceed to **Phase 1** (`prompts/01-discover-routes.md`).

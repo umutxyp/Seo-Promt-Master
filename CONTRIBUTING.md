@@ -16,6 +16,7 @@ Thanks for helping keep this current! Google's guidance changes often, and frame
 - 🧪 **Example** — a worked `ROUTES-INVENTORY.md` / `SEO-AUDIT-PROGRESS.md` for a real stack in `examples/`.
 - 🌐 **Translation** — a localized `docs/` set, in a sibling folder `docs-<lang>/` (e.g. `docs-tr/`, `docs-es/`) mirroring the same `01`–`11` numbering and filenames as `docs/`, so cross-references stay valid across languages.
 - 📄 **New topic doc** — if it doesn't fit an existing `docs/01`–`11` file, add it as `docs/12-<topic>.md` (next free number, kebab-case) and link it from `docs/README.md`; don't fold unrelated topics into an existing numbered file just to avoid adding one.
+- 🏭 **New vertical** — an industry-specific overlay goes in `verticals/` (next free number, kebab-case, see `verticals/README.md`). Keep it to what's genuinely specific to that niche (schema types, pitfalls, GEO notes) and cite `docs/` for anything universal — don't re-explain core mechanisms already covered there.
 
 ## How
 

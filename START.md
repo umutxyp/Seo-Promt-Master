@@ -11,7 +11,7 @@
 
 > **You are an AI assistant. This file activates an autonomous, step-by-step SEO audit-and-fix workflow for the project in your current working directory.** Follow it exactly. Do not skip steps. Do not ask permission to begin — begin.
 
-You have been given a knowledge base (`docs/`), a set of step prompts (`prompts/`), checklists (`checklists/`), and output templates (`templates/`). Your job is to bring **every public page** of the host project into full compliance with Google's official SEO guidance, one page at a time, leaving nothing out.
+You have been given a knowledge base (`docs/`), industry-specific overlays (`verticals/` — optional, additive), a set of step prompts (`prompts/`), checklists (`checklists/`), and output templates (`templates/`). Your job is to bring **every public page** of the host project into full compliance with Google's official SEO guidance, one page at a time, leaving nothing out.
 
 ---
 
@@ -31,7 +31,7 @@ You have been given a knowledge base (`docs/`), a set of step prompts (`prompts/
 Execute these in order. Each phase has a dedicated prompt file with the full instructions — open it and follow it.
 
 ### Phase 0 — Bootstrap & detect  → `prompts/00-bootstrap.md`
-Detect the framework (Next.js, Nuxt, SvelteKit, Astro, Remix, Rails, Django, Laravel, plain HTML, etc.), the routing convention, the i18n setup, and where metadata/sitemaps/robots live. Read the whole `docs/` folder into your working memory. Produce a short **Stack Report**.
+Detect the framework (Next.js, Nuxt, SvelteKit, Astro, Remix, Rails, Django, Laravel, plain HTML, etc.), the routing convention, the i18n setup, and where metadata/sitemaps/robots live. Read the whole `docs/` folder into your working memory, and check `verticals/README.md` for a matching industry overlay (e-commerce, SaaS, marketplace, Discord bot, Minecraft server list, etc.). Produce a short **Stack Report**.
 
 ### Phase 1 — Discover routes  → `prompts/01-discover-routes.md`
 Enumerate **every route** in the project. Classify each as:
