@@ -12,7 +12,7 @@ For each page, read the route file **and** its main component/template, then eva
 
 2. **Canonical + hreflang + redirects** (`docs/01`, `docs/02`) — Self-referential canonical to the page's own URL? If multilingual: bidirectional, self-referential `hreflang` set + `x-default`, valid ISO codes (verify reciprocity once per locale-template, see `docs/02`)? Any duplicate-URL variant that needs canonicalizing? Any internal link or canonical pointing through a **redirect chain** instead of directly to the final URL? Any 302 standing in for what should be a permanent 301?
 
-3. **Robots** (`docs/01`) — `index,follow` for real content. Is `noindex` (correctly) used only for the `public-noindex` bucket? Remember: a `robots.txt` `Disallow` **prevents Google from seeing a `noindex`** — never combine them for the same URL.
+3. **Robots** (`docs/01`) — `index,follow` for real content. Is `noindex` (correctly) used only for the `public-noindex` bucket? Remember: a `robots.txt` `Disallow` **prevents Google from seeing a `noindex`** — never combine them for the same URL. Once per project (not per page): does `robots.txt` deliberately address AI crawlers (GPTBot, Google-Extended, ClaudeBot, PerplexityBot, etc.) per `docs/10`, or is it silently defaulting to a template?
 
 4. **Structured data / JSON-LD** (`docs/08`) — **Baseline for every public page:** `WebPage` + `BreadcrumbList` (add this even if nothing else applies). On top of that baseline, is there also a type-appropriate schema for what the page *is* (Article/BlogPosting, Product+AggregateRating, ItemList/CollectionPage for lists, ProfilePage+Person, DiscussionForumPosting for forums, FAQPage, SoftwareApplication)? Does it reflect **only visible content**? JSON-LD (not Microdata) preferred.
 

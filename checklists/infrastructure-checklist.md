@@ -11,6 +11,7 @@ Shared systems that affect **many pages at once**. Fix these first — they give
 - [ ] `Disallow` covers all `private` routes (dashboard/admin/account/api) — `docs/01`
 - [ ] Does **not** `Disallow` any page you want `noindex`-ed (use meta noindex instead) — `docs/01`
 - [ ] References the sitemap (`Sitemap:` line) — `docs/06`
+- [ ] AI crawlers (GPTBot, Google-Extended, ClaudeBot, PerplexityBot, OAI-SearchBot, etc.) are deliberately addressed, not left to template defaults — `docs/10`
 
 ## XML sitemap
 - [ ] Covers exactly the `public-index` set — `docs/06`

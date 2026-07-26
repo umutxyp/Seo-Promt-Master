@@ -4,7 +4,7 @@
 
 ## Do this
 
-1. **Read the knowledge base.** Open every file in `docs/` (01–09) and hold the rules in memory. You will cite them by section throughout.
+1. **Read the knowledge base.** Open every file in `docs/` (01–10) and hold the rules in memory. You will cite them by section throughout.
 
 2. **Detect the stack.** Identify:
    - **Framework & version** (Next.js App/Pages Router, Nuxt, SvelteKit, Astro, Remix, Gatsby, Rails, Django, Laravel, Hugo/Jekyll, plain HTML, …).
