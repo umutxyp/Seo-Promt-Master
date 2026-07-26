@@ -35,6 +35,12 @@
 - ❌ Don't use JS to point canonical at a **different** URL than the HTML.
 - Pattern: pages reachable by multiple keys (id vs slug, case, tracking params) should canonicalize to **one** URL and 301/redirect the rest.
 
+## HTTPS & host consolidation
+
+- ✅ **HTTPS is a confirmed, lightweight ranking signal** — it functions as a tiebreaker between otherwise-comparable pages, not a major ranking driver on its own. Serve every page over HTTPS; there is no scenario where HTTP-only is correct for a public page in 2026.
+- ✅ **Pick exactly one canonical host** (`https://example.com` vs `https://www.example.com`) and 301-redirect every other variant (`http://`, the other `www`/non-`www` form, trailing-slash inconsistencies) to it. This is the same canonicalization problem as duplicate URL keys above, just at the host level — audit it once per project, not per page.
+- ❌ Don't leave both `www` and non-`www` (or both `http` and `https`) independently crawlable with no redirect — Google treats them as separate, competing duplicate URLs.
+
 ## Redirects
 
 - ✅ Use **301** (permanent) for URLs that have moved for good — it passes ranking signals to the target and is what Google recrawls to update its index. Use **302** (temporary) only for genuinely short-lived redirects (A/B tests, temporary maintenance) — a 302 left in place for months is a common bug, not a valid long-term pattern.
@@ -47,3 +53,4 @@
 - Snippets / meta description — https://developers.google.com/search/docs/appearance/snippet
 - Robots meta / X-Robots-Tag — https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
 - Consolidate duplicate URLs — https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls
+- HTTPS as a ranking signal — https://developers.google.com/search/blog/2014/08/https-as-ranking-signal

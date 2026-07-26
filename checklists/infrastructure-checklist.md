@@ -7,6 +7,10 @@ Shared systems that affect **many pages at once**. Fix these first — they give
 - [ ] Clamps title/description to sensible lengths without dropping the brand — `docs/01`
 - [ ] Supports a `noindex` flag and (ideally) a `canonicalPath` override for dedup — `docs/01`
 
+## HTTPS & host consolidation
+- [ ] Every page serves over HTTPS (no live HTTP-only public page) — `docs/01`
+- [ ] Exactly one canonical host is live; `http://`, the other `www`/non-`www` form, and trailing-slash variants all 301 to it — `docs/01`
+
 ## robots.txt
 - [ ] `Disallow` covers all `private` routes (dashboard/admin/account/api) — `docs/01`
 - [ ] Does **not** `Disallow` any page you want `noindex`-ed (use meta noindex instead) — `docs/01`
