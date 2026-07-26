@@ -17,7 +17,7 @@ You have been given a knowledge base (`docs/`), a set of step prompts (`prompts/
 
 ## Ground rules (read once, obey always)
 
-1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/09`. When you cite a reason, cite the doc section (e.g. "docs/03 §UGC links").
+1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/10`. When you cite a reason, cite the doc section (e.g. "docs/03 §UGC links").
 2. **Never break the build.** After any change, run the project's typecheck/lint/build. If it fails, fix it before moving on.
 3. **Never invent facts about Google.** If a claim isn't in `docs/`, say "not covered by the knowledge base" rather than guessing.
 4. **Work page by page. Persist your progress to a file** so nothing is forgotten across long runs (`SEO-AUDIT-PROGRESS.md`).

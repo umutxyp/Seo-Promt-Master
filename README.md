@@ -19,7 +19,7 @@
 
 **SEO Prompt Master** is two things in one repo:
 
-1. **A complete, up-to-date knowledge base** of Google's SEO guidance (`docs/`), distilled from [Google Search Central](https://developers.google.com/search) and [web.dev](https://web.dev), split into 9 focused, cited topics.
+1. **A complete, up-to-date knowledge base** of Google's SEO guidance (`docs/`), distilled from [Google Search Central](https://developers.google.com/search) and [web.dev](https://web.dev), split into 10 focused, cited topics — including AI crawlers (GPTBot, PerplexityBot, …) and GEO (getting cited by AI Overviews/ChatGPT/Perplexity).
 2. **A self-executing prompt workflow** (`START.md` + `prompts/`) that turns any AI coding assistant into an autonomous SEO auditor for **your** codebase.
 
 You don't read a 200-page guide and try to remember it. You hand the whole thing to your AI, and it does the audit-and-fix loop **for your actual routes**, citing the exact rule behind every change.
@@ -69,7 +69,8 @@ seo-prompt-master/
 │   ├── 06-sitemaps.md
 │   ├── 07-image-seo.md
 │   ├── 08-structured-data.md
-│   └── 09-2024-2026-updates.md
+│   ├── 09-2024-2026-updates.md
+│   └── 10-ai-crawlers-and-geo.md
 ├── checklists/               ← quick pass/fail lists
 │   ├── public-page-checklist.md
 │   └── infrastructure-checklist.md

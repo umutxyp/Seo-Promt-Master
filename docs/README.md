@@ -13,6 +13,7 @@ This is the **source of truth** for SEO Prompt Master. Every recommendation the 
 | 07 | [Image SEO](07-image-seo.md) | alt text, responsive images, lazy loading, image sitemaps |
 | 08 | [Structured Data](08-structured-data.md) | JSON-LD, schema.org types, policies, validation |
 | 09 | [2024–2026 Updates](09-2024-2026-updates.md) | Helpful Content, core updates, AI Overviews, Starter Guide changes |
+| 10 | [AI Crawlers & GEO](10-ai-crawlers-and-geo.md) | GPTBot/ClaudeBot/PerplexityBot robots.txt directives, getting cited by AI answer engines |
 
 ## How to read a rule
 
