@@ -21,6 +21,7 @@
 
 1. **A complete, up-to-date knowledge base** of Google's SEO guidance (`docs/`), distilled from [Google Search Central](https://developers.google.com/search) and [web.dev](https://web.dev), split into 11 focused, cited topics — including AI crawlers (GPTBot, PerplexityBot, …), GEO (getting cited by AI Overviews/ChatGPT/Perplexity), and a deterministic 0–100 **SEO Score / GEO Score** rubric.
 2. **A self-executing prompt workflow** (`START.md` + `prompts/`) that turns any AI coding assistant into an autonomous SEO auditor for **your** codebase.
+3. **24 industry-specific overlays** (`verticals/`) — e-commerce, SaaS, marketplaces, local business, healthcare/legal/finance (YMYL), real estate, travel, automotive, news, Discord bots, Minecraft server lists, digital/code marketplaces, and more — each adding the schema types, pitfalls, and GEO notes specific to that niche on top of the universal audit.
 
 You don't read a 200-page guide and try to remember it. You hand the whole thing to your AI, and it does the audit-and-fix loop **for your actual routes**, citing the exact rule behind every change.
 
@@ -73,6 +74,14 @@ seo-prompt-master/
 │   ├── 09-2024-2026-updates.md
 │   ├── 10-ai-crawlers-and-geo.md
 │   └── 11-scoring-rubric.md      SEO Score / GEO Score out of 100
+├── verticals/                ← 24 industry-specific overlays (optional, additive)
+│   ├── README.md                index + how they plug into Phase 0
+│   ├── 01-ecommerce.md
+│   ├── 02-saas-b2b-software.md
+│   ├── …                        (real estate, healthcare, legal, finance, travel,
+│   │                             automotive, news, marketplaces, Discord bots,
+│   │                             Minecraft server lists, digital/code marketplaces, …)
+│   └── 24-digital-code-marketplace.md
 ├── checklists/               ← quick pass/fail lists
 │   ├── public-page-checklist.md
 │   └── infrastructure-checklist.md
