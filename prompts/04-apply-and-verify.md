@@ -27,6 +27,35 @@
 - **Sitemap** → cover exactly the `public-index` set; remove disallowed URLs; accurate `lastmod`. `docs/06`.
 - **Images/CLS** → add `width`/`height`; eager+`fetchpriority=high` for LCP, `loading=lazy` below the fold. `docs/07`.
 - **hreflang** → bidirectional, self-referential, `x-default`, valid ISO codes. `docs/02`.
+- **Mobile content missing vs. desktop** → find what's conditionally hidden/omitted at mobile viewport (CSS `display:none` on breakpoint, a lighter mobile-only template) and put it back in the DOM; collapsed/accordion is fine, absent is not. `docs/05`.
+- **AI crawlers not addressed in `robots.txt`** → add an explicit block once the project's training-vs-retrieval decision is made (see `docs/10`), e.g.:
+  ```
+  # Block training crawlers
+  User-agent: GPTBot
+  User-agent: Google-Extended
+  User-agent: CCBot
+  Disallow: /
+
+  # Allow retrieval/answer-engine crawlers (remove if the project wants no AI-answer citations either)
+  User-agent: OAI-SearchBot
+  User-agent: PerplexityBot
+  Allow: /
+  ```
+- **Missing entity `sameAs`** → add to the `Organization` (or `Person`) JSON-LD block, e.g.:
+  ```json
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "…",
+    "url": "https://example.com",
+    "sameAs": [
+      "https://www.wikidata.org/wiki/Q…",
+      "https://www.linkedin.com/company/…",
+      "https://www.crunchbase.com/organization/…"
+    ]
+  }
+  ```
+  `docs/08`, `docs/10`.
 
 ## Guardrails
 
@@ -37,4 +66,4 @@
 
 ## Finish
 
-When the backlog is empty and every "done" checkbox in `START.md` is satisfied, print a **final summary table**: `page/area | change | verification evidence`. Note remaining deliberate skips. Report the passing typecheck/lint/build output.
+When the backlog is empty and every "done" checkbox in `START.md` is satisfied, **recompute the SEO Score and GEO Score** (`docs/11`) and show the before/after delta next to the baseline from Phase 3 — this is the actual evidence the work moved the number, not just a list of edits. Print a **final summary table**: `page/area | change | verification evidence`. Note remaining deliberate skips. Report the passing typecheck/lint/build output.

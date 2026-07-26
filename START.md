@@ -17,7 +17,7 @@ You have been given a knowledge base (`docs/`), a set of step prompts (`prompts/
 
 ## Ground rules (read once, obey always)
 
-1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/10`. When you cite a reason, cite the doc section (e.g. "docs/03 §UGC links").
+1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/11`. When you cite a reason, cite the doc section (e.g. "docs/03 §UGC links").
 2. **Never break the build.** After any change, run the project's typecheck/lint/build. If it fails, fix it before moving on.
 3. **Never invent facts about Google.** If a claim isn't in `docs/`, say "not covered by the knowledge base" rather than guessing.
 4. **Work page by page. Persist your progress to a file** so nothing is forgotten across long runs (`SEO-AUDIT-PROGRESS.md`).
@@ -46,7 +46,7 @@ Write the result to **`ROUTES-INVENTORY.md`** using `templates/routes-inventory.
 For **every** `public-index` route, run the 9-point audit (metadata, canonical/hreflang, robots, JSON-LD, headings/semantics, images, internal links, rendering, sitemap). Record findings per page in **`SEO-AUDIT-PROGRESS.md`** using `templates/audit-progress.md`. Do not stop until every page has a row.
 
 ### Phase 3 — Prioritize  → `prompts/03-prioritize-fixes.md`
-Turn the findings into a single prioritized backlog: **P1 (indexing/crawl blockers)**, **P2 (structured data / render / dedup)**, **P3 (hygiene / CWV polish)**. Note any deliberate skips with a reason tied to `docs/`.
+Turn the findings into a single prioritized backlog: **P1 (indexing/crawl blockers)**, **P2 (structured data / render / dedup)**, **P3 (hygiene / CWV polish)**. Note any deliberate skips with a reason tied to `docs/`. Self-recheck a sample of Phase 2's passes, then compute a baseline **SEO Score** and **GEO Score** out of 100 (`docs/11`).
 
 ### Phase 4 — Fix & verify  → `prompts/04-apply-and-verify.md`
 Work the backlog top-down. Fix **shared infrastructure first** (metadata helper, sitemap, robots, i18n) because it fixes many pages at once, then per-page items. After each batch: typecheck → lint → build → verify the live/rendered output. Tick each item in `SEO-AUDIT-PROGRESS.md` as you complete it.
@@ -68,6 +68,7 @@ You are done when **all** of the following are true and you can show evidence fo
 - [ ] The XML sitemap covers exactly the `public-index` set (no disallowed URLs), with accurate `lastmod`.
 - [ ] Typecheck, lint, and build all pass. You have driven or rendered the changed routes and confirmed the output.
 - [ ] Phase 5 was either run against a sample of live pages, or explicitly skipped with a stated reason (no live URL / no connected MCP SEO tool).
+- [ ] A final **SEO Score** and **GEO Score** (`docs/11`) are reported, each with its category breakdown, coverage status (final vs. provisional), and the off-page-factors caveat — not a bare number.
 
 Print a final summary table: page → what changed → verification evidence.
 
