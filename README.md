@@ -19,7 +19,7 @@
 
 **SEO Prompt Master** is two things in one repo:
 
-1. **A complete, up-to-date knowledge base** of Google's SEO guidance (`docs/`), distilled from [Google Search Central](https://developers.google.com/search) and [web.dev](https://web.dev), split into 10 focused, cited topics — including AI crawlers (GPTBot, PerplexityBot, …) and GEO (getting cited by AI Overviews/ChatGPT/Perplexity).
+1. **A complete, up-to-date knowledge base** of Google's SEO guidance (`docs/`), distilled from [Google Search Central](https://developers.google.com/search) and [web.dev](https://web.dev), split into 11 focused, cited topics — including AI crawlers (GPTBot, PerplexityBot, …), GEO (getting cited by AI Overviews/ChatGPT/Perplexity), and a deterministic 0–100 **SEO Score / GEO Score** rubric.
 2. **A self-executing prompt workflow** (`START.md` + `prompts/`) that turns any AI coding assistant into an autonomous SEO auditor for **your** codebase.
 
 You don't read a 200-page guide and try to remember it. You hand the whole thing to your AI, and it does the audit-and-fix loop **for your actual routes**, citing the exact rule behind every change.
@@ -71,7 +71,8 @@ seo-prompt-master/
 │   ├── 07-image-seo.md
 │   ├── 08-structured-data.md
 │   ├── 09-2024-2026-updates.md
-│   └── 10-ai-crawlers-and-geo.md
+│   ├── 10-ai-crawlers-and-geo.md
+│   └── 11-scoring-rubric.md      SEO Score / GEO Score out of 100
 ├── checklists/               ← quick pass/fail lists
 │   ├── public-page-checklist.md
 │   └── infrastructure-checklist.md
@@ -105,6 +106,8 @@ START.md
 Metadata · Canonical + hreflang · Robots/indexing · Structured data (JSON-LD) · Headings & semantics · Images · Internal links & pagination · Rendering (SSR/CSR) · Sitemap.
 
 Every rule traces to a cited section in `docs/`. See [`checklists/public-page-checklist.md`](checklists/public-page-checklist.md).
+
+**Output includes a real number, not just a checklist:** a deterministic **SEO Score** and **GEO Score**, each out of 100 with a per-category breakdown — see [`docs/11-scoring-rubric.md`](docs/11-scoring-rubric.md). A P1 crawl/index blocker caps a page's score regardless of everything else it gets right, and no final score is reported without full page coverage plus a self-recheck pass. It's a technical-readiness score, not a ranking guarantee — off-page factors (backlinks, content quality, competition) are explicitly out of scope.
 
 ---
 

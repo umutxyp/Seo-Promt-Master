@@ -7,6 +7,36 @@
 
 ---
 
+## SEO Score & GEO Score (`docs/11`)
+
+> Recompute at end of Phase 3 (baseline), Phase 4 (post-fix), Phase 5 (post-live, if run). No score without full page coverage — see `docs/11`'s hard rules (P1 caps a page at 60, provisional labeling, self-recheck).
+
+### SEO Score: <N>/100 (<final|provisional — X/Y pages>)
+| Category | Points | / Max |
+|---|---:|---:|
+| Indexability & crawl foundation | | 25 |
+| Rendering & mobile parity | | 20 |
+| Structured data | | 15 |
+| Metadata quality | | 10 |
+| Internationalization (or redistributed to Metadata) | | 10 |
+| Headings, semantics & links | | 10 |
+| Images | | 5 |
+| Core Web Vitals | | 5 |
+
+### GEO Score: <N>/100 (<final|provisional>)
+| Category | Points | / Max |
+|---|---:|---:|
+| AI crawler configuration | | 20 |
+| Extractable rendering | | 20 |
+| Extractable content structure | | 15 |
+| Entity authority | | 20 |
+| Classic-SEO prerequisite | | 15 |
+| No wasted/counterproductive GEO effort | | 10 |
+
+_Caveat: technical readiness scores, not a ranking/traffic guarantee — off-page factors are out of scope._
+
+---
+
 ## Prioritized backlog (Phase 3 — infra first)
 ### P1 — crawl/index blockers
 - [ ] …

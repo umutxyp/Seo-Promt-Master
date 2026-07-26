@@ -14,8 +14,8 @@ Thanks for helping keep this current! Google's guidance changes often, and frame
 - ✍️ **Doc update** — a rule changed; update the text + source + the date implications in `docs/09` if relevant.
 - 🧩 **Framework recipe** — add concrete "how to fix X in Next.js / Nuxt / SvelteKit / Astro / Rails / Django / Laravel" notes to the relevant `prompts/04` recipe or a new `examples/` file.
 - 🧪 **Example** — a worked `ROUTES-INVENTORY.md` / `SEO-AUDIT-PROGRESS.md` for a real stack in `examples/`.
-- 🌐 **Translation** — a localized `docs/` set, in a sibling folder `docs-<lang>/` (e.g. `docs-tr/`, `docs-es/`) mirroring the same `01`–`10` numbering and filenames as `docs/`, so cross-references stay valid across languages.
-- 📄 **New topic doc** — if it doesn't fit an existing `docs/01`–`10` file, add it as `docs/11-<topic>.md` (next free number, kebab-case) and link it from `docs/README.md`; don't fold unrelated topics into an existing numbered file just to avoid adding one.
+- 🌐 **Translation** — a localized `docs/` set, in a sibling folder `docs-<lang>/` (e.g. `docs-tr/`, `docs-es/`) mirroring the same `01`–`11` numbering and filenames as `docs/`, so cross-references stay valid across languages.
+- 📄 **New topic doc** — if it doesn't fit an existing `docs/01`–`11` file, add it as `docs/12-<topic>.md` (next free number, kebab-case) and link it from `docs/README.md`; don't fold unrelated topics into an existing numbered file just to avoid adding one.
 
 ## How
 
