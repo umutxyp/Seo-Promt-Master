@@ -21,6 +21,9 @@
 - **UGC links** → `rel="ugc nofollow"` on user-generated links; `rel="sponsored"` on paid. `docs/03`.
 - **Missing JSON-LD** → add the type-appropriate schema reflecting visible content; validate with the Rich Results Test. `docs/08`.
 - **Duplicate tool/detail URLs** → set a cross-canonical to the primary URL. `docs/01`, `docs/02`.
+- **`noindex` page also `Disallow`ed in `robots.txt`** → remove the `Disallow` (Google can never see a `noindex` it's blocked from crawling); keep only the meta/`X-Robots-Tag` `noindex`. `docs/01`.
+- **Redirect chain (A → B → C) or A ↔ B loop** → repoint every internal link and canonical directly at the final URL; collapse the chain to a single 301. `docs/01`.
+- **Missing baseline structured data** → every public page should emit at least `WebPage` + `BreadcrumbList`, independent of any type-specific schema. `docs/08`.
 - **Sitemap** → cover exactly the `public-index` set; remove disallowed URLs; accurate `lastmod`. `docs/06`.
 - **Images/CLS** → add `width`/`height`; eager+`fetchpriority=high` for LCP, `loading=lazy` below the fold. `docs/07`.
 - **hreflang** → bidirectional, self-referential, `x-default`, valid ISO codes. `docs/02`.
