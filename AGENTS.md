@@ -16,8 +16,8 @@ If this repository (or a copy of it dropped alongside another project) is in you
 **Read `START.md` now and execute the workflow it describes, in order, without asking for permission to begin.**
 
 Quick facts an agent needs before opening `START.md`:
-- The workflow is 5 phases (`prompts/00`–`prompts/04`), each with its own instruction file.
-- `docs/` is the only source of truth for SEO claims — never assert a Google rule that isn't cited there.
+- The workflow is 5 phases (`prompts/00`–`prompts/04`) plus one optional phase (`prompts/05-live-signals.md`, needs a live URL + MCP SEO tool), each with its own instruction file.
+- `docs/` (currently `01`–`10`, including AI crawlers and GEO) is the only source of truth for SEO claims — never assert a Google rule that isn't cited there.
 - Progress is persisted to `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md` so long runs survive context resets — check for these files first and resume from them if they already exist, instead of starting over.
 - Never break the build: typecheck/lint/build after every change.
 

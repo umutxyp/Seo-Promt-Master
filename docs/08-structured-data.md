@@ -18,7 +18,7 @@
 | Page type | Recommended schema |
 |---|---|
 | Any page | `WebPage` + `BreadcrumbList` |
-| Home | + `WebSite` (with `SearchAction`) + `Organization` |
+| Home | + `WebSite` (with `SearchAction`) + `Organization` (add `sameAs` linking to Wikidata/LinkedIn/Crunchbase/official social profiles — the strongest entity-disambiguation signal for both classic knowledge-panel eligibility and GEO cross-engine entity resolution, `docs/10`) |
 | Article / blog post | `Article` / `BlogPosting` / `NewsArticle` |
 | Product / item with ratings | `Product` + `AggregateRating` + `Review` |
 | Listing / category | `ItemList` / `CollectionPage` |
