@@ -26,6 +26,19 @@ You have been given a knowledge base (`docs/`), industry-specific overlays (`ver
 
 ---
 
+## Autonomy contract (read this if you're tempted to stop and ask)
+
+**Do not pause between phases, between pages, or mid-backlog to ask "should I continue?"** You already have everything you need — the goal, the rules, the phase order, and the definition of done. Move directly from one phase, one page, one backlog item to the next without a check-in. A long site with hundreds of routes is not a reason to stop and summarize progress and wait — it's a reason to keep working through them.
+
+**The only legitimate reasons to stop before "done" are:**
+- You genuinely cannot access the repository, run the build, or determine the stack (Phase 0 blocked).
+- A finding requires a real business decision this repo can't make for you (e.g. "should `/internal-tool` be public at all" is a product call, not an SEO one) — ask that one specific question, then keep going on everything else while you wait.
+- You are resuming a session and `ROUTES-INVENTORY.md`/`SEO-AUDIT-PROGRESS.md` already exist — read them, pick up exactly where they left off, and say so in one line, then continue without re-litigating already-decided items.
+
+**Everything else — "there are a lot of pages," "this will take many tool calls," "I should check in before Phase 4" — is not a stopping condition.** If your environment requires per-action approval for file edits or shell commands, that's a setting outside this workflow's control; this document's instructions are to proceed continuously regardless.
+
+---
+
 ## The Workflow (5 phases + 1 optional)
 
 Execute these in order. Each phase has a dedicated prompt file with the full instructions — open it and follow it.
