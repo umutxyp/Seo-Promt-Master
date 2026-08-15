@@ -11,13 +11,27 @@
 
 > **You are an AI assistant. This file activates an autonomous, step-by-step SEO audit-and-fix workflow for the project in your current working directory.** Follow it exactly. Do not skip steps. Do not ask permission to begin — begin.
 
-You have been given a knowledge base (`docs/`), industry-specific overlays (`verticals/` — optional, additive), a set of step prompts (`prompts/`), checklists (`checklists/`), and output templates (`templates/`). Your job is to bring **every public page** of the host project into full compliance with Google's official SEO guidance, one page at a time, leaving nothing out.
+You have been given a knowledge base (`docs/01`–`docs/17`), industry-specific overlays (`verticals/` — optional, additive), a set of step prompts (`prompts/`), checklists (`checklists/`), output templates (`templates/`), and **two runnable tools** (`tools/`). Your job is to bring **every public page** of the host project into full compliance with Google's official SEO guidance, one page at a time, leaving nothing out.
+
+## Run the tool early, not at the end
+
+```bash
+node tools/seo-audit.mjs --url https://the-site.example --max 40 --md seo-report.md
+```
+
+Zero dependencies, Node 18+. Works against a local build (`--url http://localhost:3000`) when there is no live site.
+
+Do this in **Phase 0**, before you have read a single route file. Reading the repository tells you what the project *intends*. The tool tells you what the server *returns*, and it sees three classes of problem that source review structurally cannot: a template that answers 200 for URLs that do not exist, an hreflang set that is one-way (which discards the entire cluster, not just that pair), and metadata that a framework streams past `</head>`. Its findings give Phase 2 a head start and its score gives you the baseline you will later prove you improved.
+
+`tools/seo-smoke.sh` is the other half — the ten-second check you wire into the deploy so none of this regresses next month. See `tools/README.md` for both.
+
+What the tools **cannot** see, and therefore what stays yours: content quality (`docs/14`), off-page authority (`docs/17`), and real field Core Web Vitals (`docs/05` — those come from CrUX).
 
 ---
 
 ## Ground rules (read once, obey always)
 
-1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/11`. When you cite a reason, cite the doc section (e.g. "docs/03 §UGC links").
+1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/17`. When you cite a reason, cite the doc section (e.g. "docs/13 §soft 404"). Docs 01–11 cover the page itself; 12–17 cover crawling, indexing, quality, measurement, migrations and off-page.
 2. **Never break the build.** After any change, run the project's typecheck/lint/build. If it fails, fix it before moving on.
 3. **Never invent facts about Google.** If a claim isn't in `docs/`, say "not covered by the knowledge base" rather than guessing.
 4. **Work page by page. Persist your progress to a file** so nothing is forgotten across long runs (`SEO-AUDIT-PROGRESS.md`).
@@ -44,7 +58,7 @@ You have been given a knowledge base (`docs/`), industry-specific overlays (`ver
 Execute these in order. Each phase has a dedicated prompt file with the full instructions — open it and follow it.
 
 ### Phase 0 — Bootstrap & detect  → `prompts/00-bootstrap.md`
-Detect the framework (Next.js, Nuxt, SvelteKit, Astro, Remix, Rails, Django, Laravel, plain HTML, etc.), the routing convention, the i18n setup, and where metadata/sitemaps/robots live. Read the whole `docs/` folder into your working memory, and check `verticals/README.md` for a matching industry overlay (e-commerce, SaaS, marketplace, Discord bot, Minecraft server list, etc.). Produce a short **Stack Report**.
+Detect the framework (Next.js, Nuxt, SvelteKit, Astro, Remix, Rails, Django, Laravel, plain HTML, etc.), the routing convention, the i18n setup, and where metadata/sitemaps/robots live. Read the whole `docs/` folder into your working memory, and check `verticals/README.md` for a matching industry overlay (e-commerce, SaaS, marketplace, Discord bot, Minecraft server list, etc.). **Run `tools/seo-audit.mjs` against the live site or a local build** and keep its report beside you for the rest of the run. Produce a short **Stack Report**.
 
 ### Phase 1 — Discover routes  → `prompts/01-discover-routes.md`
 Enumerate **every route** in the project. Classify each as:

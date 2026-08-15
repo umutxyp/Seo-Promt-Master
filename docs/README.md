@@ -15,6 +15,17 @@ This is the **source of truth** for SEO Prompt Master. Every recommendation the 
 | 09 | [2024–2026 Updates](09-2024-2026-updates.md) | Helpful Content, core updates, AI Overviews, Starter Guide changes |
 | 10 | [AI Crawlers & GEO](10-ai-crawlers-and-geo.md) | GPTBot/ClaudeBot/PerplexityBot robots.txt directives, getting cited by AI answer engines |
 | 11 | [SEO Score & GEO Score](11-scoring-rubric.md) | Deterministic 0–100 scoring rubric, P1-caps-the-page rule, self-recheck requirement |
+| 12 | [Crawling & robots.txt](12-crawling-and-robots.md) | RFC 9309 semantics, response-code behaviour, Google's crawlers, crawl budget, log analysis |
+| 13 | [Indexing & duplicates](13-indexing-and-duplicates.md) | noindex vs Disallow vs 410, canonical conflicts, duplicate taxonomy, faceted nav, soft 404s, GSC index states |
+| 14 | [Quality, E-E-A-T & spam](14-quality-eeat-and-spam.md) | The 16 spam policies, scaled content abuse, AI-content line, directory thresholds, manual action recovery |
+| 15 | [Measurement & verification](15-measurement-and-verification.md) | Search Console reports, BigQuery, KPI set, proving a change, traffic-drop diagnosis |
+| 16 | [Migrations & incidents](16-migrations-and-incidents.md) | URL inventory, redirect maps, rollback criteria, hack response |
+| 17 | [Off-page & entity authority](17-offpage-and-entity-authority.md) | Link quality, digital PR, disavow, brand and entity building |
+
+**01–11 are about the page.** 12–17 are about everything around it: whether a
+crawler reaches the page, which URL wins when several say the same thing, whether
+the content clears the quality bar at all, how you prove a change worked, and
+what to do when a migration or an incident is under way.
 
 ## How to read a rule
 

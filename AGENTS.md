@@ -11,18 +11,54 @@
 
 # Agent instructions for this repository
 
-If this repository (or a copy of it dropped alongside another project) is in your context, you are looking at **SEO Prompt Master** — a prompt-driven SEO audit-and-fix workflow.
+If this repository (or a copy of it dropped alongside another project) is in
+your context, you are looking at **SEO Prompt Master** — a prompt-driven SEO
+audit-and-fix workflow with a runnable live audit tool.
 
-**Read `START.md` now and execute the workflow it describes, in order, without asking for permission to begin — and don't stop between phases or pages to check in either. Keep going until every phase is done or you hit one of the specific, named stopping conditions in `START.md`'s "Autonomy contract" section.**
+**Read `START.md` now and execute the workflow it describes, in order, without
+asking for permission to begin — and don't stop between phases or pages to check
+in either. Keep going until every phase is done or you hit one of the specific,
+named stopping conditions in `START.md`'s "Autonomy contract" section.**
 
-Quick facts an agent needs before opening `START.md`:
-- The workflow is 5 phases (`prompts/00`–`prompts/04`) plus one optional phase (`prompts/05-live-signals.md`, needs a live URL + MCP SEO tool), each with its own instruction file.
-- `docs/` (currently `01`–`11`, including AI crawlers/GEO and a numeric SEO/GEO scoring rubric) is the only source of truth for SEO claims — never assert a Google rule that isn't cited there.
-- `verticals/` has 24 industry-specific overlays (e-commerce, SaaS, marketplace, Discord bots, Minecraft server lists, etc. — see `verticals/README.md`). Check for a match in Phase 0; apply alongside the core audit, never instead of it.
-- The workflow ends with a real, computed **SEO Score** and **GEO Score** out of 100 (`docs/11`), not just a pass/fail list — don't report a final score without full page coverage and the self-recheck pass `docs/11` requires.
-- Progress is persisted to `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md` so long runs survive context resets — check for these files first and resume from them if they already exist, instead of starting over.
-- Never break the build: typecheck/lint/build after every change.
+## Before you open START.md
 
-This file is intentionally short. Full ground rules, phase-by-phase instructions, and the "definition of done" live in `START.md` — go there next.
+- **Run the tool, don't only read the code.**
+  ```bash
+  node tools/seo-audit.mjs --url https://the-site.example --max 40 --md seo-report.md
+  ```
+  Zero dependencies, Node 18+, works against `http://localhost:3000` too. Reading
+  the repository tells you what the project *intends*; this tells you what the
+  server *returns* — soft 404s per template, one-way hreflang sets, canonicals
+  pointing at redirects, metadata streamed past `</head>`. Exits `1` on any P1.
+  See `tools/README.md`.
 
-If your agent framework does not auto-load `AGENTS.md` or `START.md`, the user can paste either file's contents directly into the chat to activate the same workflow (see `README.md` → "How to use", Option B).
+- **`docs/01`–`docs/17` is the only source of truth for SEO claims.** Cite the
+  section behind every recommendation. If a claim is not in there, say "not
+  covered by the knowledge base" rather than recalling it — much of the SEO
+  advice in training data predates INP replacing FID, FAQ rich results being
+  removed, and `rel=next/prev` falling out of use. Docs 01–11 cover the page;
+  12–17 cover crawling, indexing, quality, measurement, migrations and off-page.
+
+- **`verticals/` has 24 industry overlays** (e-commerce, SaaS, marketplace,
+  Discord bots, Minecraft server lists…). Check for a match in Phase 0; apply
+  alongside the core audit, never instead of it.
+
+- **The workflow ends with a computed SEO Score and GEO Score out of 100**
+  (`docs/11`), with the category breakdown and the off-page caveat — not a bare
+  number, and never a "final" score without full coverage and the self-recheck.
+
+- **Progress is persisted** to `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md`
+  so long runs survive context resets. Check for these first and resume from
+  them rather than starting over.
+
+- **Never break the build.** Typecheck, lint and build after every change.
+
+This file is intentionally short. The full ground rules, phase instructions and
+definition of done live in `START.md` — go there next.
+
+If your framework does not auto-load `AGENTS.md` or `START.md`, the user can
+paste either file into the chat to activate the same workflow. Other agents have
+their own entry points in this repository: `.claude/skills/seo-audit/SKILL.md`,
+`.cursor/rules/seo-prompt-master.mdc`, `GEMINI.md`,
+`.github/copilot-instructions.md`. `install.sh` writes all of them into another
+project.

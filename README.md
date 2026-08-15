@@ -2,13 +2,14 @@
 
 # 🔍 SEO Prompt Master
 
-### Google SEO — the full docs, as an AI prompt machine.
+### Google SEO — the full docs as an AI skill, plus a tool that actually runs.
 
-**Drop this repo into your AI coding assistant. It auto-detects the workflow, maps every public route of your site, audits each page against Google's official SEO rules, and fixes the gaps — step by step, nothing left out.**
+**Install it into your project and every coding agent you use — Claude Code, Codex, Cursor, Gemini CLI, Copilot — gains an SEO auditor that maps your routes, checks them against Google's official rules, fixes the gaps, and proves it with a real audit against your live server.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-78c51c.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.0.0-4285F4.svg)](CHANGELOG.md)
 [![Docs: Google Search Central](https://img.shields.io/badge/docs-Google%20Search%20Central-4285F4.svg)](https://developers.google.com/search)
-[![Works with](https://img.shields.io/badge/works%20with-Claude%20·%20GPT%2FCodex%20·%20Gemini%20·%20Grok%20·%20Cursor-000.svg)](#-how-to-use)
+[![Works with](https://img.shields.io/badge/skill%20for-Claude%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot-000.svg)](#-install-as-a-skill)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 </div>
@@ -17,35 +18,64 @@
 
 ## What is this?
 
-**SEO Prompt Master** is two things in one repo:
+Three things in one repository:
 
-1. **A complete, up-to-date knowledge base** of Google's SEO guidance (`docs/`), distilled from [Google Search Central](https://developers.google.com/search) and [web.dev](https://web.dev), split into 11 focused, cited topics — including AI crawlers (GPTBot, PerplexityBot, …), GEO (getting cited by AI Overviews/ChatGPT/Perplexity), and a deterministic 0–100 **SEO Score / GEO Score** rubric.
-2. **A self-executing prompt workflow** (`START.md` + `prompts/`) that turns any AI coding assistant into an autonomous SEO auditor for **your** codebase.
-3. **24 industry-specific overlays** (`verticals/`) — e-commerce, SaaS, marketplaces, local business, healthcare/legal/finance (YMYL), real estate, travel, automotive, news, Discord bots, Minecraft server lists, digital/code marketplaces, and more — each adding the schema types, pitfalls, and GEO notes specific to that niche on top of the universal audit.
+1. **A knowledge base of Google's SEO guidance** (`docs/01`–`docs/17`), distilled from [Google Search Central](https://developers.google.com/search) and [web.dev](https://web.dev), every claim cited. Docs 01–11 cover the page; 12–17 cover crawling and crawl budget, indexing and canonicals, content quality and the spam policies, measurement, migrations, and off-page authority.
+2. **A skill** that installs into whichever agent you use, so "audit my SEO" activates the whole workflow without you pasting anything.
+3. **Two tools that run** (`tools/`) — because reading a repository tells you what a project *intends*, and only a request tells you what the server *returns*.
 
-You don't read a 200-page guide and try to remember it. You hand the whole thing to your AI, and it does the audit-and-fix loop **for your actual routes**, citing the exact rule behind every change.
-
-> Built from a real audit of a **40-locale, 574K-concurrent-user** production site ([mcstat.org](https://mcstat.org)) — the methodology is battle-tested, not theoretical.
+> The tools are not decoration. Tested against five production sites before release, `seo-audit.mjs` found two live P1 blockers — a `Disallow: /_next/` breaking rendering, and a template returning 200 for every URL under it — that source review had not surfaced.
 
 ---
 
-## 🚀 How to use
+## 🚀 Install as a skill
 
-**Not tied to any one AI vendor.** Every phase is a plain markdown prompt — any assistant that can read files and follow instructions can run it.
+```bash
+git clone https://github.com/umutxyp/Seo-Promt-Master.git
+cd /path/to/your-project
+bash /path/to/Seo-Promt-Master/install.sh
+```
 
-### Option A — inside an AI coding agent (Claude Code, OpenAI Codex CLI, Cursor, Windsurf, GitHub Copilot, Amp, Gemini CLI, Grok/xAI agents, …)
-1. Copy this folder into your project (or open it alongside your repo).
-2. Most agents auto-discover **`AGENTS.md`** at the repo root and start on their own. If yours doesn't, tell it:
-   > **"Read `START.md` and run the workflow on this project."**
-3. It will produce `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md`, then fix issues page by page, verifying as it goes.
+That copies the knowledge base and tools into `.seo-prompt-master/` and writes the entry point each agent actually reads:
 
-### Option B — chat assistant (Claude, ChatGPT, Gemini web, Grok, …)
-1. Paste the contents of `START.md` (and, if it fits, the `docs/`).
-2. Give it your repo (zip, paste files, or connect the tool to your codebase).
-3. Say **"Begin at Phase 0."**
+| Agent | File it discovers |
+|---|---|
+| **Claude Code** | `.claude/skills/seo-audit/SKILL.md` |
+| **OpenAI Codex CLI**, Amp, Jules | `AGENTS.md` |
+| **Cursor** | `.cursor/rules/seo-prompt-master.mdc` |
+| **Gemini CLI** | `GEMINI.md` |
+| **GitHub Copilot** | `.github/copilot-instructions.md` |
 
-### Option C — just the knowledge
-Read `docs/` as a clean, current reference for Google SEO. Start at [`docs/README.md`](docs/README.md).
+Then just ask: **"run the SEO audit"**. The agent finds the workflow itself.
+
+An existing `AGENTS.md` or `GEMINI.md` is appended to, never replaced, and re-running the installer is safe.
+
+**Prefer not to install?** Drop the repo next to your project — most agents auto-discover `AGENTS.md` and start on their own. Or paste `START.md` into any chat assistant and say "begin at Phase 0". Or ignore the automation entirely and read [`docs/README.md`](docs/README.md) as a current, cited SEO reference.
+
+---
+
+## 🛠️ The tools
+
+```bash
+# The thorough pass — sample the sitemap, audit each page, score it
+node tools/seo-audit.mjs --url https://example.com --max 40 --md report.md
+
+# The ten-second deploy tripwire
+SEO_SMOKE_404_PATHS="/ /blog /products" bash tools/seo-smoke.sh https://example.com
+```
+
+Zero dependencies. Node 18+ for the auditor, `curl` and `awk` for the smoke test. Both exit non-zero on failure, so either can gate a deploy or a CI job. Both work against `http://localhost:3000`.
+
+**What `seo-audit.mjs` catches that reading code cannot:**
+
+- **Soft 404s per template** — a route answering 200 for URLs that do not exist. In frameworks with Suspense boundaries this has no visible symptom at all; a `loading.tsx` above one segment silently turns that whole template's 404 into a 200 shell.
+- **One-way hreflang** — a set that is not reciprocal is discarded *in full*, so every language in the cluster loses the signal. Only visible by comparing pages against each other.
+- **Streamed metadata** — frameworks that flush `<head>` early and emit `<title>` later. Browsers hoist it; bots that stop reading at `</head>` see an untitled page.
+- Plus: robots.txt against RFC 9309 group semantics, blocked render-critical paths, sitemap limits and `lastmod` credibility, host consolidation, canonical self-reference and duplicate titles, JSON-LD validity, `aggregateRating` with no ratings behind it, raw-HTML content volume, image dimensions.
+
+**What it deliberately cannot see**, and so stays your job: content quality (`docs/14`), off-page authority (`docs/17`), and real field Core Web Vitals, which come from CrUX rather than from fetching a page (`docs/05`). A high score means the technical foundation is sound — not that the site will rank.
+
+See [`tools/README.md`](tools/README.md).
 
 ---
 
@@ -53,80 +83,87 @@ Read `docs/` as a clean, current reference for Google SEO. Start at [`docs/READM
 
 ```
 seo-prompt-master/
-├── AGENTS.md                 ← universal entry point (auto-discovered by most agents)
-├── START.md                  ← the bootstrap prompt (AI reads this first)
+├── install.sh                ← writes the skill into your project, for every agent
+├── VERSION · CHANGELOG.md    ← semver; a major means old scores aren't comparable
+│
+├── .claude/skills/seo-audit/SKILL.md    ← Claude Code
+├── AGENTS.md                            ← Codex, Amp, Jules (and most others)
+├── .cursor/rules/seo-prompt-master.mdc  ← Cursor
+├── GEMINI.md                            ← Gemini CLI
+├── .github/copilot-instructions.md      ← GitHub Copilot
+├── CLAUDE.md · START.md                 ← the workflow itself
+│
+├── tools/                    ← the parts that run
+│   ├── seo-audit.mjs            live audit, scored, exits 1 on any P1
+│   ├── seo-smoke.sh             deploy tripwire
+│   └── README.md
+│
 ├── prompts/                  ← the 5-phase workflow (+ 1 optional)
-│   ├── 00-bootstrap.md          detect stack + load knowledge base
+│   ├── 00-bootstrap.md          detect stack, load docs, run the audit tool
 │   ├── 01-discover-routes.md    enumerate & classify every route
 │   ├── 02-audit-page.md         9-point audit per public page
 │   ├── 03-prioritize-fixes.md   one ordered backlog (infra-first)
 │   ├── 04-apply-and-verify.md   fix + typecheck/lint/build + prove it
-│   └── 05-live-signals.md       optional: cross-check against live production via MCP
+│   └── 05-live-signals.md       optional: field data via MCP
+│
 ├── docs/                     ← the knowledge base (source of truth)
-│   ├── 01-meta-and-head.md
-│   ├── 02-internationalization.md
-│   ├── 03-ugc-forums-blogs.md
-│   ├── 04-page-structure.md
+│   ├── 01-meta-and-head.md              06-sitemaps.md
+│   ├── 02-internationalization.md       07-image-seo.md
+│   ├── 03-ugc-forums-blogs.md           08-structured-data.md
+│   ├── 04-page-structure.md             09-2024-2026-updates.md
 │   ├── 05-rendering-and-core-web-vitals.md
-│   ├── 06-sitemaps.md
-│   ├── 07-image-seo.md
-│   ├── 08-structured-data.md
-│   ├── 09-2024-2026-updates.md
-│   ├── 10-ai-crawlers-and-geo.md
-│   └── 11-scoring-rubric.md      SEO Score / GEO Score out of 100
-├── verticals/                ← 24 industry-specific overlays (optional, additive)
-│   ├── README.md                index + how they plug into Phase 0
-│   ├── 01-ecommerce.md
-│   ├── 02-saas-b2b-software.md
-│   ├── …                        (real estate, healthcare, legal, finance, travel,
-│   │                             automotive, news, marketplaces, Discord bots,
-│   │                             Minecraft server lists, digital/code marketplaces, …)
-│   └── 24-digital-code-marketplace.md
+│   ├── 10-ai-crawlers-and-geo.md        11-scoring-rubric.md
+│   │
+│   ├── 12-crawling-and-robots.md        RFC 9309, crawl budget, log analysis
+│   ├── 13-indexing-and-duplicates.md    canonicals, facets, soft 404s, GSC states
+│   ├── 14-quality-eeat-and-spam.md      the 16 spam policies, scaled content
+│   ├── 15-measurement-and-verification.md  GSC, BigQuery, proving a change
+│   ├── 16-migrations-and-incidents.md   redirect maps, rollback, hack response
+│   └── 17-offpage-and-entity-authority.md  links, digital PR, entity building
+│
+├── verticals/                ← 24 industry overlays (optional, additive)
 ├── checklists/               ← quick pass/fail lists
-│   ├── public-page-checklist.md
-│   └── infrastructure-checklist.md
 ├── templates/                ← output files the AI fills in
-│   ├── routes-inventory.md
-│   ├── audit-progress.md
-│   └── live-signals.md
 └── examples/                 ← a worked example
 ```
 
 ---
 
-## 🧠 The workflow in one picture
+## 🧠 The workflow
 
 ```
 START.md
   │
-  ├─ Phase 0  Bootstrap ......... detect framework, rendering, i18n; load docs/
-  ├─ Phase 1  Discover .......... list EVERY route → ROUTES-INVENTORY.md
+  ├─ Phase 0  Bootstrap ......... detect framework, i18n, rendering; load docs/;
+  │                               RUN tools/seo-audit.mjs for the baseline
+  ├─ Phase 1  Discover .......... every route → ROUTES-INVENTORY.md
   │                               classify: public-index / public-noindex / private
-  ├─ Phase 2  Audit ............. 9-point check per public page → SEO-AUDIT-PROGRESS.md
+  ├─ Phase 2  Audit ............. 9-point check per page → SEO-AUDIT-PROGRESS.md
   ├─ Phase 3  Prioritize ........ one backlog, infra-first (P1 → P2 → P3)
-  ├─ Phase 4  Fix & verify ...... change → typecheck/lint/build → prove → tick
-  └─ Phase 5  Live signals ...... optional: cross-check against live production via MCP
+  ├─ Phase 4  Fix & verify ...... change → typecheck/lint/build → re-fetch → tick
+  └─ Phase 5  Live signals ...... optional: CrUX and live scrape via MCP
 ```
+
+Progress lives in `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md`, so a long run survives a context reset and resumes instead of restarting.
 
 ---
 
-## ✅ What it checks (the 9 points)
+## ✅ What it checks
 
-Metadata · Canonical + hreflang · Robots/indexing · Structured data (JSON-LD) · Headings & semantics · Images · Internal links & pagination · Rendering (SSR/CSR) · Sitemap.
+Metadata · Canonical + hreflang · Robots and indexing · Structured data · Headings and semantics · Images · Internal links and pagination · Rendering · Sitemap — every rule tracing to a cited section in `docs/`.
 
-Every rule traces to a cited section in `docs/`. See [`checklists/public-page-checklist.md`](checklists/public-page-checklist.md).
-
-**Output includes a real number, not just a checklist:** a deterministic **SEO Score** and **GEO Score**, each out of 100 with a per-category breakdown — see [`docs/11-scoring-rubric.md`](docs/11-scoring-rubric.md). A P1 crawl/index blocker caps a page's score regardless of everything else it gets right, and no final score is reported without full page coverage plus a self-recheck pass. It's a technical-readiness score, not a ranking guarantee — off-page factors (backlinks, content quality, competition) are explicitly out of scope.
+**The output is a number with its working shown:** a deterministic **SEO Score** and **GEO Score** out of 100 ([`docs/11`](docs/11-scoring-rubric.md)), each with a per-category breakdown. A P1 crawl/index blocker caps a page's score no matter what else it gets right — a page that cannot be indexed does not benefit from polish. No score is reported as final without full coverage plus a self-recheck of a random sample. And it is a technical-readiness score, stated as such every time: backlinks, content quality and competition are out of scope.
 
 ---
 
 ## ❤️ Why it exists
 
-Most "SEO checklists" are shallow, outdated, or generic. This one is:
-- **Current** (2024–2026: Helpful Content, core updates, AI Overviews, the 2024 Starter Guide refresh).
-- **Cited** (every claim links to Google's own docs).
-- **Executable** (an AI can actually *run* it on your code, not just read it).
-- **Honest** (it distinguishes ranking factors from a11y-only niceties, and logs deliberate skips).
+Most SEO checklists are shallow, generic, or quietly out of date. This one is:
+
+- **Current.** It is explicit about what changed: INP replaced FID in March 2024, FAQ rich results were removed in May 2026, `rel=next/prev` has been unused since 2019, Google does not support IndexNow, `llms.txt` is not required. Advice that repeats any of those is old, and the knowledge base says so.
+- **Cited.** Every claim links to Google's own documentation. If something is not in `docs/`, the agent is instructed to say "not covered by the knowledge base" rather than recall it from training data.
+- **Executable.** An agent can run it against your code *and* your server, not just read it.
+- **Honest about its limits.** It separates ranking factors from hygiene, logs deliberate skips, and names the three things it cannot measure.
 
 ---
 
@@ -134,28 +171,29 @@ Most "SEO checklists" are shallow, outdated, or generic. This one is:
 
 **Umut Bayraktar** — [@umutxyp](https://github.com/umutxyp)
 
-Full-stack developer (React · Next.js · Node.js · PostgreSQL) & AI-systems tinkerer. Founder at **Codeshare Technology**. Antalya, Turkey.
+Full-stack developer and AI-systems researcher. Founder at **Codeshare Technology**.
 
-Building things people actually use:
-- 🎵 **[Beatra](https://beatra.app)** — multi-platform Discord music bot (1.2M+ users)
-- 🛡️ **[Sylon](https://sylon.app)** — AI-powered Discord moderation (20K+ users)
-- 🧩 **[Codeshare](https://codeshare.me)** — digital marketplace for code & content (15K+ users)
-- ⛏️ **[McStat.org](https://mcstat.org)** — Minecraft server stats (574K+ concurrent players) — *the site this toolkit was forged on*
+The methodology comes out of running these, not out of theory:
 
-🔗 **Links:** [Portfolio](https://umutbayraktar.vercel.app) · [GitHub](https://github.com/umutxyp) · [Codeshare](https://codeshare.me)
-⭐ Notable OSS: [MusicBot](https://github.com/umutxyp/MusicBot) (1.3k★) · [Personal-Website](https://github.com/umutxyp/Personal-Website) · [Discord-Bot-Website](https://github.com/umutxyp)
+- ⛏️ **[MCStat.org](https://mcstat.org)** — Minecraft server list, 6.7K servers and ~250K players tracked daily
+- 🎵 **[Beatra](https://beatra.app)** — Discord music bot, 32.8K servers and 2.1M+ users
+- 💬 **[JustDiscord](https://justdiscord.org)** — Discord server and bot list, 16K+ listings across 21 languages
+- 🛒 **[Codeshare](https://codeshare.me)** — digital marketplace for code, licences and services
+- 🛡️ **[Sylon](https://sylon.app)** — AI-powered Discord moderation
 
-If this saved you time, **star the repo** and share it. 🌟
+🔗 [Portfolio](https://umutbayraktar.vercel.app) · [GitHub](https://github.com/umutxyp) · [Codeshare](https://codeshare.me)
+
+If this saved you time, **star the repo**. 🌟
 
 ---
 
 ## 📄 License
 
 [MIT](LICENSE) © Umut Bayraktar ([@umutxyp](https://github.com/umutxyp)).
-Knowledge base compiled from public Google Search Central & web.dev documentation; all trademarks belong to their owners. This project is not affiliated with or endorsed by Google.
+Knowledge base compiled from public Google Search Central and web.dev documentation; all trademarks belong to their owners. Not affiliated with or endorsed by Google.
 
 ---
 
 ## 🤝 Contributing
 
-Google's guidance evolves — PRs that update a rule (with a source link) or add a framework recipe are very welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Google's guidance moves. PRs that update a rule with a source link, add a framework recipe, or add a check to `tools/` are very welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).

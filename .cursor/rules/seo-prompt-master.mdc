@@ -1,0 +1,53 @@
+---
+description: SEO Prompt Master — audit and fix technical SEO and AI-search readiness against Google's official guidance, with a runnable live audit tool.
+globs:
+alwaysApply: false
+---
+
+# SEO Prompt Master
+
+Invoke this when the task involves search visibility: an SEO audit, indexing or
+crawling problems, canonicals, hreflang, sitemaps, `robots.txt`, structured
+data, a traffic drop, a site migration, or being cited by AI answer engines.
+Also invoke it before shipping changes to routing, metadata, `robots.txt` or
+sitemap generation.
+
+## Source of truth
+
+`docs/01`–`docs/17` in this repository, distilled from Google Search Central and
+web.dev. Every recommendation must cite one (`docs/13 §soft 404`). If a claim is
+not in there, say so rather than recalling it — most SEO advice online is years
+out of date, and this knowledge base is explicit about what changed (FID → INP,
+FAQ rich results removed, `rel=next/prev` unused since 2019).
+
+`verticals/01`–`24` add industry-specific overlays. They supplement the core
+audit; they never replace it.
+
+## Run the tool, don't only read the code
+
+```bash
+node tools/seo-audit.mjs --url https://the-site.example --max 40 --md seo-report.md
+```
+
+Reading the repository tells you what the project intends. This tells you what
+the server returns — soft 404s per template, one-way hreflang sets, canonicals
+pointing at redirects, metadata streamed past `</head>`. Zero dependencies,
+Node 18+, exits `1` on any P1 so it can gate a deploy. Works against
+`http://localhost:3000` when there is no live site.
+
+## Workflow
+
+`START.md` holds the phases. In short: detect the stack → inventory every route
+as `public-index` / `public-noindex` / `private` → audit each indexable page →
+prioritise into P1 (crawl/index blockers), P2 (misrepresentation), P3 (hygiene)
+→ fix shared infrastructure first, then per-page → verify by re-fetching.
+
+Persist to `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md` so a long run
+survives a context reset, and resume from them if they already exist.
+
+## Non-negotiable
+
+- Typecheck, lint and build after every change; never leave the build broken.
+- A fix is not done until you have re-fetched the page and seen it.
+- Finish with the SEO/GEO scores from `docs/11`, with the category breakdown and
+  the off-page caveat — never a bare number.
