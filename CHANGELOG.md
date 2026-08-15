@@ -3,6 +3,18 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## 2.0.2 — 2026-08-15
+
+- **The client-rendered-shell check no longer cries wolf on unusual names.** A
+  profile titled `❦`, a track called `呼喚`: the subject was too short to search
+  for, so the check fell back to the page title — and a title is often a
+  constructed sentence ("X Discord Profile on Sylon") that appears nowhere in
+  the body even on a page that renders perfectly. The title is now a fallback
+  only for pages with no `<h1>` at all, and a subject with fewer than four
+  characters (after stripping combining marks, punctuation and symbols) is
+  skipped rather than guessed at. Every such case seen in testing was a false
+  positive, and a check that fires on unusual names is worse than no check.
+
 ## 2.0.1 — 2026-08-15
 
 Three fixes to `seo-audit.mjs`, all found by running it across five production

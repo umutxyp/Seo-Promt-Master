@@ -285,8 +285,33 @@ function parsePage(html) {
       const fromTitle = (titleMatch ? decode(titleMatch[1].replace(/<[^>]+>/g, "")) : "")
         .split(/\s+[|·—–-]\s+/)[0]
         .trim();
-      const subject = heading.length > 2 ? heading : fromTitle;
-      if (subject.length <= 2) return null; // nothing to judge by
+      /* The title is a fallback for pages with no h1 at all, not for pages
+       * whose h1 is merely short.
+       *
+       * A title is often a constructed sentence — "shxrky.022 Discord Profile
+       * on Sylon" — and that sentence does not appear anywhere in the body even
+       * on a page that renders perfectly. Falling back to it whenever the h1
+       * was short turned every symbol-named profile into a false positive. If
+       * the page has a heading, that heading is the subject; if it cannot be
+       * judged, the honest answer is to not judge it. */
+      const subject = heading.length > 0 ? heading : fromTitle;
+
+      /* A subject has to be long enough to be searched for.
+       *
+       * Some pages are titled with a single symbol or two ideographs — a
+       * display name of "❦", a track called "呼喚". Combining marks (U+20DF and
+       * friends) attach to whatever precedes them once the text is normalised,
+       * so a substring test on one of those fails even when the name is plainly
+       * on the page. Every such case observed in testing was a false positive,
+       * and a check that cries wolf on unusual names is worse than no check.
+       *
+       * Counted after stripping marks, punctuation and symbols, so "❦" is one
+       * character and "呼喚" is two — neither is enough to conclude anything. */
+      const meaningful = subject
+        .normalize("NFKD")
+        .replace(/[\p{M}\p{P}\p{S}\s]/gu, "");
+      if (meaningful.length < 4) return null;
+
       const needle = subject.slice(0, Math.min(24, subject.length)).toLowerCase();
       return text.toLowerCase().includes(needle);
     })(),
