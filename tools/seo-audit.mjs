@@ -325,8 +325,36 @@ function parsePage(html) {
         .replace(/[\p{M}\p{P}\p{S}\s]/gu, "");
       if (meaningful.length < 4) return null;
 
-      const needle = subject.slice(0, Math.min(24, subject.length)).toLowerCase();
-      return text.toLowerCase().includes(needle);
+      /* Both sides folded the same way before comparing.
+       *
+       * A display name like "♚          𝐐𝐀𝐘𝐒" is on the page, but the
+       * extracted text has had its runs of whitespace collapsed while the
+       * heading string still carries them, and the mathematical letterforms
+       * lowercase differently from their ASCII equivalents. Comparing a raw
+       * subject against normalised text reports a rendered page as an empty
+       * shell. Fold decoration away on both sides and what is left is the
+       * question actually being asked: does the page contain its own name? */
+      const fold = (value) =>
+        value
+          .normalize("NFKD")
+          .toLowerCase()
+          .replace(/[\p{M}\p{P}\p{S}]/gu, "")
+          .replace(/\s+/g, " ")
+          .trim();
+
+      const needle = fold(subject).slice(0, 24).trim();
+      if (needle.length < 4) return null;
+
+      /* Note that when the subject came from an `<h1>`, this is close to
+       * self-satisfying — the heading is itself part of the extracted text. That
+       * is deliberate, not an oversight. The question is "does the raw HTML say
+       * what this page is about", and a server-rendered `<h1>` answers it: the
+       * subject is there before any JavaScript runs. The pages this catches are
+       * the ones with no heading in the HTML at all, which is what a shell that
+       * renders its own title client-side looks like. Whether such a page then
+       * has *enough* content is the word-count question below, and a different
+       * finding with a different fix. */
+      return fold(text).includes(needle);
     })(),
   };
 }

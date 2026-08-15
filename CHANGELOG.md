@@ -3,6 +3,16 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## 2.0.5 — 2026-08-15
+
+- **Subject matching folds both sides the same way.** A display name carrying
+  decorative Unicode and runs of spaces was reported as absent from a page it
+  was plainly on: the heading kept its whitespace while the extracted text had
+  been collapsed, and mathematical letterforms do not lowercase to their ASCII
+  equivalents. Both sides are now normalised before comparison.
+- Documented why the check is close to self-satisfying when the page has an
+  `<h1>` — that is the answer to the question being asked, not a bug.
+
 ## 2.0.4 — 2026-08-15
 
 - **`Content-Signal:` counts as an AI-crawler decision.** The check looked only
