@@ -3,6 +3,13 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## 2.0.4 — 2026-08-15
+
+- **`Content-Signal:` counts as an AI-crawler decision.** The check looked only
+  for per-bot `User-agent` groups, so a site declaring `Content-Signal:
+  ai-train=no, search=yes, ai-input=yes` — the newer machine-readable form, one
+  line saying the same thing — was reported as having no position at all.
+
 ## 2.0.3 — 2026-08-15
 
 - **An image whose box is reserved by CSS is no longer reported as a layout-shift

@@ -422,7 +422,12 @@ async function checkRobots() {
   }
 
   const aiBots = ["GPTBot", "ClaudeBot", "CCBot", "Google-Extended", "PerplexityBot", "OAI-SearchBot"];
-  const mentionsAi = aiBots.some((b) => new RegExp(`user-agent:\\s*${b}`, "i").test(text));
+  // Either way of stating it counts: per-bot groups, or the newer machine-readable
+  // `Content-Signal:` declaration (contentsignals.org / IETF AIPREF), which says
+  // the same thing in one line. A site that has decided is a site that has decided.
+  const mentionsAi =
+    aiBots.some((b) => new RegExp(`user-agent:\\s*${b}`, "i").test(text)) ||
+    /^\s*Content-Signal\s*:/im.test(text);
   if (!mentionsAi) {
     add("P3", "docs/10", "/robots.txt", "robots.txt takes no explicit position on AI crawlers. Training, AI-search and user-triggered fetching are three different decisions; defaulting silently is not one of them.", null);
   }
