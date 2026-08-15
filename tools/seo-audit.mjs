@@ -231,6 +231,19 @@ function parsePage(html) {
       height: attr(tag, "height"),
       loading: attr(tag, "loading"),
       hasAltAttribute: /\balt\s*=/i.test(tag),
+      /* Is this image's box already reserved by CSS?
+       *
+       * Google asks for width/height *or* a reserved space — an aspect-ratio
+       * box is the documented alternative, not a workaround. An image that
+       * fills a sized container (`size-full`, `w-full h-full`, `absolute
+       * inset-0`, an explicit `aspect-*`) has its space reserved before the
+       * bytes arrive, and reporting it as a layout-shift risk is noise. It was
+       * 113 findings on one site, all of them wrong, which is how a checker
+       * teaches people to ignore it. */
+      cssSized:
+        /\b(size-full|w-full|h-full|inset-0|aspect-|object-(cover|contain))\b/.test(
+          attr(tag, "class") || "",
+        ) || /\b(width|height|aspect-ratio)\s*:/i.test(attr(tag, "style") || ""),
     }));
 
   const anchors = [...body.matchAll(/<a\b[^>]*>/gi)]
@@ -635,12 +648,12 @@ async function auditPage(url) {
 
   // ── Images ────────────────────────────────────────────────────────────────
   const noAlt = page.images.filter((i) => !i.hasAltAttribute);
-  const noDims = page.images.filter((i) => !i.width || !i.height);
+  const noDims = page.images.filter((i) => (!i.width || !i.height) && !i.cssSized);
   if (noAlt.length) {
     add("P3", "docs/07", where, `${noAlt.length}/${page.images.length} images have no \`alt\` attribute (decorative images still need \`alt=""\`).`, null);
   }
   if (noDims.length) {
-    add("P3", "docs/07", where, `${noDims.length}/${page.images.length} images lack width/height. Missing dimensions are the single most common cause of layout shift.`, null);
+    add("P3", "docs/07", where, `${noDims.length}/${page.images.length} images have neither width/height nor a CSS-reserved box. Unreserved space is the single most common cause of layout shift.`, null);
   }
 
   // ── Structured data ───────────────────────────────────────────────────────

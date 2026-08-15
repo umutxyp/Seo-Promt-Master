@@ -3,6 +3,16 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## 2.0.3 — 2026-08-15
+
+- **An image whose box is reserved by CSS is no longer reported as a layout-shift
+  risk.** Google asks for `width`/`height` *or* reserved space — an aspect-ratio
+  box is the documented alternative, not a workaround. The check now recognises
+  an image that fills a sized container (`size-full`, `w-full h-full`, `absolute
+  inset-0`, an explicit `aspect-*`, or inline sizing) and stays quiet. On one
+  site this was 113 findings, every one of them wrong; a checker that noisy is a
+  checker people learn to ignore. Genuinely unreserved images are still flagged.
+
 ## 2.0.2 — 2026-08-15
 
 - **The client-rendered-shell check no longer cries wolf on unusual names.** A
