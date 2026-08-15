@@ -141,11 +141,21 @@ async function pool(items, worker, size = CONCURRENCY) {
 // enough in practice; anything subtler is left to the agent reading the page.
 // ─────────────────────────────────────────────────────────────────────────────
 
+/* What a reader would see: scripts, styles and the document head removed.
+ *
+ * The head matters. `<title>` is text, and left in, it lands in the extracted
+ * body — so a page whose entire content arrives with JavaScript would appear to
+ * "contain its own subject" purely because the subject is also its title. That
+ * is precisely the page this tool needs to catch. `<title>` is stripped
+ * separately as well, because a framework that streams metadata emits it
+ * outside `</head>`. */
 const stripped = (html) =>
   html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ");
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")
+    .replace(/<head[\s\S]*?<\/head>/gi, " ")
+    .replace(/<title[\s\S]*?<\/title>/gi, " ");
 
 const decode = (s = "") =>
   s
@@ -258,6 +268,28 @@ function parsePage(html) {
     streamedMetadata,
     wordCount: text.split(/\s+/).filter(Boolean).length,
     textSample: text.slice(0, 400),
+    /* Does the raw HTML actually contain what the page is about?
+     *
+     * Computed here, against the full text, because the caller only keeps a
+     * sample — and the subject of a page is as likely to be halfway down it as
+     * in the first 400 characters.
+     *
+     * The h1 is the best statement of the subject, but the worst pages do not
+     * have one: a shell that renders everything client-side often renders its
+     * heading there too. So the title is the fallback, with the site-name
+     * suffix trimmed off — "Uspomene by Ana Bekuta | Beatra" is about a song,
+     * and matching on "Beatra" would pass every page on the site.
+     */
+    subjectRendered: (() => {
+      const heading = headings.find((h) => h.level === 1)?.text?.trim() ?? "";
+      const fromTitle = (titleMatch ? decode(titleMatch[1].replace(/<[^>]+>/g, "")) : "")
+        .split(/\s+[|·—–-]\s+/)[0]
+        .trim();
+      const subject = heading.length > 2 ? heading : fromTitle;
+      if (subject.length <= 2) return null; // nothing to judge by
+      const needle = subject.slice(0, Math.min(24, subject.length)).toLowerCase();
+      return text.toLowerCase().includes(needle);
+    })(),
   };
 }
 
@@ -553,11 +585,27 @@ async function auditPage(url) {
     }
   }
 
-  // ── Rendering ─────────────────────────────────────────────────────────────
-  // AI crawlers largely do not execute JavaScript, so an empty raw HTML body is
-  // not only a Google rendering-queue delay — it is total invisibility there.
-  if (page.wordCount < 120) {
-    add("P2", "docs/05", where, `Only ${page.wordCount} words in the raw HTML. Most AI crawlers never run JavaScript, so client-fetched content does not exist for them.`, { sample: page.textSample.slice(0, 160) });
+  // ── Rendering vs thin content ─────────────────────────────────────────────
+  //
+  // A low word count means one of two different things, with different fixes,
+  // and conflating them produces a page of noise on any site whose entity pages
+  // are simply small.
+  //
+  // A client-rendered shell has chrome and nothing else: whatever the page is
+  // *about* — the name in its <h1> — is absent from the raw HTML entirely,
+  // because it arrives with the JavaScript. Most AI crawlers never run
+  // JavaScript, so for them the page has no subject at all. That is a rendering
+  // bug (docs/05).
+  //
+  // A server-rendered page that happens to be short is a content question
+  // (docs/14), not a rendering one. It is worth noting and it is not the same
+  // finding.
+  const subject = (h1s[0]?.text || page.title || "").split(/\s+[|·—–-]\s+/)[0].trim();
+
+  if (page.wordCount < 200 && page.subjectRendered === false) {
+    add("P2", "docs/05", where, `The raw HTML does not contain this page's own subject ("${subject.slice(0, 40)}") — only ${page.wordCount} words, all of it site chrome. The content arrives with JavaScript, and most AI crawlers never run any.`, { sample: page.textSample.slice(0, 160) });
+  } else if (page.wordCount < 120) {
+    add("P3", "docs/14", where, `Only ${page.wordCount} words of server-rendered content. Rendering is fine; there is simply not much here, which is the kind of page an index threshold is for.`, { words: page.wordCount });
   }
 
   // ── Images ────────────────────────────────────────────────────────────────

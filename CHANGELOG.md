@@ -3,6 +3,25 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## 2.0.1 — 2026-08-15
+
+Three fixes to `seo-audit.mjs`, all found by running it across five production
+sites rather than by reading it.
+
+- **Thin content and a client-rendered shell are no longer the same finding.**
+  A flat word-count threshold reported 29 false P2s on a site whose profile
+  pages are server-rendered and simply small. The check now asks whether the raw
+  HTML contains the page's own subject — its `<h1>`, or its title with the site
+  suffix trimmed. Absent means the content arrives with JavaScript (P2,
+  `docs/05`); present but short means there is not much there (P3, `docs/14`).
+- **The `<title>` no longer leaks into the body text.** `<head>` was not
+  stripped before extracting visible text, so a page whose entire content is
+  client-rendered appeared to contain its own subject — because the subject was
+  also its title. That silently hid the exact pages the check exists to find.
+- **A page with no `<h1>` is judged by its title instead of skipped.** The worst
+  shells render their heading client-side too, so "no h1" was excluding the most
+  broken pages from the most relevant check.
+
 ## 2.0.0 — 2026-08-15
 
 The release that stops this being only a prompt.
