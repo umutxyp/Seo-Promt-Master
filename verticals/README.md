@@ -1,12 +1,12 @@
 # Vertical Playbooks — Industry-Specific SEO & GEO Overlays
 
-The core knowledge base (`docs/01`–`11`) covers universal technical SEO and GEO — it applies to every site. This directory adds **industry-specific overlays**: the schema.org types, structural pitfalls, and GEO considerations particular to a business type. A vertical file never repeats or contradicts the core docs — it only adds what's specific to that niche and cites back to `docs/` for everything else.
+The core knowledge base (`docs/01`–`18`) covers universal technical SEO and GEO — it applies to every site. This directory adds **industry-specific overlays**: the schema.org types, structural pitfalls, and GEO considerations particular to a business type. A vertical file never repeats or contradicts the core docs — it only adds what's specific to that niche and cites back to `docs/` for everything else.
 
 ## How to use this during the workflow
 
 In **Phase 0** (`prompts/00-bootstrap.md`), after detecting the stack, also identify which vertical(s) below best match the project (a site can match more than one, e.g. a marketplace that's also SaaS). Read the matching file(s) and apply their priorities **in addition to** the standard Phase 1–4 audit — a vertical file adds emphasis and vertical-specific checks, it does not replace the 9-point audit or the scoring rubric (`docs/11`).
 
-If no vertical clearly matches, that's fine — the core `docs/01`–`11` workflow is fully self-sufficient on its own; verticals are a bonus layer, not a requirement.
+If no vertical clearly matches, that's fine — the core `docs/01`–`18` workflow is fully self-sufficient on its own; verticals are a bonus layer, not a requirement.
 
 ## Index
 

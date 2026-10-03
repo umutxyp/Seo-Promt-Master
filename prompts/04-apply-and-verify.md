@@ -32,17 +32,36 @@
 - **Mobile content missing vs. desktop** → find what's conditionally hidden/omitted at mobile viewport (CSS `display:none` on breakpoint, a lighter mobile-only template) and put it back in the DOM; collapsed/accordion is fine, absent is not. `docs/05`.
 - **AI crawlers not addressed in `robots.txt`** → add an explicit block once the project's training-vs-retrieval decision is made (see `docs/10`), e.g.:
   ```
-  # Block training crawlers
+  # Search engines: the * group below applies (Googlebot, Bingbot, Applebot…)
+
+  # Opt out of model training (blocking these does not affect Search)
   User-agent: GPTBot
+  User-agent: ClaudeBot
   User-agent: Google-Extended
+  User-agent: Applebot-Extended
+  User-agent: Meta-ExternalAgent
   User-agent: CCBot
   Disallow: /
 
-  # Allow retrieval/answer-engine crawlers (remove if the project wants no AI-answer citations either)
+  # Stay citable in AI answers (remove if the project wants no AI citations either)
   User-agent: OAI-SearchBot
+  User-agent: Claude-SearchBot
   User-agent: PerplexityBot
+  User-agent: DuckAssistBot
   Allow: /
+  Disallow: /admin/
+
+  User-agent: *
+  Disallow: /admin/
+
+  # The same decision, machine-readable (docs/10)
+  Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+  Sitemap: https://example.com/sitemap.xml
   ```
+  Remember RFC 9309: a bot that matches a named group ignores the `*` group entirely, so repeat any `Disallow` the named group still needs (`docs/12`). Re-verify the token list quarterly (`docs/10`).
+- **Bing (or another engine) blocked or throttled** → remove the accidental block (often a `Googlebot`-only allow group above `User-agent: * / Disallow: /`) and any large `Crawl-delay`; verify the site in Bing Webmaster Tools. `docs/18`.
+- **Fast-changing site, slow discovery outside Google** → wire **IndexNow** into the publish/update/delete path (host the key file, ping on real changes only). Google does not use it, so keep the sitemap accurate too. `docs/18`, `docs/06`.
 - **Missing entity `sameAs`** → add to the `Organization` (or `Person`) JSON-LD block, e.g.:
   ```json
   {
