@@ -35,15 +35,18 @@ echo "Installing SEO Prompt Master $VERSION into $TARGET"
 
 # ── Payload ──────────────────────────────────────────────────────────────────
 mkdir -p "$TARGET/$PAYLOAD"
-for dir in docs verticals prompts checklists templates tools examples; do
+for dir in docs verticals prompts prompt-library checklists templates tools examples; do
   [ -d "$SOURCE/$dir" ] || continue
   rm -rf "${TARGET:?}/$PAYLOAD/$dir"
   cp -R "$SOURCE/$dir" "$TARGET/$PAYLOAD/$dir"
 done
 cp "$SOURCE/START.md" "$TARGET/$PAYLOAD/START.md"
 cp "$SOURCE/VERSION" "$TARGET/$PAYLOAD/VERSION"
+for guide in GUIDE.md GUIDE.tr.md; do
+  [ -f "$SOURCE/$guide" ] && cp "$SOURCE/$guide" "$TARGET/$PAYLOAD/$guide"
+done
 chmod +x "$TARGET/$PAYLOAD/tools/seo-smoke.sh" "$TARGET/$PAYLOAD/tools/seo-audit.mjs" 2>/dev/null || true
-echo "  ✓ $PAYLOAD/ (docs, verticals, prompts, tools)"
+echo "  ✓ $PAYLOAD/ (docs, verticals, prompts, prompt-library, tools)"
 
 # Paths inside the installed copy differ from paths inside this repo, so rewrite
 # them rather than shipping instructions that point at files the agent cannot find.
@@ -54,6 +57,9 @@ rewrite() {
       -e "s#\`docs/#\`$PAYLOAD/docs/#g" \
       -e "s#\`verticals/#\`$PAYLOAD/verticals/#g" \
       -e "s#\`prompts/#\`$PAYLOAD/prompts/#g" \
+      -e "s#\`prompt-library/#\`$PAYLOAD/prompt-library/#g" \
+      -e "s#\`templates/#\`$PAYLOAD/templates/#g" \
+      -e "s#\`checklists/#\`$PAYLOAD/checklists/#g" \
       -e "s#\`START.md\`#\`$PAYLOAD/START.md\`#g" \
       "$1" |
   # Ranges like `docs/01`–`docs/17` come out of the rewrite above with the
@@ -113,3 +119,4 @@ echo
 echo "  node $PAYLOAD/tools/seo-audit.mjs --url https://your-site.example --max 25 --md seo-report.md"
 echo
 echo "Then ask your agent to 'run the SEO audit' — it will find the workflow on its own."
+echo "Single-task prompts: $PAYLOAD/prompt-library/README.md · Guide: $PAYLOAD/GUIDE.md"

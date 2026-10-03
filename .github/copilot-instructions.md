@@ -8,13 +8,15 @@ problems, canonicals, hreflang, sitemaps, `robots.txt`, structured data, a
 traffic drop, a migration, or AI answer-engine visibility — follow `START.md`
 and its phases in order.
 
-**Source of truth:** `docs/01`–`docs/17`, distilled from Google Search Central
+**Source of truth:** `docs/01`–`docs/18`, distilled from Google Search Central
 and web.dev. Cite the section behind every recommendation (`docs/13 §soft 404`).
 If a claim is not in there, say it is not covered rather than recalling it —
 much of the SEO advice in training data predates INP replacing FID, the removal
-of FAQ rich results, and `rel=next/prev` falling out of use.
+of FAQ rich results for most sites, and `rel=next/prev` falling out of use.
 
 **Industry overlays:** `verticals/01`–`24`, additive to the core audit.
+**Other engines:** `docs/18` (Bing, Yandex, Apple/Safari, Brave).
+**Single-task prompts:** `prompt-library/`.
 
 **Run the audit rather than only reading the code:**
 

@@ -32,12 +32,18 @@ named stopping conditions in `START.md`'s "Autonomy contract" section.**
   pointing at redirects, metadata streamed past `</head>`. Exits `1` on any P1.
   See `tools/README.md`.
 
-- **`docs/01`–`docs/17` is the only source of truth for SEO claims.** Cite the
+- **`docs/01`–`docs/18` is the only source of truth for SEO claims.** Cite the
   section behind every recommendation. If a claim is not in there, say "not
   covered by the knowledge base" rather than recalling it — much of the SEO
   advice in training data predates INP replacing FID, FAQ rich results being
-  removed, and `rel=next/prev` falling out of use. Docs 01–11 cover the page;
-  12–17 cover crawling, indexing, quality, measurement, migrations and off-page.
+  restricted to government and health sites, and `rel=next/prev` falling out
+  of use. Docs 01–11 cover the page; 12–18 cover crawling, indexing, quality,
+  measurement, migrations, off-page, and other engines (Bing, Yandex, Apple,
+  Brave).
+
+- **`prompt-library/` has 47 single-task prompts** (robots.txt, hreflang, JSON-LD,
+  traffic drop, Bing/IndexNow, AI-crawler policy…). Use one when the user asks
+  for one narrow job rather than the full audit.
 
 - **`verticals/` has 24 industry overlays** (e-commerce, SaaS, marketplace,
   Discord bots, Minecraft server lists…). Check for a match in Phase 0; apply
