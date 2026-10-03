@@ -1,6 +1,6 @@
 # Knowledge Base — Google SEO, Split by Topic
 
-This is the **source of truth** for SEO Prompt Master. Every recommendation the workflow makes should cite one of these sections. All rules are distilled from **Google Search Central** (`developers.google.com/search`) and **web.dev**, cross-checked and current for **2024–2026**.
+This is the **source of truth** for SEO Prompt Master. Every recommendation the workflow makes should cite one of these sections. All rules are distilled from **Google Search Central** (`developers.google.com/search`) and **web.dev**, cross-checked and current for **2024–2026** (last full review: **October 2026**). Google is the reference engine; `docs/18` covers where Bing, Yandex, Apple, Brave and the regional engines differ.
 
 | # | Doc | Covers |
 |---|---|---|
@@ -21,8 +21,9 @@ This is the **source of truth** for SEO Prompt Master. Every recommendation the 
 | 15 | [Measurement & verification](15-measurement-and-verification.md) | Search Console reports, BigQuery, KPI set, proving a change, traffic-drop diagnosis |
 | 16 | [Migrations & incidents](16-migrations-and-incidents.md) | URL inventory, redirect maps, rollback criteria, hack response |
 | 17 | [Off-page & entity authority](17-offpage-and-entity-authority.md) | Link quality, digital PR, disavow, brand and entity building |
+| 18 | [Beyond Google](18-other-search-engines.md) | Bing (+ DuckDuckGo, Yahoo, Copilot), Yandex, Apple/Safari, Brave, Naver, Seznam, Baidu, IndexNow |
 
-**01–11 are about the page.** 12–17 are about everything around it: whether a
+**01–11 are about the page.** 12–18 are about everything around it: whether a
 crawler reaches the page, which URL wins when several say the same thing, whether
 the content clears the quality bar at all, how you prove a change worked, and
 what to do when a migration or an incident is under way.

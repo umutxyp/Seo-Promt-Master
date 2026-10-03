@@ -4,7 +4,7 @@
 
 ## Do this
 
-1. **Read the knowledge base.** Open every file in `docs/` (01–11) and hold the rules in memory. You will cite them by section throughout.
+1. **Read the knowledge base.** Open every file in `docs/` (01–18) and hold the rules in memory — at minimum `docs/README.md` plus 01–13 and 18 before Phase 2; 14–17 when content quality, measurement, a migration or off-page work comes up. You will cite them by section throughout.
 
 1a. **Match against `verticals/`.** Check `verticals/README.md`'s index — if the project matches one or more of the 24 industry playbooks there (e-commerce, SaaS, marketplace, Discord bot, Minecraft server list, etc.), read the matching file(s) too. These are additive overlays (vertical-specific schema types, pitfalls, GEO notes) on top of the standard audit, not a replacement for it — apply them alongside, not instead of, Phases 1–4.
 

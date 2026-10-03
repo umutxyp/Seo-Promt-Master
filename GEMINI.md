@@ -18,10 +18,14 @@ pages into compliance with Google's documented guidance.
 
 ## The short version
 
-- **Knowledge base:** `docs/01`–`docs/17`, distilled from Google Search Central
+- **Knowledge base:** `docs/01`–`docs/18`, distilled from Google Search Central
   and web.dev. It is the only source of truth. Never assert a Google rule that
   is not in there — say "not covered by the knowledge base" instead.
 - **Industry overlays:** `verticals/01`–`24`. Additive, never a replacement.
+- **Beyond Google:** `docs/18` — Bing (also behind DuckDuckGo, Yahoo, Copilot),
+  Yandex, Apple/Safari, Brave. Never fix for Google in a way that breaks them.
+- **Single-task prompts:** `prompt-library/` — for one narrow job instead of the
+  full workflow.
 - **Phases:** `prompts/00`–`04`, plus optional `05` for live field data.
 - **Progress files:** `ROUTES-INVENTORY.md` and `SEO-AUDIT-PROGRESS.md`. Check
   whether they already exist and resume rather than restarting.

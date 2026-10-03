@@ -56,6 +56,7 @@ It is **RFC 9309**. The rules are exact:
 | `Google-Extended` | **Gemini training & grounding control.** Blocking it does **not** affect Search ranking | Yes |
 | `Google-Safety` | Abuse scanning | **No** — ignores robots.txt |
 
+- Other engines' crawlers (Bing, Yandex, Apple, DuckDuckGo, Baidu, Naver, Seznam) and how they read robots.txt differently are in `docs/18`. AI crawlers are in `docs/10`.
 - ⚠️ **User-agent strings are trivially spoofed.** Verify real Googlebot by reverse DNS (`*.googlebot.com` / `*.google.com`) or against Google's published IP ranges before whitelisting anything in a WAF.
 
 ## Crawl budget
@@ -83,7 +84,7 @@ actual crawling = min(crawl capacity limit, crawl demand)
 - ✅ Close crawl traps: infinite calendars, unbounded filter combinations, endless pagination.
 
 ### Things that do not raise crawl budget (myths)
-`Crawl-delay` (Google ignores it) · sitemap `<priority>`/`<changefreq>` (ignored) · a high Lighthouse score (the signal is *response time*, not the score) · `nofollow` on internal links (the URL is still discovered) · "budget optimisation" on a small site (there is no problem to solve).
+`Crawl-delay` (Google ignores it — but **Bing obeys it**, so a leftover value can throttle Bing; `docs/18`) · sitemap `<priority>`/`<changefreq>` (ignored) · a high Lighthouse score (the signal is *response time*, not the score) · `nofollow` on internal links (the URL is still discovered) · "budget optimisation" on a small site (there is no problem to solve).
 
 ## Log analysis — the only source of ground truth
 

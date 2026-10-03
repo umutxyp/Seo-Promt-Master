@@ -54,13 +54,22 @@ check /
 # likely to reach production unnoticed, because nothing about the page looks
 # different.
 echo "indexability"
-if body / | grep -qi 'name="robots"[^>]*content="[^"]*noindex'; then
-  bad "homepage carries noindex"
+# Either attribute order, single or double quotes, the googlebot/bingbot-scoped
+# meta, and the X-Robots-Tag header — a noindex can arrive by any of them.
+if body / | tr '\n' ' ' | grep -oiE '<meta[^>]+>' \
+  | grep -iE "name=[\"']?(robots|googlebot|bingbot)[\"']?" | grep -qiE 'noindex|[\"'"'"' ,]none[\"'"'"' ,]'; then
+  bad "homepage carries a noindex robots meta tag"
 else
-  pass "no noindex on homepage"
+  pass "no noindex meta on homepage"
+fi
+if curl -s -D - -o /dev/null -m 15 -A 'seo-smoke' "$BASE/" 2>/dev/null | grep -i '^x-robots-tag:' | grep -qiE 'noindex|none'; then
+  bad "homepage sends X-Robots-Tag: noindex"
+else
+  pass "no X-Robots-Tag noindex on homepage"
 fi
 
-# `Disallow: /` only matters in the group that applies to search crawlers.
+# `Disallow: /` only matters in the group that applies to search crawlers —
+# Google and Bing (Bing also feeds DuckDuckGo, Yahoo and Copilot; docs/18).
 # Blocking GPTBot or Google-Extended outright is a deliberate AI-training policy
 # (docs/10) and flagging it would train people to ignore this script.
 if body /robots.txt | awk '
@@ -69,7 +78,7 @@ if body /robots.txt | awk '
   /^[[:space:]]*[Uu]ser-[Aa]gent:/ {
     agent = tolower($2)
     if (started) { relevant = 0; started = 0 }
-    if (agent == "*" || agent == "googlebot" || agent == "bingbot") relevant = 1
+    if (agent == "*" || agent == "googlebot" || agent == "bingbot" || agent == "msnbot") relevant = 1
     next
   }
   /^[[:space:]]*[Dd]isallow:/ {

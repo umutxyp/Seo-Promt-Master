@@ -3,6 +3,73 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## 2.1.0 — 2026-10-03
+
+Beyond Google, a prompt library, and an audit tool that now catches what it
+claimed to catch.
+
+### `seo-audit.mjs`
+
+- **Every engine, not just Google.** robots.txt is now resolved per RFC 9309
+  (one group per crawler, longest match, `Allow` wins ties, `*`/`$`) for 24
+  crawlers: Googlebot, Bingbot, YandexBot, Applebot (inheriting the Googlebot
+  group, as Apple documents), DuckDuckBot, Baiduspider, Naver's Yeti, SeznamBot
+  and 16 AI crawlers. The report prints the full **crawler access matrix**. A
+  blocked Bingbot is a P1 — it takes DuckDuckGo, Yahoo and Copilot with it.
+- **Checks that were claimed but missing now exist:** canonicals pointing at a
+  redirect, an error or a `noindex` page; `noindex` sent in the `X-Robots-Tag`
+  header; sitemap URLs that redirect or that robots.txt blocks; render-critical
+  scripts and stylesheets blocked for Googlebot (read from the page, instead of
+  guessing at `/static/`-style paths whether the site used them or not).
+- **New checks:** multiple canonicals, missing viewport, missing `<html lang>`,
+  `Product` with no offers/review/rating, empty `BreadcrumbList`,
+  `aggregateRating` without `ratingValue`, `nosnippet`/`noarchive`/`nocache`
+  (AI-answer controls), a lazy first image on the homepage, `Crawl-delay` that
+  throttles Bing, robots.txt served as HTML, an HTTP-only origin.
+- **GEO Score**, computed across the six `docs/11` rows, with heuristic rows
+  labelled. The SEO Score now shows **where the points went** per category and
+  no longer counts the AI-crawler decision against SEO (it is a GEO row).
+- **Bot protection is recognised.** A Cloudflare/Akamai/Imperva challenge was
+  scored as a P1 on every page — on one production site, eleven false P1s and a
+  score of 0. It is now reported once, with what to verify, and not scored.
+- Fixed: `data-src` was read as `src`; the soft-404 probe hit `/undefined` for
+  the homepage's prefix; host-consolidation probes dropped the port and
+  reported `localhost` as its own duplicate; a homepage that redirects (to a
+  locale, say) was dropped from the audit instead of followed; the report said
+  `1.0.0` whatever the version; `--insecure` was documented but did nothing.
+- `.xml.gz` sitemaps; `--fail-on P1|P2|never`; `--404-paths`; `--user-agent`;
+  `--version`; input validation. Runs with `npx github:umutxyp/Seo-Promt-Master`.
+
+### `seo-smoke.sh`
+
+- The `noindex` check missed `<meta content="noindex" name="robots">` (attribute
+  order), single quotes, `googlebot`/`bingbot` metas and the `X-Robots-Tag`
+  header. It now catches all of them.
+
+### Knowledge base
+
+- **`docs/18` Beyond Google** — Bing (and what is built on it), Yandex
+  (`Clean-param`, the obsolete `Host:`), Apple/Safari (Applebot,
+  Applebot-Extended), Brave, DuckDuckGo, Naver, Seznam, Baidu, and IndexNow.
+- **`docs/10`** — the AI-crawler list rebuilt as a provider table (training /
+  AI search / user-triggered), retired tokens (`anthropic-ai`, `Claude-Web`)
+  called out, `Content-Signal:`, and the snippet controls that govern AI answers.
+- `docs/05` no longer lists TTFB as if it were a Core Web Vital; viewport added.
+- The README's "FAQ rich results were removed in May 2026" contradicted
+  `docs/08` (restricted to government and health sites since August 2023). The
+  README now says what the knowledge base says.
+- Stale "01–11" ranges across prompts and entry points brought up to 01–18.
+
+### New
+
+- **`prompt-library/`** — 47 copy-paste prompts in 8 categories, plus a
+  `prompts.csv` (prompts.chat-compatible) generated from the Markdown.
+- **`GUIDE.md`** and **`GUIDE.tr.md`** — usage guides in English and Turkish.
+- **`tests/`** and a CI workflow — both tools run against a healthy and a broken
+  fixture site; repository checks verify every `docs/NN` citation and relative
+  link resolves.
+- `package.json`, so the auditor runs with `npx` and `npm test` works.
+
 ## 2.0.5 — 2026-08-15
 
 - **Subject matching folds both sides the same way.** A display name carrying

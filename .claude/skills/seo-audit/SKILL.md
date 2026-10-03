@@ -1,6 +1,6 @@
 ---
 name: seo-audit
-description: Audit and fix a website's technical SEO and AI-search (GEO) readiness against Google's official guidance, page by page, ending in a computed SEO/GEO score. Use when asked to audit SEO, fix indexing or crawling problems, check canonicals/hreflang/sitemaps/structured data, diagnose why pages are not indexed or traffic dropped, prepare a site migration, or make a site visible to AI answer engines. Also use before shipping changes that touch routing, metadata, robots.txt or sitemaps.
+description: Audit and fix a website's technical SEO and AI-search (GEO) readiness against Google's official guidance (plus Bing, Yandex, Apple and the AI crawlers), page by page, ending in a computed SEO/GEO score. Use when asked to audit SEO, fix indexing or crawling problems, check canonicals/hreflang/sitemaps/structured data, diagnose why pages are not indexed or traffic dropped, prepare a site migration, or make a site visible to AI answer engines. Also use before shipping changes that touch routing, metadata, robots.txt or sitemaps.
 ---
 
 # SEO audit and repair
@@ -13,11 +13,20 @@ prove it rather than asserting it.
 
 Read `docs/README.md` for the map, then keep `docs/` open as you work. It is the
 **only** source of truth in this skill. If a claim about how Google behaves is
-not in `docs/01`–`docs/17`, say "not covered by the knowledge base" instead of
+not in `docs/01`–`docs/18`, say "not covered by the knowledge base" instead of
 recalling it from memory — the SEO web is full of advice that was true in 2021.
 
 Check `verticals/README.md` for an overlay matching the project's industry. It
 adds emphasis; it never replaces the core audit.
+
+Google is the reference engine, not the only one. `docs/18` covers where Bing
+(which also feeds DuckDuckGo, Yahoo and Copilot), Yandex, Apple/Safari, Brave
+and the regional engines differ — never "fix" something for Google in a way that
+blocks or throttles them.
+
+For a single narrow task rather than the full workflow (rewrite robots.txt,
+generate JSON-LD, diagnose a traffic drop), use the matching prompt in
+`prompt-library/README.md` instead of running every phase.
 
 ## Two ways to learn what is wrong, and you need both
 
@@ -32,10 +41,12 @@ node tools/seo-audit.mjs --url https://the-site.example --max 40 --md seo-report
 Zero dependencies, Node 18+. It samples across the sitemap rather than the head
 of it, then checks robots.txt against RFC 9309, sitemap limits and `lastmod`
 credibility, host consolidation, per-template soft 404s, canonical
-self-reference, **hreflang reciprocity across pages** (a one-way set is
-discarded in full), duplicate titles, streamed-metadata visibility, raw-HTML
-content volume, structured-data validity, and image dimensions. It exits `1` if
-any P1 is open, so it can gate a deploy.
+self-reference and canonical *targets*, `X-Robots-Tag` headers, **hreflang
+reciprocity across pages** (a one-way set is discarded in full), duplicate
+titles, streamed-metadata visibility, raw-HTML content volume, structured-data
+validity, and image dimensions. It prints a **crawler access matrix** (Google,
+Bing, Apple, Yandex… and 16 AI crawlers), an SEO Score and a GEO Score, and
+exits `1` if any P1 is open, so it can gate a deploy.
 
 Point it at a local build (`--url http://localhost:3000`) when there is no live
 site yet.
