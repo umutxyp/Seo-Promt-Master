@@ -15,6 +15,7 @@
 ## Formats & submission
 
 - ✅ Formats: **XML** (most versatile — supports image/video/news/hreflang), RSS/Atom, plain text. Prefer XML.
+- ✅ For engines that support it (Bing, Yandex, Naver, Seznam — **not** Google), also ping **IndexNow** when a URL is published, changed or removed. It speeds discovery and does not replace the sitemap (`docs/18`).
 - ✅ Submit via Search Console, the Search Console API, a `Sitemap:` line in `robots.txt`, or WebSub for feeds.
 
 ## Coverage rule (audit this)

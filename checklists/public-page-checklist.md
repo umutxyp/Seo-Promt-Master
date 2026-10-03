@@ -6,7 +6,8 @@ Run this against **every `public-index` page**. Each item cites its knowledge-ba
 - [ ] Unique, descriptive `<title>` (not boilerplate) — `docs/01`
 - [ ] Unique meta `description` — `docs/01`
 - [ ] Open Graph + Twitter card (title/description/image/url/type) — `docs/01`
-- [ ] `index,follow` robots (this page should rank) — `docs/01`
+- [ ] `index,follow` robots (this page should rank), in the meta tag **and** the `X-Robots-Tag` header — `docs/01`
+- [ ] No accidental `nosnippet` / `noarchive` / `nocache` if the page should be quotable in AI answers — `docs/10`, `docs/18`
 - [ ] Self-referential `rel="canonical"` — `docs/01`
 
 ## Internationalization (if multilingual)

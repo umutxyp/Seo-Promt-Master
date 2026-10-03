@@ -14,14 +14,15 @@ sitemap generation.
 
 ## Source of truth
 
-`docs/01`–`docs/17` in this repository, distilled from Google Search Central and
+`docs/01`–`docs/18` in this repository, distilled from Google Search Central and
 web.dev. Every recommendation must cite one (`docs/13 §soft 404`). If a claim is
 not in there, say so rather than recalling it — most SEO advice online is years
 out of date, and this knowledge base is explicit about what changed (FID → INP,
 FAQ rich results removed, `rel=next/prev` unused since 2019).
 
 `verticals/01`–`24` add industry-specific overlays. They supplement the core
-audit; they never replace it.
+audit; they never replace it. `docs/18` covers Bing, Yandex, Apple/Safari and
+Brave, and `prompt-library/` holds single-task prompts for narrow requests.
 
 ## Run the tool, don't only read the code
 

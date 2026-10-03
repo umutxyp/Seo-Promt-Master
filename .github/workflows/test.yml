@@ -1,0 +1,23 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node --check tools/seo-audit.mjs
+      - run: bash -n tools/seo-smoke.sh install.sh
+      - run: npm test
+      - name: prompt-library CSV is up to date
+        run: node tools/build-prompts-csv.mjs --check

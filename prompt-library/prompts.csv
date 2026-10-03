@@ -1,0 +1,378 @@
+act,prompt,category,source
+"Full audit and fix (coding agent)","Run the SEO Prompt Master workflow on this project, start to finish.
+
+1. Read START.md and follow its phases in order (0 → 5). Don't stop between phases to ask whether to continue.
+2. In Phase 0, run: node tools/seo-audit.mjs --url {{live_url_or_http://localhost:3000}} --max 40 --md seo-report.md
+   (inside an installed project the path is .seo-prompt-master/tools/seo-audit.mjs). Keep the report open for the whole run.
+3. Treat docs/01–docs/18 as the only source of truth and cite the section behind every finding. If a rule isn't there, say ""not covered by the knowledge base"".
+4. Fix shared infrastructure first (metadata helper, robots, sitemap, i18n), then per-page issues. Typecheck, lint and build after every change. A fix only counts once you've re-fetched the page and seen it.
+5. Persist progress to ROUTES-INVENTORY.md and SEO-AUDIT-PROGRESS.md, so the run can resume after a reset.
+6. Finish with the SEO Score and GEO Score from docs/11 (before → after, per-category breakdown, coverage status, off-page caveat), plus a table of page → change → evidence.","Start here","prompt-library/01-start-here.md"
+"Quick 15-minute health check (URL only)","Act as a senior technical SEO. Give me a fast health check of {{url}}.
+
+If you can run commands, run: npx github:umutxyp/Seo-Promt-Master --url {{url}} --max 15 --md seo-report.md
+and base the answer on that report. If you can't, fetch these yourself: /robots.txt, the sitemap it lists, the homepage HTML, and 2 inner pages.
+
+Report exactly:
+1. Top 5 problems, ranked by impact. Use P1 (crawl/index blocker), P2 (misrepresented) or P3 (hygiene), with the evidence for each: the URL plus the header, tag or line you saw.
+2. Crawler access: is the site open to Googlebot, Bingbot and Applebot? What is its AI-crawler policy (training vs AI search vs user-triggered)?
+3. One quick win that can be done today.
+Don't recommend llms.txt, meta keywords, or anything you can't tie to official search-engine documentation.","Start here","prompt-library/01-start-here.md"
+"Deep audit of a single page","Audit this single page as a technical SEO and GEO reviewer: {{url}}
+(Page type: {{homepage | article | product | category | profile | tool}}. Target query: {{main query}}.)
+
+Work through all 9 points and give a verdict for each (✅ / ⚠️ / ❌), with the evidence you saw:
+1 metadata (title, description, OG) · 2 canonical, hreflang and redirects · 3 robots meta + X-Robots-Tag header · 4 JSON-LD (type fits the page, reflects visible content, required properties present) · 5 headings & semantics · 6 images (alt, dimensions, LCP image eager) · 7 internal links & anchors · 8 rendering (is the main content in the raw HTML?) · 9 sitemap presence.
+Then the GEO view: does each section lead with a direct, quotable answer? Is the author or organization identifiable?
+End with a prioritized fix list. Give exact code or tag changes, not advice.","Start here","prompt-library/01-start-here.md"
+"Resume an interrupted audit","Resume the SEO Prompt Master audit in this project. Don't start over.
+Read ROUTES-INVENTORY.md and SEO-AUDIT-PROGRESS.md and tell me in one line where the run stopped (phase, last page, open backlog count). Then continue from exactly that point.
+Don't re-litigate decisions already recorded. Re-verify a random 15% (at least 3) of the items already ticked against the real rendered output before you trust them.","Start here","prompt-library/01-start-here.md"
+"Explain my seo-audit report","Below is the output of seo-audit (SEO Prompt Master). Explain it to me as a plan.
+
+For each finding group:
+- what it means, in plain language
+- whether it can really hurt rankings or AI visibility, or is hygiene
+- the exact fix for my stack ({{framework}})
+- how I'll verify the fix (command or check)
+
+Then give an order of work: infrastructure P1 → page P1 → P2 → P3. Name anything that's a business decision rather than a bug (for example, the AI-crawler policy).
+
+REPORT:
+{{paste seo-report.md here}}","Start here","prompt-library/01-start-here.md"
+"Review and rewrite robots.txt","Act as a technical SEO who knows RFC 9309 exactly. Review this robots.txt for {{domain}}.
+
+Check:
+- group semantics: each crawler obeys ONE group (its most specific match). Rules from * are not merged into a named group.
+- longest-match wins; Allow wins ties; paths are prefixes, case-sensitive; * and $ wildcards
+- render-critical paths (JS/CSS/images) that are blocked
+- locale-prefixed copies of every Disallow (/tr/panel as well as /panel)
+- no URL that should carry noindex is Disallowed (a blocked URL's noindex is never seen)
+- Bingbot, Applebot and other search engines aren't blocked by accident; no Crawl-delay throttling Bing
+- a deliberate AI policy: training bots vs AI-search bots vs user-triggered fetchers, plus an optional Content-Signal line
+- an absolute Sitemap: line
+
+Output: a table of each important crawler (Googlebot, Bingbot, Applebot, YandexBot, GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended) → allowed or blocked at / and at {{key_path}}. Then the problems, then a corrected file with a comment per section.
+Private routes to block: {{/admin /dashboard /api}}. AI decision: {{allow AI search, block training | allow all | block all}}.
+
+robots.txt:
+{{paste}}","Technical SEO","prompt-library/02-technical-seo.md"
+"Generate or fix the XML sitemap","Act as a technical SEO engineer. Build (or fix) the XML sitemap for this {{framework}} project.
+
+Rules:
+- list exactly the public-index URLs: absolute, canonical, 200, not noindex, not Disallowed
+- split at 50,000 URLs / 50 MB uncompressed and add a sitemap index
+- <lastmod> only from a real content-change timestamp (W3C format). Never the build time.
+- no <priority> or <changefreq> (Google ignores them)
+- hreflang via xhtml:link if the site is multilingual
+- reference it from robots.txt with an absolute Sitemap: line
+
+Give me the generator code that fits the project's routing, then a verification command that fetches the sitemap and checks a sample of 20 URLs for 200 + self-canonical + no noindex.
+Data source for URLs and timestamps: {{database table / CMS / filesystem}}.","Technical SEO","prompt-library/02-technical-seo.md"
+"Hunt soft 404s, template by template","Find every route template in this project that can answer 200 for a URL that doesn't exist.
+
+For each dynamic route ([slug], :id, catch-all):
+1. Read the route code: what happens when the entity lookup fails?
+2. Prove it. Request {{base_url}}/<template-root>/seo-check-nonexistent-123 and record the status code.
+3. In Next.js App Router specifically, look for a loading.tsx or Suspense boundary above the segment. It flushes a 200 shell before notFound() runs, so the refusal has to happen in layout.tsx or before streaming starts.
+
+Output: a table of template → current status for a missing entity → fix → verification command. Then wire the template roots into the deploy check:
+SEO_SMOKE_404_PATHS=""{{/blog /products /users}}"" bash tools/seo-smoke.sh {{base_url}}","Technical SEO","prompt-library/02-technical-seo.md"
+"Untangle a canonical / duplicate cluster","Act as a technical SEO. These URLs show the same or near-identical content:
+{{list of URLs}}
+
+For each URL, collect the five signals and show them in a table: status code, rel=canonical, sitemap membership, how internal links point to it, redirects, and hreflang if any.
+Find where the signals disagree. Then choose ONE canonical URL per cluster and give me the changes that align all five signals on it: 301s for true duplicates, self-canonicals, sitemap entries, internal links and hreflang.
+Parameters to keep crawlable vs to consolidate: {{?page= keep, ?utm_ consolidate, ?sort= consolidate}}.
+Never ""fix"" a variant with noindex when a canonical or a 301 is the right instrument.","Technical SEO","prompt-library/02-technical-seo.md"
+"Build a migration redirect map","Act as a site-migration lead. We are moving from {{old setup}} to {{new setup}} on {{date}}.
+
+1. Build the URL inventory from the union of: a crawl, the sitemaps, a Search Console pages export, analytics landing pages and server logs. Tell me which of these you could actually use.
+2. Write the 1:1 redirect map as CSV (old,new), generated by rules plus an exceptions list. No chains, no blanket redirects to the homepage, and a 410 where no equivalent page exists.
+3. Give me a script that tests the whole map (status 301 and the exact target), and a day-0 checklist: robots.txt, noindex scan, sitemaps (old and new), Change of Address, internal links.
+4. Write down the rollback triggers now, before launch.
+URL rules: {{e.g. /blog/:id → /articles/:slug}}","Technical SEO","prompt-library/02-technical-seo.md"
+"Build and verify hreflang","Act as an international SEO engineer. Locales: {{en, tr, de}} using {{subdirectory /tr/ | subdomain | ccTLD}}. Fallback: {{en}}.
+
+1. Implement hreflang in the project's metadata layer. Every page lists itself and every other language version, plus x-default, as absolute URLs with valid ISO codes (en-GB, not en-UK; no underscores).
+2. Each locale version's canonical points to ITSELF, never to the default language.
+3. Make sure there's no automatic IP or Accept-Language redirect. Offer a banner or selector instead.
+4. Set <html lang> per locale (Bing reads it).
+5. Verify reciprocity: for one page per template, fetch every alternate and confirm that each one links back. One-way sets are discarded entirely.
+Show the code change and the verification output.","Technical SEO","prompt-library/02-technical-seo.md"
+"Diagnose JavaScript rendering problems","Act as a JavaScript SEO specialist. For these routes of a {{framework}} app: {{routes}}
+
+1. Fetch the RAW HTML, with no JavaScript (curl -A ""Googlebot"" {{url}}). Is the page's main content there: its H1, its body text, and its internal links as <a href>?
+2. Compare it with the rendered DOM. List what exists only after JavaScript runs.
+3. Check the raw HTML (not the hydrated DOM) for <title>, canonical and robots. Note any metadata that is streamed after </head>.
+For each gap, give the fix: move the data fetch server-side (SSR/SSG/ISR), render pagination as real links, and stop using client-only metadata.
+Remember that most AI crawlers never execute JavaScript, so whatever is missing from the raw HTML is invisible to them.","Technical SEO","prompt-library/02-technical-seo.md"
+"Diagnose Core Web Vitals","Act as a web performance engineer. Field data (CrUX / Search Console) for {{url or URL group}}:
+LCP {{x}}s, INP {{y}}ms, CLS {{z}}, TTFB {{t}}ms (diagnostic only).
+
+Working from the page source and the framework ({{framework}}):
+- LCP: which element is it? Is it discoverable in the raw HTML (real src, not data-src), eager, and fetchpriority=high? Is TTFB the real cause?
+- INP: long tasks over 50 ms, hydration cost, third-party scripts. Suggest yield points and code-splitting.
+- CLS: images or embeds without reserved space, late-injected banners, web fonts.
+Rank the fixes by expected impact. Treat lab tools (Lighthouse) as debugging aids only: ranking uses the 28-day CrUX field data, so say how the result will be confirmed there.","Technical SEO","prompt-library/02-technical-seo.md"
+"Design a faceted-navigation policy","Act as a technical SEO for a large catalog. Filters: {{list facets, e.g. color, size, brand, price, sort}}.
+For each facet and each combination type, decide: index or not, and how to implement it.
+- Facets with real search demand and unique content → a static path, with their own title, H1 and description, listed in the sitemap.
+- Rare combinations → noindex,follow, or robots.txt.
+- Sort and view parameters → canonical to the base URL, plus robots.txt.
+- Pagination → self-canonical, crawlable.
+Also: a normalized parameter order, a noindex plus a helpful alternative on empty-result pages, and an estimate of the crawl space before and after.
+Output: a policy table, and the code or config changes for {{framework}}.","Technical SEO","prompt-library/02-technical-seo.md"
+"Crawl-budget analysis from server logs","Act as a crawl-budget analyst. Here is a sample of access logs (combined format):
+{{paste or attach logs}}
+
+1. Keep only verified search crawlers. Note that user agents can be spoofed and say how to verify them by reverse DNS.
+2. Report the status-code mix per crawler (Googlebot, Bingbot, YandexBot, Applebot, AI bots).
+3. Show the top 50 crawled paths, grouped by template. Is crawl budget being spent on parameters, facets or redirects?
+4. List sitemap URLs that were never crawled in the period.
+5. Report response time and the 5xx/429 rate.
+Give the 3 changes that would move the most crawl toward valuable URLs.","Technical SEO","prompt-library/02-technical-seo.md"
+"Write titles and meta descriptions in bulk","Act as an SEO copywriter. Write a <title> and a meta description for each page below.
+Rules:
+- unique per page, describing THIS page's specific content. No boilerplate.
+- title: about 50–60 characters (a practical target, not a rule), main topic first, brand last separated by "" | "" or "" – "". Brand = {{brand}}.
+- description: about 140–160 characters. Say what the reader gets, in plain language. No keyword lists.
+- language: {{language}}. Don't promise anything the page doesn't deliver.
+- for programmatic pages, give a TEMPLATE that uses the entity's real fields, plus 3 filled examples.
+Return a table: URL | title | length | description | length.
+
+Pages (URL — what the page is):
+{{list}}","On-page & content","prompt-library/03-on-page-and-content.md"
+"Fix the heading outline and semantics","Review the heading structure and landmarks of this page's HTML.
+- exactly one <h1> stating the page's subject
+- a logical h2/h3 outline. Note level skips as an accessibility issue (heading order is not a Google ranking factor, so don't oversell it).
+- landmarks: <main>, <nav>, <article>, <section>, and <time datetime> for dates
+- each section should open with a direct, self-contained sentence that answers the question its heading implies. That's what AI answer engines quote.
+Give the corrected outline and the minimal markup diff.
+
+HTML:
+{{paste}}","On-page & content","prompt-library/03-on-page-and-content.md"
+"Plan internal linking","Act as an information architect. My important pages, by priority: {{list with URLs}}
+My templates: {{home, category, article, product…}}
+
+Design internal linking so that:
+- every important page is linked from at least one crawlable <a href>, ideally within 3 clicks of the home page
+- anchors describe the destination (no ""click here""); for image links, the alt text acts as the anchor
+- hubs (category and topic pages) link down to their children, and children link back up and across to siblings
+- pagination uses real ?page=n links, not ""load more"" alone
+Output: a link plan per template (where the link sits, the anchor pattern, the target rule), plus the 10 highest-impact links to add first.","On-page & content","prompt-library/03-on-page-and-content.md"
+"Triage thin and low-value pages","Act as a content strategist who knows Google's spam policies (scaled content abuse, doorways, thin affiliation).
+Here are pages with their 12-month data: URL | impressions | clicks | words | backlinks | last updated
+{{paste table}}
+
+Put every page in one bucket, with a one-line reason:
+KEEP & DEEPEN (has demand and a unique angle) · MERGE (301 into the stronger page) · NOINDEX (useful to users, not to search) · DELETE (410).
+Then define an index threshold as a product rule (for example, ""a listing is indexable only when it has a description and is approved""), so that quality control stops depending on people remembering it.
+Don't recommend producing more pages. A high not-indexed ratio is fixed by consolidating, not by adding.","On-page & content","prompt-library/03-on-page-and-content.md"
+"E-E-A-T and trust audit","Act as a Search Quality Rater–minded reviewer. Audit {{site}} for trust signals (E-E-A-T is a framework, not a ranking factor):
+- Who: author bylines with bios and credentials; an About page that works as the entity home; contact information and a real address or company details
+- How: evidence of first-hand experience (original photos, data, tests); AI involvement disclosed where it exists
+- Why: does each page exist to help someone, or to collect traffic?
+- Trust: privacy policy, terms, accurate dates, a corrections policy, genuine reviews, affiliate and sponsored links disclosed and marked rel=""sponsored""
+- Structured data: Person for authors and Organization for the site, both with sameAs to profiles the site really controls
+Output: a gap list with the specific page and fix for each. Mark YMYL-critical gaps.","On-page & content","prompt-library/03-on-page-and-content.md"
+"Write a content refresh brief","Act as an SEO editor. Page: {{url}}. Main query cluster: {{queries}}. Current position {{x}}, impressions {{y}}, CTR {{z}}.
+Write a refresh brief:
+1. Search intent: what does the searcher actually need? Name the gaps in the current page.
+2. New outline (H2/H3), with the direct answer leading each section.
+3. What's missing that only we can add: our own data, examples, screenshots, expert input.
+4. Facts to update, with sources.
+5. A title and description variant (the CTR problem).
+6. 3–5 internal links to add pointing to this page, and from it.
+7. How we'll measure it: the affected URL, a control page, and a 4–8 week window.","On-page & content","prompt-library/03-on-page-and-content.md"
+"Resolve keyword cannibalization","These URLs compete for the same query cluster ""{{query}}"":
+{{URL | impressions | clicks | avg position, per URL}}
+Decide: merge (which one wins, and 301 the rest), differentiate (give each a distinct intent and change the titles, H1s and internal anchors), or canonicalize (only for true duplicates).
+Give the exact changes, and the internal links to repoint so that every signal points at the winner.","On-page & content","prompt-library/03-on-page-and-content.md"
+"Generate JSON-LD for a page type","Act as a schema.org and Google structured-data expert. Generate JSON-LD for this page.
+Page type: {{home | article | product | category/list | profile | local business | forum thread | software/app | video | event}}
+Visible content (paste the real fields): {{title, author, date, price, rating count, address…}}
+
+Rules:
+- baseline on every page: WebPage + BreadcrumbList. Add the type-specific node on top, combined in one @graph with @id references.
+- include every property Google documents as required for that type, and the recommended ones where the data exists
+- ONLY data that's visible on the page. No invented ratings, no reviews from elsewhere, no hidden FAQs.
+- real schema.org types only (no made-up types such as ""GameServer"")
+- FAQPage and HowTo are valid markup, but the FAQ rich result is limited to government and health sites, and the HowTo rich result is gone. Don't promise a rich result for either.
+Return the JSON-LD, the server-side code that injects it for {{framework}} (escape the output safely), and how to validate it (Rich Results Test plus the schema.org validator).","Structured data","prompt-library/04-structured-data.md"
+"Validate existing JSON-LD","Validate this JSON-LD against Google's structured-data guidelines and schema.org:
+1. Does it parse? Is @context present? Does every node have an @type?
+2. Are the required and recommended properties present for each type Google supports here?
+3. Does each value match what's VISIBLE on the page? I'll paste the visible text below.
+4. Policy problems: aggregateRating with no real ratings, self-serving reviews, incentivized reviews, markup describing content that isn't on the page.
+5. Duplicate or conflicting nodes (for example, two Organization nodes with different names).
+Return each issue (severity, why, fix) and a corrected block.
+
+JSON-LD:
+{{paste}}
+Visible page text:
+{{paste}}","Structured data","prompt-library/04-structured-data.md"
+"Build the Organization / Person entity","Act as an entity-SEO specialist. Build the site-wide entity for {{organization or person name}}.
+- Organization (or the most specific subtype: LocalBusiness, NewsMediaOrganization, Corporation…) or Person
+- name exactly as used everywhere; url; logo; description; foundingDate / address / contactPoint where they apply
+- sameAs: ONLY profiles we control, consistently named. Mine: {{Wikidata, LinkedIn, GitHub, X, YouTube, Crunchbase…}}
+- WebSite node (with SearchAction if the site has search), linked by @id
+- for authors: a Person node with jobTitle, sameAs and worksFor, used in every Article's author field
+Also list where the name, logo and description must be made consistent off-site (profiles, directories), because AI engines check consistency across the open web.","Structured data","prompt-library/04-structured-data.md"
+"Check Product / merchant markup","Audit the Product markup on these pages: {{URLs or paste JSON-LD}}
+Check: name, image, and offers (price, priceCurrency, availability kept in sync with real stock). If there's no offers, the markup needs review or aggregateRating instead.
+Ratings: aggregateRating only when genuine reviews are rendered on the page (ratingValue, ratingCount/reviewCount, bestRating). Is the review count high enough for stars to appear? Never mark up incentivized reviews.
+Variants: is one canonical pattern used site-wide?
+Out of stock: availability must be accurate, and the page must not soft-404.
+Return the issues and a corrected template.","Structured data","prompt-library/04-structured-data.md"
+"Decide the AI-crawler policy","Help me make — and then implement — an explicit AI-crawler policy for {{site}}, a {{type of business}}.
+
+Explain the three decisions separately, each with its trade-off:
+1. Model training (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, Meta-ExternalAgent, CCBot…): blocking costs no search visibility, but the content isn't used to train models.
+2. AI search and answers (OAI-SearchBot, Claude-SearchBot, PerplexityBot, DuckAssistBot; Google AI Overviews use Googlebot itself; Copilot uses Bing): blocking means not being cited.
+3. User-triggered fetchers (ChatGPT-User, Claude-User, Perplexity-User): what ""a user asked about my page"" means for us.
+Ask me the two or three questions that decide this, then write the robots.txt groups (remember that a named group ignores *, so repeat the needed Disallows), plus a matching Content-Signal line.
+Also list any page-level controls I might want: nosnippet or data-nosnippet for Google AI features, and noarchive or nocache for Copilot.","GEO: AI answer engines","prompt-library/05-geo-ai-search.md"
+"Rewrite a page to be quotable (answer-first)","Act as an editor optimizing for AI answer engines without hurting human readers. Rewrite this page's structure. Keep the facts, the voice and the length roughly the same.
+- every H2 or H3 is a question or a clear topic, and is followed IMMEDIATELY by a 1–2 sentence direct answer that still makes sense when quoted on its own
+- comparisons → a table; steps or options → a list
+- concrete numbers, dates and named entities instead of vague claims; cite sources for facts
+- a visible author and last-updated date; our first-hand experience or data made explicit
+- no keyword stuffing, no ""AI chunks"" written for machines, and no hidden text
+Return: the new outline, the rewritten opening paragraph of each section, and a list of tables or lists to add.
+
+Page:
+{{paste}}","GEO: AI answer engines","prompt-library/05-geo-ai-search.md"
+"Entity consistency audit","Act as an entity-SEO analyst. Our entity: {{name}}, {{one-line description}}, site {{url}}.
+1. List where the entity is described: the site's About page, JSON-LD Organization/Person, Wikidata, LinkedIn, GitHub, X, YouTube, directories, review platforms, press.
+2. For each, compare the name, the description, the logo, the founding facts and the links back to the site. Flag every inconsistency.
+3. Check the site's sameAs: does it point to all of these and only to profiles we control?
+4. Recommend the 5 changes most likely to make AI engines resolve ""who is this"" correctly.","GEO: AI answer engines","prompt-library/05-geo-ai-search.md"
+"Test AI citations (manual tracking)","Create an AI-visibility test plan for {{site}}, covering the topics {{topics}}.
+1. Write 15 realistic prompts a potential customer would ask: a mix of informational, comparison (""best X for Y"") and brand questions.
+2. Make a tracking table: prompt | engine (ChatGPT search, Perplexity, Copilot, Google AI Mode/Overviews, Gemini, Claude) | are we cited? (Y/N + URL) | competitors cited | date.
+3. Explain how to read the results alongside the first-party data: Search Console's Generative AI report (impressions), Bing Webmaster Tools AI Performance, and an analytics segment for AI referrers (chatgpt.com, perplexity.ai, copilot.microsoft.com, gemini.google.com, claude.ai).
+4. Set the cadence: monthly, with the same prompts, logged.","GEO: AI answer engines","prompt-library/05-geo-ai-search.md"
+"Should we add llms.txt?","Someone on my team wants to add llms.txt (or another ""AI file"") for SEO or GEO. Give me an evidence-based answer:
+- what Google says officially about llms.txt and AI features
+- whether any major AI search product has committed to using it in production
+- what it costs (keeping it maintained) against what it's likely to return
+- what to do instead: server-rendered content, an answer-first structure, entity markup with sameAs, an explicit AI-crawler policy
+If we add it anyway (for example, for developer documentation), say how to do it without treating it as an SEO fix.","GEO: AI answer engines","prompt-library/05-geo-ai-search.md"
+"Did AI Overviews take our clicks?","Search Console data for {{period vs previous period}}:
+{{query | impressions | clicks | CTR | position — paste}}
+Separate the causes: a change in demand, a change in ranking (position), or the SERP changing (an AI Overview or other feature absorbing the click while position stays flat).
+For the queries hit hardest, check whether an AI Overview appears now and whether we're cited in it.
+Recommend: which queries to stop chasing, which pages to restructure so they get cited (answer-first, tables, original data), and where titles and descriptions can win back the click.","GEO: AI answer engines","prompt-library/05-geo-ai-search.md"
+"Multi-engine readiness check","Act as a multi-engine SEO auditor. Check {{url}} for Google, Bing (which also feeds DuckDuckGo, Yahoo and Copilot), Apple (Siri, Spotlight, Safari Suggestions), Brave, Yandex and DuckDuckGo.
+
+If you can run commands: npx github:umutxyp/Seo-Promt-Master --url {{url}} --max 15 --md report.md, then read its ""Crawler access"" table.
+Otherwise, read robots.txt and resolve it per RFC 9309 for: Googlebot, Bingbot, Applebot (which falls back to the Googlebot group), YandexBot, DuckDuckBot, Baiduspider, Yeti and SeznamBot. Brave follows the Googlebot rules.
+
+Check:
+- is any search engine blocked, or throttled by Crawl-delay (Bing obeys it)?
+- <html lang> and content-language agree with hreflang (Bing reads them)
+- noarchive or nocache on pages we want cited in Copilot
+- is the site verified in Bing Webmaster Tools, and is IndexNow in use?
+Output: a table of engine → status → issue → fix.","Beyond Google: Bing, Yandex, Apple, Brave, DuckDuckGo","prompt-library/06-multi-engine.md"
+"Set up Bing Webmaster Tools and IndexNow","Walk me through, step by step, setting up Bing for {{site}} ({{framework}}, hosted on {{host}}):
+1. Verify the site in Bing Webmaster Tools (importing from Google Search Console is fastest) and submit the sitemaps.
+2. Implement IndexNow: generate a key, serve it at /<key>.txt, and ping https://api.indexnow.org/indexnow on publish, meaningful update and delete. Use a POST batch of up to 10,000 URLs for bulk changes. Give the code that hooks into our {{CMS/database/deploy}} events, with retries and no duplicate pings for unchanged content.
+3. Remove any Crawl-delay that's throttling Bing, and use Bing's crawl control instead.
+4. Turn on the AI Performance report and tell me what to watch there.
+Note: Google doesn't use IndexNow, so the sitemap stays accurate regardless.","Beyond Google: Bing, Yandex, Apple, Brave, DuckDuckGo","prompt-library/06-multi-engine.md"
+"Set up Yandex","Set {{site}} up for Yandex:
+1. Verify it in Yandex Webmaster, submit the sitemaps, and set the region if the site is local.
+2. robots.txt: add a Yandex group with Clean-param for the tracking and session parameters we use ({{utm_*, ref, sessionid}}). Don't use the obsolete Host: directive; the main mirror is set by 301s. Don't rely on Crawl-delay (Yandex ignores it); use the crawl-speed setting instead.
+3. Confirm that canonical, hreflang and the sitemap index are consistent.
+4. Add IndexNow (shared with Bing) if it isn't already there.
+Give the exact robots.txt additions, and a checklist.","Beyond Google: Bing, Yandex, Apple, Brave, DuckDuckGo","prompt-library/06-multi-engine.md"
+"Apple, Safari and Brave readiness","Explain and check {{site}}'s readiness for Apple and Brave:
+- Safari searches go to Google by default, so the Google foundation covers them. What extra does Applebot (Siri, Spotlight, Safari Suggestions) need?
+- robots.txt: does Applebot fall back to our Googlebot group, and is that what we want? Do we want to opt out of model training with Applebot-Extended without leaving Siri and Spotlight?
+- Brave follows the Googlebot rules and has no webmaster console. Confirm that nothing blocks it, and that discovery through links is strong.
+- How to verify that a request is really Applebot (reverse DNS *.applebot.apple.com).
+Output: the current state, recommended changes, and the exact robots.txt lines.","Beyond Google: Bing, Yandex, Apple, Brave, DuckDuckGo","prompt-library/06-multi-engine.md"
+"Regional engines: Naver, Seznam, Baidu","We target {{country}}. Tell me which search engine matters there and what's specifically needed:
+- Naver (Korea): crawler Yeti, Naver Search Advisor registration, sitemap submission, IndexNow
+- Seznam (Czechia): SeznamBot, IndexNow
+- Baidu (China): Baiduspider, Baidu Ziyuan, weak JavaScript rendering (so server-rendered HTML is effectively mandatory). Flag the hosting and ICP licence questions as business and legal decisions, not SEO fixes.
+Only recommend work for the markets we actually serve. Give a prioritized setup list.","Beyond Google: Bing, Yandex, Apple, Brave, DuckDuckGo","prompt-library/06-multi-engine.md"
+"Diagnose a traffic drop","Act as an SEO incident analyst. Organic traffic dropped {{x%}} starting {{date}}. Work through these steps in order, and don't skip ahead:
+1. Is it real? Analytics or tag change? Did Search Console impressions fall too, or only clicks?
+2. Is it technical? A 5xx spike, a robots.txt change, a leaked noindex (check the meta tags AND the X-Robots-Tag header), a broken canonical, an unreachable sitemap, a WAF blocking Googlebot or Bingbot. If you can, run: npx github:umutxyp/Seo-Promt-Master --url {{url}} and bash tools/seo-smoke.sh {{url}}
+3. Is there a manual action or a security issue in Search Console?
+4. Is it algorithmic? Does the date line up with a core or spam update? Is it site-wide or one section?
+5. Did the SERP change? Position flat but clicks down usually means an AI Overview or a SERP feature.
+6. Is it seasonal? Compare demand in Google Trends.
+Match the shape of the drop (sudden, gradual, one folder, one country) to its likely cause. Give the most probable cause, the evidence still needed, and the fix.
+Data I have: {{paste GSC / analytics summaries, deploy log, dates}}","Monitoring & diagnosis","prompt-library/07-monitoring-and-diagnosis.md"
+"Analyze a Search Console export","Analyze this Search Console Performance export (query, page, clicks, impressions, CTR, position):
+{{paste or attach}}
+Find:
+1. Positions 8–20 with high impressions (the cheapest wins), each with the page and the action.
+2. High impressions with low CTR (a title or snippet problem, or an AI Overview), each with a rewrite suggestion.
+3. Cannibalization: one query, several URLs.
+4. Pages declining over the last 3 months compared with the previous 3.
+Filter out brand queries ({{brand terms}}) first. Present each finding as a table, and end with the top 10 actions.","Monitoring & diagnosis","prompt-library/07-monitoring-and-diagnosis.md"
+"Gate deploys with SEO checks (CI)","Add SEO regression gates to this project's CI ({{GitHub Actions | GitLab CI | other}}):
+1. After build and start, run: bash tools/seo-smoke.sh http://localhost:{{port}}, with SEO_SMOKE_404_PATHS set to our template roots ({{/blog /products}}).
+2. Run node tools/seo-audit.mjs --url http://localhost:{{port}} --max 25 --fail-on P1 --md seo-report.md and upload the report as an artifact.
+3. After the production deploy, run seo-smoke against the live URL and roll back on failure.
+Use the installed path .seo-prompt-master/tools/ if that's where the tools live. Show the full workflow file. Wait for the server to be ready rather than using a fixed sleep.","Monitoring & diagnosis","prompt-library/07-monitoring-and-diagnosis.md"
+"Monthly SEO / GEO report","Write this month's SEO/GEO report for {{site}} from the data below. Structure:
+1. Headline: 3 bullet points, written for a non-specialist.
+2. KPI table: crawl (requests, response time, 5xx), index (indexed vs submitted), visibility (non-brand impressions), clicks and CTR, AI (Generative AI impressions, AI referral sessions), CWV at p75, authority (referring domains), business conversions. Show each against last month.
+3. What we shipped, with each change's hypothesis and its result so far. Include the ones that didn't work.
+4. The current seo-audit SEO and GEO scores, with the category breakdown.
+5. Next month's top 3 priorities.
+Data: {{paste}}","Monitoring & diagnosis","prompt-library/07-monitoring-and-diagnosis.md"
+"Respond to a hacked site","Our site {{url}} looks hacked: {{symptoms}}. Give me an incident runbook, in order:
+1. Contain it (take the site offline or isolate it).
+2. Find the entry point (logs, recently changed files, dependencies, credentials).
+3. Restore from a clean backup and close the hole.
+4. Return 410 for the injected URLs and clean any spam sitemaps.
+5. Rotate every key and session.
+6. Request a review in Search Console, and check Bing Webmaster Tools too.
+7. Hardening: 2FA, dependency scanning, a WAF, file-integrity monitoring.
+For each step, give the exact commands or checks for our stack ({{stack}}).","Monitoring & diagnosis","prompt-library/07-monitoring-and-diagnosis.md"
+"Next.js (App Router)","Apply SEO Prompt Master's rules to this Next.js App Router project:
+- metadata: one shared helper used by every generateMetadata. It sets title, description, alternates.canonical (absolute, self-referencing) and alternates.languages (hreflang + x-default), robots, and openGraph/twitter. Set metadataBase.
+- streaming: check whether <title> lands after </head> for bots that don't run JavaScript. If it does, configure htmlLimitedBots so metadata blocks for crawlers.
+- 404s: notFound() for missing entities. Look for loading.tsx or Suspense ABOVE dynamic segments, which turns 404s into 200 shells, and move the refusal into layout.tsx or out of the streamed path. Verify each template with curl.
+- app/sitemap.ts (generateSitemaps for more than 50k URLs) with real lastmod values; app/robots.ts with a deliberate AI policy and Bingbot left unblocked.
+- JSON-LD: a server-rendered <script type=""application/ld+json""> with safely escaped output, plus WebPage + BreadcrumbList as a baseline.
+- data: server components fetch the data. No useEffect-only content on pages that should be indexed.
+- images: next/image with explicit sizes; priority on the LCP image only.
+Run typecheck, lint and build after each change, and re-fetch the routes to prove it.","Framework recipes","prompt-library/08-framework-recipes.md"
+"Nuxt","Apply SEO Prompt Master's rules to this Nuxt project:
+- useSeoMeta / useHead in one composable for title, description, canonical (absolute), hreflang (via @nuxtjs/i18n's head with SEO enabled), robots and OG
+- render content-critical routes with SSR or prerender (routeRules). No client-only data on pages that should be indexed.
+- a real 404 via throw createError({ statusCode: 404 }) for missing entities, verified with curl for each template
+- sitemap and robots (via @nuxtjs/sitemap and @nuxtjs/robots, or server routes) with an accurate lastmod and a deliberate AI policy
+- JSON-LD rendered server-side
+Run the build and re-fetch the routes to prove it.","Framework recipes","prompt-library/08-framework-recipes.md"
+"SvelteKit / Astro / Remix","Apply SEO Prompt Master's rules to this {{SvelteKit | Astro | Remix}} project:
+- a single head/meta helper for title, description, absolute self-canonical, hreflang + x-default, robots and OG
+- SSR or prerendering for every public-index route; check that the raw HTML contains the H1 and the body text
+- real 404s: SvelteKit error(404) in load · Astro return a 404 Response / Astro.response.status = 404 · Remix throw a 404 Response from the loader. Verify each template.
+- an XML sitemap (split at 50k) with a real lastmod, and robots.txt with an explicit AI policy and Bing unblocked
+- server-rendered JSON-LD
+Show the code changes and the curl proof.","Framework recipes","prompt-library/08-framework-recipes.md"
+"WordPress","Audit and fix this WordPress site's SEO configuration ({{plugin: Yoast | Rank Math | none}}):
+- Settings → Reading: ""Discourage search engines"" must be OFF in production (it sends a noindex)
+- one canonical host and HTTPS (siteurl and home), with the other host variants 301ing to it
+- the plugin's sitemap includes only indexable content: exclude tag, author, date and attachment archives unless they're valuable
+- attachment pages redirect to the parent or the file
+- robots.txt doesn't block /wp-content/ or /wp-includes/ assets that rendering needs; it has a deliberate AI policy and leaves Bing unblocked
+- the schema graph has Organization/Person with sameAs, plus Article for posts. Avoid duplicate schema from the theme and the plugin.
+- a theme or plugin isn't injecting noindex or a second canonical
+Give the exact settings to change, and any code snippets (in a must-use plugin, not in the theme).","Framework recipes","prompt-library/08-framework-recipes.md"
+"Laravel / Django / Rails (server-rendered)","Apply SEO Prompt Master's rules to this {{Laravel | Django | Rails}} app:
+- a base-layout partial that renders title, description, an absolute self-canonical, hreflang, robots and OG from per-view variables, with safe defaults
+- missing records return a real 404 (findOrFail / get_object_or_404 / ActiveRecord::RecordNotFound → 404)
+- sitemap generation (a package or a custom controller) with an accurate lastmod from updated_at; robots.txt served statically or by a route that can't return a 5xx
+- middleware that 301s non-canonical hosts, protocols and trailing slashes in one hop
+- JSON-LD from a view helper with escaped output
+- pagination as real ?page=n links, each page self-canonical
+Show the diffs and the curl proof.","Framework recipes","prompt-library/08-framework-recipes.md"

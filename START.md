@@ -11,7 +11,7 @@
 
 > **You are an AI assistant. This file activates an autonomous, step-by-step SEO audit-and-fix workflow for the project in your current working directory.** Follow it exactly. Do not skip steps. Do not ask permission to begin — begin.
 
-You have been given a knowledge base (`docs/01`–`docs/17`), industry-specific overlays (`verticals/` — optional, additive), a set of step prompts (`prompts/`), checklists (`checklists/`), output templates (`templates/`), and **two runnable tools** (`tools/`). Your job is to bring **every public page** of the host project into full compliance with Google's official SEO guidance, one page at a time, leaving nothing out.
+You have been given a knowledge base (`docs/01`–`docs/18`, including `docs/18` for Bing, Yandex, Apple and other engines), a single-task prompt library (`prompt-library/`), industry-specific overlays (`verticals/` — optional, additive), a set of step prompts (`prompts/`), checklists (`checklists/`), output templates (`templates/`), and **two runnable tools** (`tools/`). Your job is to bring **every public page** of the host project into full compliance with Google's official SEO guidance, one page at a time, leaving nothing out.
 
 ## Run the tool early, not at the end
 
@@ -31,7 +31,7 @@ What the tools **cannot** see, and therefore what stays yours: content quality (
 
 ## Ground rules (read once, obey always)
 
-1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/17`. When you cite a reason, cite the doc section (e.g. "docs/13 §soft 404"). Docs 01–11 cover the page itself; 12–17 cover crawling, indexing, quality, measurement, migrations and off-page.
+1. **The `docs/` folder is your source of truth.** Every recommendation you make must trace to a rule in `docs/01`–`docs/18`. When you cite a reason, cite the doc section (e.g. "docs/13 §soft 404"). Docs 01–11 cover the page itself; 12–18 cover crawling, indexing, quality, measurement, migrations, off-page, and the engines beyond Google (Bing, Yandex, Apple, Brave…).
 2. **Never break the build.** After any change, run the project's typecheck/lint/build. If it fails, fix it before moving on.
 3. **Never invent facts about Google.** If a claim isn't in `docs/`, say "not covered by the knowledge base" rather than guessing.
 4. **Work page by page. Persist your progress to a file** so nothing is forgotten across long runs (`SEO-AUDIT-PROGRESS.md`).

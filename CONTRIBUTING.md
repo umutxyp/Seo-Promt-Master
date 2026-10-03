@@ -4,7 +4,7 @@ Thanks for helping keep this current! Google's guidance changes often, and frame
 
 ## Ground rules
 
-1. **Every SEO claim needs a source.** Add or update the `Source:` link (prefer `developers.google.com/search` or `web.dev`). No source, no merge.
+1. **Every SEO claim needs a source.** Add or update the `Source:` link (prefer `developers.google.com/search`, `web.dev`, or the engine's own docs — Bing, Yandex, Apple…). No source, no merge.
 2. **Keep the `✅ Do / ⚠️ Gotcha / ❌ Don't` convention** in `docs/`.
 3. **Distinguish ranking factors from a11y/UX niceties.** Don't oversell something Google says isn't a ranking signal.
 4. **Prompts stay tool-agnostic.** They should work in Claude, GPT, Gemini, Cursor, Copilot, etc.
@@ -14,14 +14,16 @@ Thanks for helping keep this current! Google's guidance changes often, and frame
 - ✍️ **Doc update** — a rule changed; update the text + source + the date implications in `docs/09` if relevant.
 - 🧩 **Framework recipe** — add concrete "how to fix X in Next.js / Nuxt / SvelteKit / Astro / Rails / Django / Laravel" notes to the relevant `prompts/04` recipe or a new `examples/` file.
 - 🧪 **Example** — a worked `ROUTES-INVENTORY.md` / `SEO-AUDIT-PROGRESS.md` for a real stack in `examples/`.
-- 🌐 **Translation** — a localized `docs/` set, in a sibling folder `docs-<lang>/` (e.g. `docs-tr/`, `docs-es/`) mirroring the same `01`–`11` numbering and filenames as `docs/`, so cross-references stay valid across languages.
-- 📄 **New topic doc** — if it doesn't fit an existing `docs/01`–`11` file, add it as `docs/12-<topic>.md` (next free number, kebab-case) and link it from `docs/README.md`; don't fold unrelated topics into an existing numbered file just to avoid adding one.
+- 🌐 **Translation** — a localized `docs/` set, in a sibling folder `docs-<lang>/` (e.g. `docs-tr/`, `docs-es/`) mirroring the same `01`–`18` numbering and filenames as `docs/`, so cross-references stay valid across languages.
+- 📄 **New topic doc** — if it doesn't fit an existing `docs/01`–`18` file, add it as `docs/<next-number>-<topic>.md` (next free number, kebab-case) and link it from `docs/README.md`; don't fold unrelated topics into an existing numbered file just to avoid adding one.
+- 💬 **New prompt** — add it to the matching `prompt-library/` category in the same shape (title, **Use when:**, a `text` block), then run `npm run prompts:csv`.
+- 🔧 **New check in `tools/`** — every check cites a `docs/` rule and comes with a fixture in `tests/fixtures.mjs` proving it fires on the broken site and stays quiet on the healthy one. Run `npm test`.
 - 🏭 **New vertical** — an industry-specific overlay goes in `verticals/` (next free number, kebab-case, see `verticals/README.md`). Keep it to what's genuinely specific to that niche (schema types, pitfalls, GEO notes) and cite `docs/` for anything universal — don't re-explain core mechanisms already covered there.
 
 ## How
 
 1. Fork → branch → edit.
-2. Keep changes focused and cited.
+2. Keep changes focused and cited. Run `npm test` (tools, links, citations, prompt format).
 3. Open a PR describing what changed and linking the Google source.
 
 By contributing you agree your work is licensed under the repo's [MIT License](LICENSE).

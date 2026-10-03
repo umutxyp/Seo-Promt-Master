@@ -1,0 +1,39 @@
+{
+  "name": "seo-prompt-master",
+  "version": "2.1.0",
+  "description": "Google SEO + multi-engine + GEO knowledge base as an AI skill, with a zero-dependency live audit tool.",
+  "type": "module",
+  "bin": {
+    "seo-audit": "tools/seo-audit.mjs",
+    "seo-prompt-master": "tools/seo-audit.mjs"
+  },
+  "scripts": {
+    "audit": "node tools/seo-audit.mjs",
+    "smoke": "bash tools/seo-smoke.sh",
+    "prompts:csv": "node tools/build-prompts-csv.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "files": [
+    "tools/",
+    "docs/",
+    "prompts/",
+    "prompt-library/",
+    "verticals/",
+    "checklists/",
+    "templates/",
+    "examples/",
+    "START.md",
+    "VERSION",
+    "install.sh"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["seo", "geo", "ai-search", "audit", "prompts", "claude", "codex", "cursor", "robots.txt", "sitemap", "hreflang", "structured-data"],
+  "author": "Umut Bayraktar (https://github.com/umutxyp)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umutxyp/Seo-Promt-Master.git"
+  }
+}

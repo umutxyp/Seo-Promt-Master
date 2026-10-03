@@ -16,6 +16,13 @@ Shared systems that affect **many pages at once**. Fix these first — they give
 - [ ] Does **not** `Disallow` any page you want `noindex`-ed (use meta noindex instead) — `docs/01`
 - [ ] References the sitemap (`Sitemap:` line) — `docs/06`
 - [ ] AI crawlers (GPTBot, Google-Extended, ClaudeBot, PerplexityBot, OAI-SearchBot, etc.) are deliberately addressed, not left to template defaults — `docs/10`
+- [ ] Bingbot, Applebot and every other search engine the project wants are allowed; no `Crawl-delay` throttling Bing — `docs/18`
+
+## Other engines
+- [ ] Bing Webmaster Tools verified, sitemaps submitted — `docs/18`
+- [ ] IndexNow wired into publish/update/delete (if content changes often) — `docs/18`
+- [ ] `<html lang>` set site-wide and consistent with hreflang — `docs/18`
+- [ ] Yandex Webmaster + `Clean-param` (only if the market matters) — `docs/18`
 
 ## XML sitemap
 - [ ] Covers exactly the `public-index` set — `docs/06`
