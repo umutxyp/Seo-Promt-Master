@@ -3,6 +3,16 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## Unreleased
+
+### Security
+
+- **HTML is read the way a browser reads it.** An end tag with whitespace or
+  attributes before its `>` (`</script >`) no longer leaks a script into the
+  page text — which could make a client-rendered shell look server-rendered —
+  and comments are stripped. Character references are decoded in one pass:
+  `&amp;lt;` is the text `&lt;`, not `<`; numeric references are decoded too.
+
 ## 2.1.0 — 2026-10-03
 
 Beyond Google, a prompt library, and an audit tool that now catches what it

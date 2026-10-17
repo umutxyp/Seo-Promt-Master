@@ -5,7 +5,7 @@ import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { brokenSite, healthySite, noindexSite, serve } from "./fixtures.mjs";
+import { brokenSite, healthySite, markupSite, noindexSite, serve } from "./fixtures.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const run = (cmd, args, env = {}) =>
@@ -64,6 +64,15 @@ test("a broken site is caught on every defect", async () => {
 test("--fail-on never keeps the exit code at 0", async () => {
   const { code } = await audit(brokenSite, ["--fail-on", "never"]);
   assert.equal(code, 0);
+});
+
+test("markup is read the way a browser reads it", async () => {
+  const { report } = await audit(markupSite);
+  const home = report.pages.find((p) => p.path === "/");
+  assert.equal(home.title, "Fish &lt;3 Chips – Five items", "references decoded once; a comment is not text");
+  assert.equal(home.words, 5, "no script, style or comment text is counted, whatever its end tag looks like");
+  assert.ok(!has(report, "P3", /No JSON-LD/, "/"), "JSON-LD closed by </script > is read");
+  assert.ok(has(report, "P2", /does not contain this page's own subject/, "/shell"), "a subject named only inside a script is not rendered");
 });
 
 test("seo-smoke passes a healthy site and fails a broken one", async () => {

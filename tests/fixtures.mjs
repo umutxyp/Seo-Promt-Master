@@ -74,6 +74,27 @@ export function noindexSite(origin) {
   };
 }
 
+/** Markup a careless reader gets wrong: end tags with whitespace or attributes
+ *  before their `>`, comments, and a character reference escaped twice. */
+export function markupSite(origin) {
+  const hidden =
+    `<script>var hidden = "alpha beta gamma";</script >` +
+    `<style>.x { content: "delta" }</style\n>` +
+    `<!-- epsilon > zeta -->` +
+    `<SCRIPT type="module">eta theta</SCRIPT data-x="1">`;
+  return {
+    routes: {
+      "/robots.txt": [200, "text/plain", `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`],
+      "/sitemap.xml": [200, "application/xml", `<urlset><url><loc>${origin}/</loc></url><url><loc>${origin}/shell</loc></url></urlset>`],
+      // Five visible words; everything else is script, style or comment.
+      "/": [200, "text/html", page({ title: "Fish &amp;lt;3 Chips &#8211; Five<!-- --> items", h1: "Visible words", canonical: `${origin}/`, head: `<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Fish"}</script >`, body: hidden + "<p>one two three</p>" })],
+      // A client-rendered shell: its subject is only ever named inside a script.
+      "/shell": [200, "text/html", page({ title: "Shell subject here", h1: "", canonical: `${origin}/shell`, body: `<div id="app"></div><script>render("Shell subject here")</script >` })],
+    },
+    headers: {},
+  };
+}
+
 export function serve(build) {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {

@@ -214,31 +214,45 @@ async function pool(items, worker, size = CONCURRENCY) {
 // enough in practice; anything subtler is left to the agent reading the page.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/* What a reader would see: scripts, styles and the document head removed.
+/* What a reader would see: comments, scripts, styles and the document head
+ * removed.
  *
  * The head matters. `<title>` is text, and left in, it lands in the extracted
  * body — so a page whose entire content arrives with JavaScript would appear to
  * "contain its own subject" purely because the subject is also its title. That
  * is precisely the page this tool needs to catch. `<title>` is stripped
  * separately as well, because a framework that streams metadata emits it
- * outside `</head>`. */
+ * outside `</head>`.
+ *
+ * An end tag may carry whitespace or attributes before its `>` — `</script >`
+ * closes a script in every browser — so every end tag below allows for it, or
+ * the rest of a script would leak into the text. Comments, scripts and styles
+ * go in one pass so that whichever opens first wins, as it does in a browser: a
+ * commented-out `<script>` is a comment, and `<!--` inside a script is script. */
 const stripped = (html) =>
   html
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")
-    .replace(/<head[\s\S]*?<\/head>/gi, " ")
-    .replace(/<title[\s\S]*?<\/title>/gi, " ");
+    .replace(/<!--[\s\S]*?--!?>|<script\b[\s\S]*?<\/script\b[^>]*>|<style\b[\s\S]*?<\/style\b[^>]*>/gi, " ")
+    .replace(/<noscript\b[\s\S]*?<\/noscript\b[^>]*>/gi, " ")
+    .replace(/<head\b[\s\S]*?<\/head\b[^>]*>/gi, " ")
+    .replace(/<title\b[\s\S]*?<\/title\b[^>]*>/gi, " ");
 
+/* Character references, decoded in a single pass so that a decoded `&` can
+ * never start another reference: `&amp;lt;` is the text "&lt;", not "<". */
+const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
 const decode = (s = "") =>
   s
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#0?39;|&apos;/g, "'")
-    .replace(/&nbsp;/g, " ")
+    .replace(/&(?:#(\d+)|#x([\da-f]+)|(amp|lt|gt|quot|apos|nbsp));/gi, (_, dec, hex, name) => {
+      if (name) return ENTITIES[name.toLowerCase()];
+      const code = dec ? Number(dec) : parseInt(hex, 16);
+      const valid = code > 0 && code <= 0x10ffff && (code < 0xd800 || code > 0xdfff);
+      return valid ? String.fromCodePoint(code) : "\uFFFD";
+    })
     .trim();
+
+/* Markup to text. Every tag becomes a space, never "", so the words either side
+ * of one stay two words; character references are decoded last, so an escaped
+ * `&lt;b&gt;` is text the page shows rather than a tag to strip. */
+const textOf = (markup) => decode(markup.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ");
 
 const attr = (tag, name) => {
   // Anchored on whitespace so `src` never matches inside `data-src`, nor `name`
@@ -248,7 +262,7 @@ const attr = (tag, name) => {
 };
 
 function parsePage(html) {
-  const headMatch = html.match(/<head[\s\S]*?<\/head>/i);
+  const headMatch = html.match(/<head\b[\s\S]*?<\/head\b[^>]*>/i);
   const head = headMatch ? headMatch[0] : html;
 
   /**
@@ -260,10 +274,11 @@ function parsePage(html) {
    * a fully-tagged page as having no title at all. <svg><title> is stripped
    * first so an inline icon cannot masquerade as the page title.
    */
-  const doc = html.replace(/<svg[\s\S]*?<\/svg>/gi, " ");
+  const doc = html.replace(/<svg\b[\s\S]*?<\/svg\b[^>]*>/gi, " ");
   const tags = (re) => doc.match(re) || [];
 
-  const titleMatch = doc.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const titleMatch = doc.match(/<title\b[^>]*>([\s\S]*?)<\/title\b[^>]*>/i);
+  const title = titleMatch ? textOf(titleMatch[1]) : null;
   const metas = tags(/<meta\b[^>]*>/gi);
   const links = tags(/<link\b[^>]*>/gi);
   const streamedMetadata = Boolean(
@@ -293,9 +308,9 @@ function parsePage(html) {
     .filter((a) => a.hreflang && a.href);
 
   const body = stripped(html);
-  const headings = [...body.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi)].map((m) => ({
+  const headings = [...body.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1\b[^>]*>/gi)].map((m) => ({
     level: Number(m[1]),
-    text: decode(m[2].replace(/<[^>]+>/g, " ")).slice(0, 120),
+    text: textOf(m[2]).slice(0, 120),
   }));
 
   const images = [...body.matchAll(/<img\b[^>]*>/gi)]
@@ -328,11 +343,11 @@ function parsePage(html) {
 
   const jsonLdRaw = [
     ...html.matchAll(
-      /<script[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
+      /<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script\b[^>]*>/gi,
     ),
   ].map((m) => m[1]);
 
-  const text = decode(body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " "));
+  const text = textOf(body);
 
   /* Render-critical assets, read from the raw document. If robots.txt blocks
    * one of these for Googlebot, the rendered page is not the page you see. */
@@ -344,7 +359,7 @@ function parsePage(html) {
   ].filter(Boolean);
 
   return {
-    title: titleMatch ? decode(titleMatch[1].replace(/<[^>]+>/g, "")) : null,
+    title,
     description: metaByName("description"),
     robots: metaByName("robots"),
     googlebot: metaByName("googlebot"),
@@ -388,7 +403,7 @@ function parsePage(html) {
      */
     subjectRendered: (() => {
       const heading = headings.find((h) => h.level === 1)?.text?.trim() ?? "";
-      const fromTitle = (titleMatch ? decode(titleMatch[1].replace(/<[^>]+>/g, "")) : "")
+      const fromTitle = (title ?? "")
         .split(/\s+[|·—–-]\s+/)[0]
         .trim();
       /* The title is a fallback for pages with no h1 at all, not for pages
