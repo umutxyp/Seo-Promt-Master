@@ -17,6 +17,7 @@ the scoring changed in a way that makes old output no longer comparable.
   page text — which could make a client-rendered shell look server-rendered —
   and comments are stripped. Character references are decoded in one pass:
   `&amp;lt;` is the text `&lt;`, not `<`; numeric references are decoded too.
+- The CI workflow's token is limited to `contents: read`.
 
 ## 2.1.0 — 2026-10-03
 

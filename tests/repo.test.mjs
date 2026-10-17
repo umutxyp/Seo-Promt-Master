@@ -54,10 +54,20 @@ test("every library prompt has a title, a 'Use when' line and a text block", asy
   }
 });
 
+// Compared as plain strings, not as a pattern built from the version: a
+// version is data, and nothing in it should be read as regex syntax.
 test("versions agree", () => {
   const version = readFileSync(join(root, "VERSION"), "utf8").trim();
   const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
   assert.equal(pkg.version, version, "package.json version matches VERSION");
-  assert.match(readFileSync(join(root, "README.md"), "utf8"), new RegExp(`version-${version.replace(/\./g, "\\.")}-`), "README badge");
-  assert.match(readFileSync(join(root, "CHANGELOG.md"), "utf8"), new RegExp(`^## ${version.replace(/\./g, "\\.")} `, "m"), "CHANGELOG entry");
+  assert.ok(readFileSync(join(root, "README.md"), "utf8").includes(`version-${version}-`), "README badge");
+  const changelog = readFileSync(join(root, "CHANGELOG.md"), "utf8").split("\n");
+  assert.ok(changelog.some((line) => line.startsWith(`## ${version} `)), "CHANGELOG entry");
+});
+
+test("every workflow limits its token permissions explicitly", () => {
+  const dir = join(root, ".github/workflows");
+  for (const file of readdirSync(dir).filter((f) => /\.ya?ml$/.test(f))) {
+    assert.match(readFileSync(join(dir, file), "utf8"), /^permissions:/m, `${file} has a top-level permissions block`);
+  }
 });
