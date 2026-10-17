@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { execFile } from "node:child_process";
+import { execFile, spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -15,11 +15,11 @@ const run = (cmd, args, env = {}) =>
     );
   });
 
-async function audit(build, extra = []) {
-  const site = await serve(build);
+async function audit(build, extra = [], { tls, env } = {}) {
+  const site = await serve(build, tls);
   const out = join(mkdtempSync(join(tmpdir(), "seo-audit-")), "report.json");
   try {
-    const result = await run(process.execPath, ["tools/seo-audit.mjs", "--url", site.origin, "--json", out, "--quiet", ...extra]);
+    const result = await run(process.execPath, ["tools/seo-audit.mjs", "--url", site.origin, "--json", out, "--quiet", ...extra], env);
     return { ...result, report: JSON.parse(readFileSync(out, "utf8")) };
   } finally {
     await site.close();
@@ -73,6 +73,32 @@ test("markup is read the way a browser reads it", async () => {
   assert.equal(home.words, 5, "no script, style or comment text is counted, whatever its end tag looks like");
   assert.ok(!has(report, "P3", /No JSON-LD/, "/"), "JSON-LD closed by </script > is read");
   assert.ok(has(report, "P2", /does not contain this page's own subject/, "/shell"), "a subject named only inside a script is not rendered");
+});
+
+/* A throwaway self-signed certificate for 127.0.0.1, made per run so that no
+ * private key is ever committed. Skipped where openssl is not installed. */
+const selfSigned = (() => {
+  const dir = mkdtempSync(join(tmpdir(), "seo-audit-tls-"));
+  const [key, cert] = [join(dir, "key.pem"), join(dir, "cert.pem")];
+  const r = spawnSync("openssl", ["req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "1", "-subj", "/CN=127.0.0.1", "-addext", "subjectAltName=IP:127.0.0.1", "-keyout", key, "-out", cert], { stdio: "ignore" });
+  return r.status === 0 ? { key: readFileSync(key), cert: readFileSync(cert), certFile: cert } : null;
+})();
+
+test("TLS certificates are verified unless --insecure is given", { skip: !selfSigned && "openssl not available" }, async () => {
+  const tls = { key: selfSigned.key, cert: selfSigned.cert };
+
+  const strict = await audit(healthySite, [], { tls });
+  assert.equal(strict.report.tlsVerified, true);
+  assert.equal(strict.report.pagesFetched, 0, "a self-signed certificate is refused by default");
+  assert.equal(strict.code, 1);
+
+  const trusted = await audit(healthySite, [], { tls, env: { NODE_EXTRA_CA_CERTS: selfSigned.certFile } });
+  assert.equal(trusted.report.tlsVerified, true);
+  assert.equal(trusted.report.pagesFetched, 3, "trusting that one certificate works with checks still on");
+
+  const insecure = await audit(healthySite, ["--insecure"], { tls });
+  assert.equal(insecure.report.tlsVerified, false, "the report says certificates were not checked");
+  assert.equal(insecure.report.pagesFetched, 3);
 });
 
 test("seo-smoke passes a healthy site and fails a broken one", async () => {

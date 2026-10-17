@@ -54,7 +54,7 @@ Sırasıyla şunları yapar:
 | `--json rapor.json` | Sonuçları başka bir araca veya panoya aktarmak için |
 | `--fail-on P2` | CI'ı sıkılaştırır (varsayılan `P1`; `never` her zaman 0 ile çıkar) |
 | `--url http://localhost:3000` | Yerel build'i yayına almadan önce denetlemek için |
-| `--insecure` | Self-signed sertifikalı staging sunucusu |
+| `--insecure` | Self-signed sertifikalı kendi staging sunucunuz. Sertifikalar varsayılan olarak doğrulanır; bu bayrak doğrulamayı tüm çalıştırma için kapatır. Yalnızca o sertifikaya güvenip doğrulamayı açık tutan `NODE_EXTRA_CA_CERTS=staging-cert.pem node tools/seo-audit.mjs …` tercih edilmeli |
 | `--user-agent "…"` | WAF veya bot koruması varsayılan user-agent'ı engelliyorsa ([SSS](#8-sorun-giderme-ve-sss)) |
 
 ---

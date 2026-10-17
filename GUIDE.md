@@ -54,7 +54,7 @@ What it does, in order:
 | `--json report.json` | Feed the results into another tool or a dashboard |
 | `--fail-on P2` | Make CI stricter (default `P1`; `never` always exits 0) |
 | `--url http://localhost:3000` | Audit a local build before it ships |
-| `--insecure` | A staging server with a self-signed certificate |
+| `--insecure` | Your own staging server with a self-signed certificate. Certificates are checked by default; this turns the checks off for the whole run. Prefer `NODE_EXTRA_CA_CERTS=staging-cert.pem node tools/seo-audit.mjs …`, which trusts that one certificate and keeps them on |
 | `--user-agent "…"` | A WAF or bot protection blocks the default user agent (see [FAQ](#8-troubleshooting--faq)) |
 
 ---

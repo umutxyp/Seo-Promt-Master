@@ -31,7 +31,7 @@ node tools/seo-audit.mjs --url http://localhost:3000 --max 20      # against a l
 | `--404-paths "<a b>"` | — | Extra template roots to probe for soft 404s |
 | `--fail-on <level>` | `P1` | Exit `1` on `P1`, on `P2` (P1 or P2), or `never` |
 | `--user-agent <ua>` | seo-audit UA | Override the User-Agent |
-| `--insecure` | — | Accept invalid TLS (staging only) |
+| `--insecure` | — | Skip TLS certificate checks for the whole run — your own self-signed staging server only, and the report says so. Prefer `NODE_EXTRA_CA_CERTS=cert.pem`, which trusts that one certificate and keeps the checks on |
 | `--quiet` | — | Summary line only |
 | `--version` | — | Print the version |
 

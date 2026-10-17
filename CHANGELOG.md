@@ -7,6 +7,11 @@ the scoring changed in a way that makes old output no longer comparable.
 
 ### Security
 
+- **TLS certificates are verified by default, and `--insecure` says what it
+  does.** The flag remains an explicit opt-in for your own self-signed staging
+  server; it turns verification off for the whole run, so the tool now warns on
+  stderr, records `tlsVerified` in the JSON and Markdown reports, and the help
+  and guides recommend `NODE_EXTRA_CA_CERTS`, which keeps verification on.
 - **HTML is read the way a browser reads it.** An end tag with whitespace or
   attributes before its `>` (`</script >`) no longer leaks a script into the
   page text — which could make a client-rendered shell look server-rendered —

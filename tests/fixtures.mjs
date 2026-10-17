@@ -5,6 +5,7 @@
  * A checker that cries wolf on a clean site is as broken as one that misses.
  */
 import http from "node:http";
+import https from "node:https";
 import { gzipSync } from "node:zlib";
 
 const page = ({ title, h1, canonical, lang = "en", head = "", body = "", jsonLd }) => `<!doctype html>
@@ -95,9 +96,10 @@ export function markupSite(origin) {
   };
 }
 
-export function serve(build) {
+/** Serves a fixture over HTTP, or over HTTPS when given `{ key, cert }`. */
+export function serve(build, tls) {
   return new Promise((resolve) => {
-    const server = http.createServer((req, res) => {
+    const handler = (req, res) => {
       const path = req.url.split("?")[0];
       const site = server.site;
       if (site.redirects?.[path]) {
@@ -113,9 +115,10 @@ export function serve(build) {
       const [status, type, body] = route;
       res.writeHead(status, { "content-type": type, ...(site.headers[path] || {}) });
       res.end(body);
-    });
+    };
+    const server = tls ? https.createServer(tls, handler) : http.createServer(handler);
     server.listen(0, "127.0.0.1", () => {
-      const origin = `http://127.0.0.1:${server.address().port}`;
+      const origin = `${tls ? "https" : "http"}://127.0.0.1:${server.address().port}`;
       server.site = build(origin);
       resolve({ origin, close: () => new Promise((r) => server.close(r)) });
     });

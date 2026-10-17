@@ -72,7 +72,10 @@ seo-audit ${VERSION} — live technical SEO + GEO audit
   --404-paths "<a b>"   Extra template roots to probe for soft 404s (e.g. "/blog /products")
   --fail-on <level>     Exit 1 on: P1 (default), P2 (P1 or P2), or never
   --user-agent <ua>     Override the request User-Agent
-  --insecure            Accept invalid TLS certificates (staging only)
+  --insecure            Skip TLS certificate checks for this whole run — only for
+                        your own staging/local server with a self-signed
+                        certificate. Prefer NODE_EXTRA_CA_CERTS=<cert.pem> (that
+                        server's certificate or its CA): it keeps checks on.
   --quiet               Only print the summary
   --version             Print the version
 
@@ -100,8 +103,22 @@ try {
   process.exit(2);
 }
 
-// Staging certificates are often self-signed. Opt-in only, never the default.
+/* Certificates are verified unless the caller explicitly says otherwise.
+ *
+ * `--insecure` exists for one case: auditing your own staging or local server
+ * behind a self-signed certificate. fetch has no per-request switch for that, so
+ * it turns verification off for every host this run touches — a sitemap or a
+ * redirect on another host included. NODE_EXTRA_CA_CERTS=<cert.pem> trusts that
+ * server's certificate (or its CA) instead and keeps verification on, which is
+ * why the help recommends it. Either way, the report records whether certificates were
+ * checked, so an unverified run is never mistaken for a verified one. */
 if (flag("insecure")) process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const TLS_VERIFIED = process.env.NODE_TLS_REJECT_UNAUTHORIZED !== "0";
+if (!TLS_VERIFIED) {
+  console.error(
+    `TLS certificates are NOT verified in this run (${flag("insecure") ? "--insecure" : "NODE_TLS_REJECT_UNAUTHORIZED=0"}) — use it only against a server you control.`,
+  );
+}
 
 const UA =
   opt("user-agent") ||
@@ -1447,7 +1464,7 @@ Allowing or blocking an AI crawler is a policy decision (\`docs/10\`), not a def
 
   return `# SEO audit — ${report.origin}
 
-_Generated ${report.generatedAt} · ${coverage} · seo-audit ${report.tool}_
+_Generated ${report.generatedAt} · ${coverage} · seo-audit ${report.tool}${report.tlsVerified ? "" : " · **TLS certificates were not verified**"}_
 
 ## SEO Score: ${report.score.total}/100 (${coverage})
 
@@ -1576,6 +1593,7 @@ const report = {
   origin: ORIGIN,
   generatedAt: new Date().toISOString(),
   durationMs: Date.now() - started,
+  tlsVerified: TLS_VERIFIED,
   pagesFetched: results.filter((r) => r.page).length,
   sitemapUrlCount: sitemapUrls.length,
   sitemapUrlsVisited: seeds.filter((u) => fromSitemap.has(normalize(u))).length,
