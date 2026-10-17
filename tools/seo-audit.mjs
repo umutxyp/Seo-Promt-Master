@@ -245,13 +245,27 @@ async function pool(items, worker, size = CONCURRENCY) {
  * closes a script in every browser — so every end tag below allows for it, or
  * the rest of a script would leak into the text. Comments, scripts and styles
  * go in one pass so that whichever opens first wins, as it does in a browser: a
- * commented-out `<script>` is a comment, and `<!--` inside a script is script. */
+ * commented-out `<script>` is a comment, and `<!--` inside a script is script.
+ *
+ * A tag name ends where a browser ends it — at whitespace, `/` or `>` — hence
+ * `[\t\n\f\r />]` after each name. A word boundary would also end it at a
+ * hyphen: `<title-bar>` would be read as a title and stripped, and a
+ * `"</script-x>"` string inside a script would close the script and leak the
+ * rest of it into the text. A comment, script, style, noscript or title left
+ * open runs to the end of the document, as it does in a browser — only
+ * `</head>` may be left out, because the head closes by itself — and `<!-->`
+ * is an empty comment. An end tag cut off by the end of the document ends
+ * there too, which also keeps a run of stray `</script ` from rescanning the
+ * rest of the page once each. */
 const stripped = (html) =>
   html
-    .replace(/<!--[\s\S]*?--!?>|<script\b[\s\S]*?<\/script\b[^>]*>|<style\b[\s\S]*?<\/style\b[^>]*>/gi, " ")
-    .replace(/<noscript\b[\s\S]*?<\/noscript\b[^>]*>/gi, " ")
-    .replace(/<head\b[\s\S]*?<\/head\b[^>]*>/gi, " ")
-    .replace(/<title\b[\s\S]*?<\/title\b[^>]*>/gi, " ");
+    .replace(
+      /<!--(?:-?>|[\s\S]*?(?:--!?>|$))|<script[\t\n\f\r />][\s\S]*?(?:<\/script(?:[\t\n\f\r /][^>]*)?(?:>|$)|$)|<style[\t\n\f\r />][\s\S]*?(?:<\/style(?:[\t\n\f\r /][^>]*)?(?:>|$)|$)/gi,
+      " ",
+    )
+    .replace(/<noscript[\t\n\f\r />][\s\S]*?(?:<\/noscript(?:[\t\n\f\r /][^>]*)?(?:>|$)|$)/gi, " ")
+    .replace(/<head[\t\n\f\r />][\s\S]*?<\/head(?:[\t\n\f\r /][^>]*)?(?:>|$)/gi, " ")
+    .replace(/<title[\t\n\f\r />][\s\S]*?(?:<\/title(?:[\t\n\f\r /][^>]*)?(?:>|$)|$)/gi, " ");
 
 /* Character references, decoded in a single pass so that a decoded `&` can
  * never start another reference: `&amp;lt;` is the text "&lt;", not "<". */
@@ -279,7 +293,7 @@ const attr = (tag, name) => {
 };
 
 function parsePage(html) {
-  const headMatch = html.match(/<head\b[\s\S]*?<\/head\b[^>]*>/i);
+  const headMatch = html.match(/<head[\t\n\f\r />][\s\S]*?<\/head(?:[\t\n\f\r /][^>]*)?(?:>|$)/i);
   const head = headMatch ? headMatch[0] : html;
 
   /**
@@ -291,10 +305,10 @@ function parsePage(html) {
    * a fully-tagged page as having no title at all. <svg><title> is stripped
    * first so an inline icon cannot masquerade as the page title.
    */
-  const doc = html.replace(/<svg\b[\s\S]*?<\/svg\b[^>]*>/gi, " ");
+  const doc = html.replace(/<svg[\t\n\f\r />][\s\S]*?<\/svg(?:[\t\n\f\r /][^>]*)?(?:>|$)/gi, " ");
   const tags = (re) => doc.match(re) || [];
 
-  const titleMatch = doc.match(/<title\b[^>]*>([\s\S]*?)<\/title\b[^>]*>/i);
+  const titleMatch = doc.match(/<title(?:[\t\n\f\r /][^>]*)?>([\s\S]*?)<\/title(?:[\t\n\f\r /][^>]*)?(?:>|$)/i);
   const title = titleMatch ? textOf(titleMatch[1]) : null;
   const metas = tags(/<meta\b[^>]*>/gi);
   const links = tags(/<link\b[^>]*>/gi);
@@ -360,7 +374,7 @@ function parsePage(html) {
 
   const jsonLdRaw = [
     ...html.matchAll(
-      /<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script\b[^>]*>/gi,
+      /<script[\t\n\f\r /][^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script(?:[\t\n\f\r /][^>]*)?(?:>|$)/gi,
     ),
   ].map((m) => m[1]);
 

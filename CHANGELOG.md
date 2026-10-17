@@ -15,8 +15,11 @@ the scoring changed in a way that makes old output no longer comparable.
 - **HTML is read the way a browser reads it.** An end tag with whitespace or
   attributes before its `>` (`</script >`) no longer leaks a script into the
   page text — which could make a client-rendered shell look server-rendered —
-  and comments are stripped. Character references are decoded in one pass:
-  `&amp;lt;` is the text `&lt;`, not `<`; numeric references are decoded too.
+  and comments are stripped. A tag name ends where a browser ends it, so a
+  `"</script-x>"` string does not close a script and `<title-bar>` is neither
+  the title nor stripped; a comment, script or style left open runs to the end
+  of the page. Character references are decoded in one pass: `&amp;lt;` is the
+  text `&lt;`, not `<`; numeric references are decoded too.
 - The CI workflow's token is limited to `contents: read`.
 
 ## 2.1.0 — 2026-10-03

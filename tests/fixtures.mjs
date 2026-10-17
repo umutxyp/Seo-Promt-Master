@@ -76,21 +76,29 @@ export function noindexSite(origin) {
 }
 
 /** Markup a careless reader gets wrong: end tags with whitespace or attributes
- *  before their `>`, comments, and a character reference escaped twice. */
+ *  before their `>`, comments, a character reference escaped twice, custom
+ *  elements whose names start like `title` or `script`, and a script left open. */
 export function markupSite(origin) {
   const hidden =
     `<script>var hidden = "alpha beta gamma";</script >` +
     `<style>.x { content: "delta" }</style\n>` +
-    `<!-- epsilon > zeta -->` +
-    `<SCRIPT type="module">eta theta</SCRIPT data-x="1">`;
+    `<SCRIPT type="module">eta theta</SCRIPT data-x="1">` +
+    // `</script-x>` is not an end tag, so it does not close the script.
+    `<script>var s = "</script-x>"; iota kappa</script>`;
+  // Custom elements are text like any other, and `<!-->` is an empty comment.
+  const visible = `<p>one</p><title-bar>two</title-bar><script-x>three</script-x><!-->four<!-- epsilon > zeta -->`;
+  // Left open, a script runs to the end of the document.
+  const unclosed = `<script>lambda mu`;
   return {
     routes: {
       "/robots.txt": [200, "text/plain", `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`],
-      "/sitemap.xml": [200, "application/xml", `<urlset><url><loc>${origin}/</loc></url><url><loc>${origin}/shell</loc></url></urlset>`],
+      "/sitemap.xml": [200, "application/xml", `<urlset><url><loc>${origin}/</loc></url><url><loc>${origin}/shell</loc></url><url><loc>${origin}/streamed</loc></url></urlset>`],
       // Five visible words; everything else is script, style or comment.
-      "/": [200, "text/html", page({ title: "Fish &amp;lt;3 Chips &#8211; Five<!-- --> items", h1: "Visible words", canonical: `${origin}/`, head: `<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Fish"}</script >`, body: hidden + "<p>one two three</p>" })],
+      "/": [200, "text/html", page({ title: "Fish &amp;lt;3 Chips &#8211; Five<!-- --> items", h1: "Visible", canonical: `${origin}/`, head: `<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Fish"}</script >`, body: hidden + visible + unclosed })],
       // A client-rendered shell: its subject is only ever named inside a script.
       "/shell": [200, "text/html", page({ title: "Shell subject here", h1: "", canonical: `${origin}/shell`, body: `<div id="app"></div><script>render("Shell subject here")</script >` })],
+      // Streamed metadata: the real <title> arrives after a <title-bar> element.
+      "/streamed": [200, "text/html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="canonical" href="${origin}/streamed"></head><body><title-bar>Site menu</title-bar><main><h1>Streamed page</h1><p>Words about the streamed page.</p></main><title>Streamed page title</title></body></html>`],
     },
     headers: {},
   };
