@@ -5,7 +5,7 @@ import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { brokenSite, healthySite, markupSite, noindexSite, serve } from "./fixtures.mjs";
+import { brokenSite, healthySite, markupSite, noindexSite, robotsSite, serve } from "./fixtures.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const run = (cmd, args, env = {}) =>
@@ -64,6 +64,21 @@ test("a broken site is caught on every defect", async () => {
 test("--fail-on never keeps the exit code at 0", async () => {
   const { code } = await audit(brokenSite, ["--fail-on", "never"]);
   assert.equal(code, 0);
+});
+
+test("robots.txt is read the way Google and Bing read it", async () => {
+  const limited = await audit(robotsSite(429, "Too many requests"));
+  assert.ok(has(limited.report, "P1", /returned 429.*server error/, "/robots.txt"), "429 is a server error, not a missing file");
+  const gone = await audit(robotsSite(404, "Not found"));
+  assert.ok(has(gone.report, "P2", /returned 404.*no robots\.txt/, "/robots.txt"), "other 4xx mean no rules");
+
+  const delayed = await audit(robotsSite(200, "User-agent: *\nCrawl-delay: 20\n\nUser-agent: bingbot\nAllow: /\n"));
+  assert.equal(delayed.report.crawlers.find((c) => c.name === "Bingbot").crawlDelay, 20, "Bing reads Crawl-delay from the default group too");
+  assert.ok(has(delayed.report, "P3", /Crawl-delay: 20 applies to Bingbot/), "and the cap is reported");
+
+  const aipref = await audit(robotsSite(200, "User-agent: *\nAllow: /\n\nUser-agent: __usage_ai-training\nDisallow: /\n"));
+  assert.ok(!has(aipref.report, "P3", /no explicit position on AI crawlers/), "the AIPREF training token is an AI-crawler position");
+  assert.equal(aipref.report.crawlers.length, 30, "30 crawlers in the access matrix");
 });
 
 test("markup is read the way a browser reads it", async () => {

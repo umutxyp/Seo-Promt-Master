@@ -103,7 +103,7 @@ Both have zero dependencies. The auditor needs Node 18+; the smoke test needs `c
 - **Soft 404s, template by template** — a route that answers 200 for URLs that don't exist. In frameworks with Suspense boundaries this has no visible symptom at all: a `loading.tsx` above one segment silently turns that whole template's 404 into a 200 shell.
 - **One-way hreflang** — a set that isn't reciprocal is discarded *in full*, so every language in the cluster loses the signal. You can only see it by comparing pages against each other.
 - **Signals that contradict each other** — a canonical pointing at a redirect, a 404 or a `noindex` page; sitemap URLs that redirect or that robots.txt blocks; a `noindex` sent in the `X-Robots-Tag` header that no one sees in the HTML.
-- **A crawler access matrix** — robots.txt resolved per RFC 9309 for Googlebot, **Bingbot** (which also feeds DuckDuckGo, Yahoo and Copilot), **Applebot** (Siri, Spotlight, Safari), YandexBot, DuckDuckBot, Baiduspider, Naver and Seznam, plus 16 AI crawlers split into training, AI search and user-triggered. Blocking Bing by accident is a P1; blocking an AI trainer is a policy decision.
+- **A crawler access matrix** — robots.txt resolved per RFC 9309 for Googlebot, **Bingbot** (which also feeds DuckDuckGo, Yahoo and Copilot), **Applebot** (Siri, Spotlight, Safari), YandexBot, DuckDuckBot, Baiduspider, Naver and Seznam, plus 22 AI crawlers split into training, AI search and user-triggered — 30 in all. Blocking Bing by accident is a P1; blocking an AI trainer is a policy decision.
 - **Streamed metadata** — frameworks that flush `<head>` early and emit `<title>` later. Browsers hoist it; bots that stop reading at `</head>` see an untitled page.
 - **Bot protection** — it recognises a Cloudflare, Akamai or Imperva challenge and reports it once, instead of scoring an unreadable site as broken.
 - Plus: render-critical JS and CSS blocked by robots.txt, sitemap limits and `lastmod` credibility (including `.xml.gz`), host consolidation, duplicate titles, JSON-LD validity and policy (`Product` with no offer, review or rating; `aggregateRating` with no ratings behind it), raw-HTML content volume, image dimensions, viewport, `lang`, and AI-answer snippet controls (`nosnippet`, `noarchive`/`nocache`).
@@ -135,7 +135,7 @@ This is what `seo-audit.mjs --md report.md` writes, shortened. The run below is 
 | Googlebot | Search engine | ✅ allowed | `*`      |
 | Bingbot   | Search engine | ⛔ blocked | `bingbot` |
 | GPTBot    | AI training   | ✅ allowed | `*`      |
-  … 24 crawlers in all
+  … 30 crawlers in all
 
 ### P1 — blockers (6)
 - robots.txt blocks Bingbot from the homepage (via `User-agent: bingbot`). That removes

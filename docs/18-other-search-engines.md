@@ -9,9 +9,9 @@ Docs 01–17 are written against Google, because Google publishes the most and h
 | Engine | Crawler token(s) | Powers | Webmaster tool | IndexNow | Honours `Crawl-delay` |
 |---|---|---|---|---|---|
 | Google | `Googlebot` (+ `Google-Extended` for Gemini) | Google Search, Discover, AI Overviews / AI Mode | Search Console | ❌ No | ❌ Ignored |
-| Bing | `bingbot` (legacy `msnbot`) | Bing, **Copilot**, and most of **DuckDuckGo / Yahoo / Ecosia** web results | Bing Webmaster Tools | ✅ Yes | ✅ Yes |
+| Bing | `bingbot` (legacy `msnbot`) | Bing, **Copilot**, and most of **DuckDuckGo / Yahoo** web results (Ecosia now mixes Bing, Google and EUSP) | Bing Webmaster Tools | ✅ Yes | ✅ Yes |
 | Yandex | `YandexBot` (group `Yandex` covers all Yandex bots) | Yandex Search, Alice | Yandex Webmaster | ✅ Yes | ❌ Ignored since 2018 — use the crawl-speed setting |
-| Apple | `Applebot` (+ `Applebot-Extended` for model training) | Siri, Spotlight, **Safari Suggestions** | — | ❌ No | — |
+| Apple | `Applebot` (+ `Applebot-Extended` for model training) | Siri, Spotlight, **Safari Suggestions** | — | ❌ No | ❌ No |
 | Brave | No distinct token — follows **Googlebot** rules | Brave Search, Brave Search API | — | ❌ No | — |
 | DuckDuckGo | `DuckDuckBot`, `DuckAssistBot` | Its own crawl supplements results mostly sourced from Bing | — (use Bing's) | — | — |
 | Naver | `Yeti` | Naver (South Korea) | Naver Search Advisor | ✅ Yes | — |
@@ -34,9 +34,9 @@ Treat Bing as the second engine of record. Its index is the one behind **DuckDuc
 
 - ✅ **Set up Bing Webmaster Tools.** You can import the site from Search Console in a few clicks. It also includes the **AI Performance** report (`docs/15`), which shows how the site appears in Copilot answers.
 - ✅ **IndexNow is Bing's preferred fast-discovery channel.** When a URL is added, changed or deleted, ping the IndexNow endpoint once. Every participating engine shares the submission. Google does not take part, so IndexNow supplements the sitemap and never replaces it.
-- ⚠️ **Bing honours `Crawl-delay`.** Google ignores it (`docs/12`), so a `Crawl-delay: 10` copied from an old template looks harmless in Search Console. In Bing it caps the crawl at 8,640 URLs a day. For a large site, remove it and use the crawl-control setting in Bing Webmaster Tools instead.
+- ⚠️ **Bing honours `Crawl-delay`.** Google ignores it (`docs/12`), so a `Crawl-delay: 10` copied from an old template looks harmless in Search Console. In Bing it caps the crawl at 8,640 URLs a day — and Bing applies a `Crawl-delay` from the default `User-agent: *` group even when a `bingbot` group exists. For a large site, remove it and use the crawl-control setting in Bing Webmaster Tools instead.
 - ✅ **Language signals:** Bing reads `<html lang>` and the `content-language` meta/header as well as hreflang. Google detects language from the visible content only (`docs/02`). Set all of them and make sure they agree.
-- ✅ **Controls for Copilot answers:** Bing treats `noarchive` and `nocache` in robots meta as content-use controls for its AI answers. With `nocache`, Copilot may show only the URL, title and snippet. With `noarchive`, the page is excluded from its answers. Both are ordinary meta values, so check that no template sets them by accident on pages you want cited.
+- ✅ **Controls for Copilot answers:** Bing treats `noarchive` and `nocache` in robots meta as content-use controls for its AI answers. With `nocache`, Copilot may show only the URL, title and snippet. With `noarchive`, the page is excluded from its answers. Since October 2025 Bing also honours `data-nosnippet`: marked sections stay indexed but are kept out of snippets and AI summaries. Both are ordinary meta values, so check that no template sets them by accident on pages you want cited.
 - ⚠️ **`bingbot` is not covered by a `Googlebot` group.** A site that writes only a `Googlebot` group and then `User-agent: * / Disallow: /` has blocked Bing — and with it most of DuckDuckGo and Copilot.
 - ✅ Bing renders JavaScript, but its own guidance prefers content in the initial HTML for the same reasons as `docs/05`. Server rendering remains the answer for every engine.
 
@@ -78,7 +78,7 @@ https://api.indexnow.org/indexnow?url=https://example.com/changed-page&key=<your
 ```
 
 - ✅ The key is a string you generate yourself and host at `https://example.com/<your-key>.txt`. That proves you own the host. For batches, POST a JSON list of up to 10,000 URLs.
-- ✅ A submission to one participating engine is shared with all of them (Bing, Yandex, Seznam, Naver and others — the current list is on indexnow.org).
+- ✅ A submission to one participating engine is shared with all of them (currently Bing, Yandex, Seznam, Naver, Yep, the Internet Archive and Amazon — the live list is indexnow.org/searchengines.json).
 - ✅ Ping on **real** changes: published, meaningfully updated, deleted (the URL then returns 404 or 410). Re-submitting unchanged URLs gains nothing.
 - ❌ It is **not** a Google channel and does not replace the sitemap. Keep the sitemap accurate (`docs/06`). That part is for everyone.
 
@@ -97,9 +97,15 @@ https://api.indexnow.org/indexnow?url=https://example.com/changed-page&key=<your
 ## Sources
 - Bing Webmaster Guidelines — https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a
 - Bing — which crawlers Bing uses — https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0
-- Bing — content controls for AI answers (`nocache` / `noarchive`) — https://blogs.bing.com/webmaster/september-2023/Announcing-new-options-for-webmasters-to-control-usage-of-their-content-in-Bing-Chat
+- Bing — content controls for AI answers (`nocache` / `noarchive`) — https://blogs.bing.com/webmaster/2023/9/Announcing-new-options-for-webmasters-to-control-usage-of-their-content-in-Bing-Chat/
+- Bing — `data-nosnippet` support (Oct 2025) — https://blogs.bing.com/webmaster/2025/10/Bing-Introduces-Support-for-the-data-nosnippet-HTML-Attribute/
+- Bing — Crawl-delay in the default group — https://blogs.bing.com/webmaster/May-2012/To-crawl-or-not-to-crawl,-that-is-BingBot-s-questi/
+- Apple — Applebot does not follow crawl-delay — https://support.apple.com/en-us/119829
+- Ecosia — search results providers — https://support.ecosia.org/article/579-search-results-providers
+- IndexNow participating engines — https://www.indexnow.org/searchengines.json
 - IndexNow protocol — https://www.indexnow.org/documentation
-- Yandex — robots.txt (incl. `Clean-param`, `Crawl-delay`) — https://yandex.com/support/webmaster/controlling-robot/robots-txt.html
+- Yandex — robots.txt (incl. `Clean-param`) — https://yandex.com/support/webmaster/en/controlling-robot/robots-txt.html
+- Yandex — Crawl-delay ignored since February 2018 — https://yandex.com/support/webmaster/en/robot-workings/crawl-delay
 - Yandex Webmaster — https://webmaster.yandex.com
 - About Applebot — https://support.apple.com/en-us/119829
 - Brave Search crawler — https://search.brave.com/help/brave-search-crawler

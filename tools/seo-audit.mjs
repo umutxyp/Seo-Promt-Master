@@ -632,7 +632,7 @@ const pathOf = (u) => {
  */
 const CRAWLERS = [
   { name: "Googlebot", tokens: ["googlebot"], kind: "search", engine: "Google (and Brave, which follows Googlebot rules)" },
-  { name: "Bingbot", tokens: ["bingbot", "msnbot"], kind: "search", engine: "Bing, plus DuckDuckGo/Yahoo/Ecosia results and Copilot answers built on Bing" },
+  { name: "Bingbot", tokens: ["bingbot", "msnbot"], kind: "search", engine: "Bing, plus DuckDuckGo and Yahoo results (largely Bing-sourced) and Copilot answers built on Bing", crawlDelayFromDefault: true },
   { name: "YandexBot", tokens: ["yandexbot", "yandex"], kind: "search", engine: "Yandex" },
   { name: "Applebot", tokens: ["applebot"], fallbacks: ["googlebot"], kind: "search", engine: "Apple — Siri, Spotlight, Safari Suggestions" },
   { name: "DuckDuckBot", tokens: ["duckduckbot"], kind: "search", engine: "DuckDuckGo's own crawler" },
@@ -650,11 +650,17 @@ const CRAWLERS = [
   { name: "Google-Extended", tokens: ["google-extended"], kind: "ai-training", engine: "Gemini training & grounding (not Search)" },
   { name: "Applebot-Extended", tokens: ["applebot-extended"], kind: "ai-training", engine: "Apple model training (not Siri/Spotlight)" },
   { name: "Meta-ExternalAgent", tokens: ["meta-externalagent"], kind: "ai-training", engine: "Meta model training" },
-  { name: "Amazonbot", tokens: ["amazonbot"], kind: "ai-training", engine: "Amazon (Alexa, AI models)" },
+  { name: "Meta-WebIndexer", tokens: ["meta-webindexer"], kind: "ai-search", engine: "Meta AI search results and citations" },
+  { name: "Meta-ExternalFetcher", tokens: ["meta-externalfetcher"], kind: "ai-user", engine: "Meta AI, fetching on a user's request (may bypass robots.txt)" },
+  { name: "Amazonbot", tokens: ["amazonbot"], kind: "ai-training", engine: "Amazon products and services; may train Amazon AI models" },
+  { name: "Amzn-SearchBot", tokens: ["amzn-searchbot"], kind: "ai-search", engine: "Alexa and Amazon search experiences (not AI training)" },
+  { name: "Amzn-User", tokens: ["amzn-user"], kind: "ai-user", engine: "Alexa, fetching on a user's request" },
   { name: "CCBot", tokens: ["ccbot"], kind: "ai-training", engine: "Common Crawl (feeds many models)" },
   { name: "Bytespider", tokens: ["bytespider"], kind: "ai-training", engine: "ByteDance model training" },
   { name: "DuckAssistBot", tokens: ["duckassistbot"], kind: "ai-search", engine: "DuckDuckGo AI answers" },
-  { name: "MistralAI-User", tokens: ["mistralai-user"], kind: "ai-user", engine: "Mistral Le Chat, user-triggered" },
+  { name: "MistralAI-User", tokens: ["mistralai-user"], kind: "ai-user", engine: "Mistral Vibe, fetching on a user's request" },
+  { name: "MistralAI-Index", tokens: ["mistralai-index"], kind: "ai-search", engine: "Mistral search index (not AI training)" },
+  { name: "MistralAI-Training", tokens: ["mistralai-training"], kind: "ai-training", engine: "Mistral model training" },
 ];
 
 async function checkRobots() {
@@ -663,14 +669,17 @@ async function checkRobots() {
   const empty = { text: "", sitemaps: [], groups: [], matrix: [], google: { rules: [] }, aiPolicy: false, contentSignal: null };
 
   if (res.status !== 200) {
-    // 4xx means "no rules", which is permissive rather than broken; 5xx stops
+    // 4xx means "no rules", which is permissive rather than broken. 5xx — and
+    // 429, which Google treats as a server error, not a client one — stops
     // Googlebot crawling the site entirely for the first ~12 hours.
-    const severity = res.status >= 500 || res.status === 0 ? "P1" : "P2";
+    const serverError = res.status >= 500 || res.status === 0 || res.status === 429;
     add(
-      severity,
+      serverError ? "P1" : "P2",
       "docs/12",
       "/robots.txt",
-      `robots.txt returned ${res.status || "no response"}. A 5xx here halts crawling site-wide; a 4xx means every rule you think you have is being ignored.`,
+      serverError
+        ? `robots.txt returned ${res.status || "no response"}. Google treats this as a server error${res.status === 429 ? " (429 is the one 4xx it does)" : ""}: crawling of the whole site stops while it retries.`
+        : `robots.txt returned ${res.status}. Google treats a 4xx as "no robots.txt", so every rule you think you have is being ignored.`,
       { status: res.status },
     );
     return empty;
@@ -706,7 +715,9 @@ async function checkRobots() {
       via: resolved.via,
       explicit: resolved.via != null && resolved.via !== "*" && !(c.fallbacks || []).includes(resolved.via),
       allowedRoot: isAllowed(resolved, "/"),
-      crawlDelay: resolved.crawlDelay,
+      // Bing applies a Crawl-delay from the default group even when a bingbot
+      // group exists (docs/18); every other engine reads only its own group.
+      crawlDelay: resolved.crawlDelay ?? (c.crawlDelayFromDefault ? rulesFor(groups, ["*"]).crawlDelay : null),
       resolved,
     };
   });
@@ -729,10 +740,12 @@ async function checkRobots() {
     add("P3", "docs/18", "/robots.txt", `Crawl-delay: ${bing.crawlDelay} applies to Bingbot. Google ignores it; Bing obeys it — that is at most ${Math.floor(86400 / bing.crawlDelay).toLocaleString("en")} URLs a day. Prefer Bing Webmaster Tools' crawl control.`, null);
   }
 
-  // Either way of stating it counts: per-bot groups, or the newer machine-readable
-  // `Content-Signal:` declaration (contentsignals.org / IETF AIPREF), which says
-  // the same thing in one line. A site that has decided is a site that has decided.
-  const aiPolicy = matrix.some((m) => m.kind.startsWith("ai") && m.explicit) || Boolean(contentSignal);
+  // Any way of stating it counts: per-bot groups, the machine-readable
+  // `Content-Signal:` declaration (contentsignals.org), or the shared IETF AIPREF
+  // training token `User-agent: __usage_ai-training` (docs/10). A site that has
+  // decided is a site that has decided.
+  const aipref = groups.some((g) => g.agents.includes("__usage_ai-training"));
+  const aiPolicy = matrix.some((m) => m.kind.startsWith("ai") && m.explicit) || Boolean(contentSignal) || aipref;
   if (!aiPolicy) {
     add("P3", "docs/10", "/robots.txt", "robots.txt takes no explicit position on AI crawlers. Training, AI-search and user-triggered fetching are three different decisions; defaulting silently is not one of them.", null, "geo");
   }

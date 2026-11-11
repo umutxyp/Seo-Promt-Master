@@ -41,12 +41,14 @@ Exit code is `1` when a finding at or above `--fail-on` is open (default: any P1
 
 **Site level** — robots.txt status, size, HTML-instead-of-text, and RFC 9309
 resolution (one group per crawler, longest match wins, `Allow` wins ties,
-`*`/`$` wildcards) for **24 crawlers**: Googlebot, Bingbot, YandexBot, Applebot
+`*`/`$` wildcards) for **30 crawlers**: Googlebot, Bingbot, YandexBot, Applebot
 (falling back to the Googlebot group, as Apple documents), DuckDuckBot,
-Baiduspider, Yeti (Naver), SeznamBot, and 16 AI crawlers split into training,
+Baiduspider, Yeti (Naver), SeznamBot, and 22 AI crawlers split into training,
 AI search and user-triggered. A blocked Googlebot or Bingbot is P1; a large
-`Crawl-delay` that Bing obeys is flagged; an AI policy (per-bot groups or
-`Content-Signal:`) is a GEO input, not a defect. Then: sitemap index traversal
+`Crawl-delay` that Bing obeys is flagged; an AI policy (per-bot groups,
+`Content-Signal:` or the AIPREF `__usage_ai-training` group) is a GEO input,
+not a defect. A robots.txt answering 429 is treated as the server error Google
+treats it as, not as a missing file. Then: sitemap index traversal
 (`.xml.gz` included), the 50,000-URL limit, `lastmod` format and credibility,
 ignored `priority`/`changefreq`; host consolidation (`http://`, `www` vs bare);
 **per-template soft 404s**; bot-protection challenges recognised and reported

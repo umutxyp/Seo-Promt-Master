@@ -45,7 +45,7 @@ self-reference and canonical *targets*, `X-Robots-Tag` headers, **hreflang
 reciprocity across pages** (a one-way set is discarded in full), duplicate
 titles, streamed-metadata visibility, raw-HTML content volume, structured-data
 validity, and image dimensions. It prints a **crawler access matrix** (Google,
-Bing, Apple, Yandex… and 16 AI crawlers), an SEO Score and a GEO Score, and
+Bing, Apple, Yandex… and 22 AI crawlers), an SEO Score and a GEO Score, and
 exits `1` if any P1 is open, so it can gate a deploy.
 
 Point it at a local build (`--url http://localhost:3000`) when there is no live

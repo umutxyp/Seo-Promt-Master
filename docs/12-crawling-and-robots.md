@@ -17,15 +17,15 @@ It is **RFC 9309**. The rules are exact:
 
 - ✅ Only `https://host:port/robots.txt` is read. There is no such thing as a subdirectory robots.txt.
 - ✅ It is **per scheme, host and port**. `https://example.com`, `https://www.example.com` and `http://example.com` each have their own file. Subdomains are independent — `cdn.example.com/robots.txt` governs the CDN alone.
-- ✅ Max processed size is **500 KiB**; everything after is ignored. UTF-8.
+- ✅ Google processes at most **500 KiB**; everything after is ignored. (RFC 9309 sets 500 KiB as the minimum a crawler must parse, so other engines may read more — don't rely on it.) UTF-8.
 - ⚠️ **Response codes change the meaning entirely:**
 
 | Code | Googlebot behaviour |
 |---|---|
 | 200 | Rules apply |
-| 4xx (incl. 404/410) | **File treated as absent → everything is crawlable** |
-| 5xx / timeout | **Nothing is crawled for the first ~12 hours**, then the last known copy is used for up to 30 days, then full crawl |
-| 3xx | Followed up to 5 hops |
+| 4xx (incl. 404/410) **except 429** | **File treated as absent → everything is crawlable** |
+| 429, 5xx / timeout | **Nothing is crawled for the first ~12 hours** while Google retries. Up to 30 days: the last good cached copy is used — or, with no cached copy, no restrictions are assumed. After 30 days: if the site is otherwise available, Google behaves as if there is no robots.txt; if the site has general availability problems, it stops crawling and keeps requesting robots.txt |
+| 3xx | Followed for at least 5 hops; after that, treated as a 404 (no restrictions) |
 
 - ❌ **Don't serve robots.txt from the application layer if that layer can 503.** A maintenance window then stops crawling site-wide. Serve it statically or at the edge.
 
@@ -68,11 +68,11 @@ actual crawling = min(crawl capacity limit, crawl demand)
 - **Capacity limit** is how much your server can take without degrading. It rises when responses are fast and **falls quickly** on 5xx, 429 and timeouts — and recovers slowly.
 - **Demand** is how much Google *wants* to crawl you, from three inputs: perceived unique inventory (duplicates inflate it wastefully), popularity, and staleness (how often content genuinely changes).
 
-**Who needs to care:** under ~1,000 URLs, nobody — basic hygiene is enough. Over ~10,000, or with fast-changing inventory, it matters. Over 1M it is the primary technical concern.
+**Who needs to care:** Google writes its crawl-budget guide for **1M+ unique pages changing about weekly**, **10,000+ pages changing daily**, or sites with a large share of URLs stuck in *Discovered – currently not indexed*. Below that, hygiene is usually enough — but a **new site** with few links has little crawl demand at any size, which is why `docs/06` ramps its sitemap up gradually.
 
 ### Raising capacity
-- ✅ Cut server response time. This is the strongest single lever; target **< 300 ms** average, with 1s as the alarm threshold.
-- ✅ Drive 5xx/429/timeouts toward zero — GSC's Crawl Stats should show **< 1%** non-2xx.
+- ✅ Cut server response time. This is the strongest single lever; a practical target (not a Google number) is **< 300 ms** average, with 1 s as the alarm threshold.
+- ✅ Drive 5xx/429/timeouts toward zero — as a practical target, keep non-2xx in Crawl Stats **under 1%**.
 - ✅ Support **HTTP 304**: honour `If-Modified-Since` / `If-None-Match` and return Not Modified for unchanged content.
 - ✅ HTTP/2 or better; avoid fanning assets across many hosts.
 
@@ -99,7 +99,7 @@ grep -i 'Googlebot' access.log | awk '{print $7}' | sed 's/?.*//' | sort | uniq 
 comm -23 <(sort sitemap-urls.txt) <(grep -i Googlebot access.log | awk '{print $7}' | sort -u)
 
 # AI crawler volume (see docs/10)
-grep -Ei 'GPTBot|ClaudeBot|PerplexityBot|OAI-SearchBot|ChatGPT-User' access.log \
+grep -Ei 'GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|PerplexityBot|Perplexity-User|Google-Extended|Meta-External|Meta-WebIndexer|Amazonbot|Amzn-|CCBot|Bytespider|DuckAssistBot|MistralAI|Applebot' access.log \
   | awk '{print $1, $7}' | sort | uniq -c | sort -rn | head -30
 ```
 
@@ -109,7 +109,7 @@ Look for: crawl requests concentrated on worthless paths, important templates cr
 
 GSC → **Settings → Crawl stats**: total request trend, average response time, response-code distribution, file type, purpose (discovery vs refresh), and Googlebot type.
 
-- ⚠️ Serving Googlebot 429/503 is an acceptable short-term signal — Google slows down. Sustained for weeks, URLs start dropping out of the index.
+- ⚠️ Serving Googlebot 429/500/503 slows crawling, but only as an emergency brake: Google advises against doing it for **longer than 1–2 days** — if Googlebot sees these codes on the same URL for multiple days, the URL may be dropped from the index.
 - ⚠️ WAF and bot-protection rules that catch Googlebot show up as a sudden 403/503 spike in Crawl Stats. On Cloudflare, verify the "Verified Bots" allow rule.
 
 ## Checklist
@@ -118,12 +118,14 @@ GSC → **Settings → Crawl stats**: total request trend, average response time
 - [ ] No URL carries both `Disallow` and `noindex`
 - [ ] Locale-prefixed variants of every `Disallow` rule are covered
 - [ ] AI crawler policy is a written decision, not a template default (`docs/10`)
-- [ ] Crawl Stats: average response < 300 ms, 5xx under 1%
+- [ ] Crawl Stats: average response < 300 ms, 5xx under 1% (practical targets)
 - [ ] Googlebot verified by reverse DNS and allowed through the WAF
 
 ## Sources
-- Managing crawl budget for large sites — https://developers.google.com/search/docs/crawling-indexing/large-site-managing-crawl-budget
-- Google common crawlers — https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers
-- Verifying Googlebot — https://developers.google.com/search/docs/crawling-indexing/verifying-googlebot
+- Managing crawl budget for large sites — https://developers.google.com/crawling/docs/crawl-budget
+- Google common crawlers — https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers
+- Verifying Googlebot — https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests
+- How Google interprets robots.txt (status codes, size limit) — https://developers.google.com/crawling/docs/robots-txt/robots-txt-spec
+- Reduce Googlebot's crawl rate (429/500/503 for 1–2 days at most) — https://developers.google.com/crawling/docs/crawlers-fetchers/reduce-crawl-rate
 - RFC 9309, Robots Exclusion Protocol — https://www.rfc-editor.org/rfc/rfc9309.html
-- HTTP status codes and network errors — https://developers.google.com/search/docs/crawling-indexing/http-network-errors
+- HTTP status codes and network errors — https://developers.google.com/crawling/docs/troubleshooting/http-status-codes

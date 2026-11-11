@@ -75,6 +75,19 @@ export function noindexSite(origin) {
   };
 }
 
+/** A one-page site whose robots.txt is whatever the test needs — a status
+ *  code, a Crawl-delay in the default group, an AIPREF training group. */
+export function robotsSite(status, body = "") {
+  return (origin) => ({
+    routes: {
+      "/robots.txt": [status, "text/plain", body],
+      "/sitemap.xml": [200, "application/xml", `<urlset><url><loc>${origin}/</loc></url></urlset>`],
+      "/": [200, "text/html", page({ title: "Robots fixture", h1: "Robots fixture", canonical: `${origin}/`, body: prose, jsonLd: { "@type": "WebPage" } })],
+    },
+    headers: {},
+  });
+}
+
 /** Markup a careless reader gets wrong: end tags with whitespace or attributes
  *  before their `>`, comments, a character reference escaped twice, custom
  *  elements whose names start like `title` or `script`, and a script left open. */
