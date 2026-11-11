@@ -116,6 +116,6 @@ Cleanup: inventory every URL (crawl + sitemap + GSC + logs + analytics) → scor
 ## Sources
 - Canonicalization troubleshooting — https://developers.google.com/search/docs/crawling-indexing/canonicalization
 - Robots meta tag / X-Robots-Tag — https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
-- Faceted navigation — https://developers.google.com/search/docs/crawling-indexing/crawling-managing-faceted-navigation
+- Faceted navigation — https://developers.google.com/crawling/docs/faceted-navigation
 - Soft 404 errors — https://developers.google.com/search/docs/crawling-indexing/http-network-errors
 - Consolidate duplicate URLs — https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls

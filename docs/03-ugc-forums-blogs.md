@@ -28,8 +28,11 @@
 - ✅ Internal **search-result** pages (`?q=`, `?search=`) should be `noindex` (thin/duplicate).
 - ✅ Hidden/deleted/moderated threads should return a real **404** (or `noindex`), not a 200 soft-404.
 - ✅ Forum threads have a dedicated schema type — `DiscussionForumPosting` (see `docs/08`).
+- ✅ **Hold back posts from new users** until they earn reputation: `noindex` them at first, then allow indexing once the account is trusted. Google's abuse guide recommends exactly this kind of reputation system.
+- ✅ **Pages made for sharing, not for Search** — share links, collaboration or utility pages — should carry `noindex`.
 
 ## Sources
 - Qualify outbound links (ugc/sponsored/nofollow) — https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links
 - Pagination — https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading
-- Faceted navigation — https://developers.google.com/search/docs/crawling-indexing/crawling-managing-faceted-navigation
+- Faceted navigation — https://developers.google.com/crawling/docs/faceted-navigation
+- Prevent user-generated spam (reputation, `noindex` for share pages) — https://developers.google.com/search/docs/monitor-debug/prevent-abuse

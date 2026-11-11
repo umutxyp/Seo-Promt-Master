@@ -17,4 +17,4 @@ AI shopping/service-discovery answers strongly prefer marketplace pages with com
 
 ## Sources
 - Creating helpful, people-first content — https://developers.google.com/search/docs/fundamentals/creating-helpful-content
-- Faceted navigation — https://developers.google.com/search/docs/crawling-indexing/crawling-managing-faceted-navigation
+- Faceted navigation — https://developers.google.com/crawling/docs/faceted-navigation

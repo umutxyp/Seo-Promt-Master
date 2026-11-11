@@ -19,4 +19,4 @@
 ## Sources
 - Creating helpful, people-first content — https://developers.google.com/search/docs/fundamentals/creating-helpful-content
 - Managing multi-regional sites — https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites
-- Faceted navigation — https://developers.google.com/search/docs/crawling-indexing/crawling-managing-faceted-navigation
+- Faceted navigation — https://developers.google.com/crawling/docs/faceted-navigation

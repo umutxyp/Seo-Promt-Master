@@ -4,18 +4,18 @@
 
 - ✅ A single sitemap file: max **50 MB uncompressed** *or* **50,000 URLs**. Exceed either → split and reference from a **sitemap index**.
 - ✅ A sitemap index: max **50,000 sitemap entries**. You can submit up to **500 index files** per site in Search Console.
-- ✅ Sitemaps referenced by an index must live on the **same site**, in the **same directory or below** the index.
+- ✅ Sitemaps referenced by an index must live on the **same site**, in the **same directory or below** the index — unless you set up **cross-site submission** (verified ownership of both sites), which waives this.
 - ✅ Files must be **UTF-8**; URLs must be **fully-qualified absolute** URLs pointing only to the **canonical** version.
 
 ## `lastmod`, `priority`, `changefreq`
 
 - ✅ Google uses `<lastmod>` **only if it's consistently and verifiably accurate** (reflecting real content changes). Use W3C Datetime format.
-- ⚠️ Google **ignores `<priority>` and `<changefreq>` entirely.** (Harmless to include for other engines, but don't rely on them.)
+- ⚠️ Google **ignores `<priority>` and `<changefreq>` entirely**, and so does **Bing** (stated July 2025). Harmless to include, but no major engine uses them — spend the effort on an accurate `<lastmod>`, which Bing also calls a key recrawl signal.
 
 ## Formats & submission
 
 - ✅ Formats: **XML** (most versatile — supports image/video/news/hreflang), RSS/Atom, plain text. Prefer XML.
-- ✅ For engines that support it (Bing, Yandex, Naver, Seznam — **not** Google), also ping **IndexNow** when a URL is published, changed or removed. It speeds discovery and does not replace the sitemap (`docs/18`).
+- ✅ For engines that support it (Bing, Yandex, Naver, Seznam, Yep, plus the Internet Archive and Amazonbot — **not** Google), also ping **IndexNow** when a URL is published, changed or removed. It speeds discovery and does not replace the sitemap (`docs/18`).
 - ✅ Submit via Search Console, the Search Console API, a `Sitemap:` line in `robots.txt`, or WebSub for feeds.
 
 ## Coverage rule (audit this)
@@ -31,3 +31,5 @@
 ## Sources
 - Build & submit a sitemap — https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
 - Large sitemaps / sitemap index — https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps
+- Bing: sitemaps in AI-powered search (`lastmod`, `changefreq`/`priority` ignored) — https://blogs.bing.com/webmaster/2025/7/Keeping-Content-Discoverable-with-Sitemaps-in-AI-Powered-Search/
+- IndexNow participating engines — https://www.indexnow.org/searchengines.json

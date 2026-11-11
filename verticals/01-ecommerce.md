@@ -18,4 +18,4 @@ Product pages with complete, accurate `Offer` data are what AI shopping assistan
 
 ## Sources
 - Merchant listing / Product structured data — https://developers.google.com/search/docs/appearance/structured-data/merchant-listing
-- Faceted navigation — https://developers.google.com/search/docs/crawling-indexing/crawling-managing-faceted-navigation
+- Faceted navigation — https://developers.google.com/crawling/docs/faceted-navigation

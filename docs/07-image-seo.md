@@ -5,6 +5,8 @@
 - ✅ Use standard `<img src>` — Google indexes images referenced there. ❌ **CSS `background-image` is NOT indexed.**
 - ✅ Supported formats include BMP, GIF, JPEG, PNG, **WebP, SVG, AVIF**.
 - ✅ Place images **near relevant text** on topically appropriate pages — Google derives image subject matter from surrounding content, captions, and titles.
+- ✅ **One image, one URL.** An image used on several pages should always be referenced by the same URL, so Google can cache and reuse it instead of fetching duplicates.
+- ✅ **Tell Google which image represents the page** — `og:image`, or schema.org `primaryImageOfPage` / the main entity's `image`. Google uses it to pick the thumbnail in Search and Discover; avoid logos, text-heavy images and extreme aspect ratios (`docs/01`, `docs/09`).
 
 ## Alt text (Google's top image-SEO tip)
 
