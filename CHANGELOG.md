@@ -3,7 +3,11 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
-## Unreleased
+## 2.2.0 — 2026-11-11
+
+The knowledge base re-checked claim by claim against the engines' own
+documentation, a sitemap ramp-up for new sites, and an auditor that reads
+robots.txt the way Google and Bing do.
 
 ### `seo-audit.mjs`
 
@@ -45,7 +49,6 @@ changes that matter most:
 - Smaller corrections across `docs/01`, `03`, `05`, `07`, `11`, `13`, `14`,
   `16`, `17`, `18` and the verticals — policy names, Google News inclusion,
   Change of Address, disavow, redirects, moved and dead source links.
-
 - **Google's update timeline is current again.** `docs/09` listed core updates
   only up to August 2024; it now carries every ranking update from March 2024 to
   the November 2026 core update (started 10 November, still rolling out), with

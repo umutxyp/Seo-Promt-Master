@@ -9,7 +9,7 @@
 <sub>robots.txt · XML sitemaps · canonicals · hreflang · structured data / schema.org · Core Web Vitals · soft 404s · AI crawlers (GPTBot, ClaudeBot, PerplexityBot) · AI Overviews · Google core updates · Bing & IndexNow</sub>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-78c51c.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.1.0-4285F4.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.2.0-4285F4.svg)](CHANGELOG.md)
 [![Tests](https://github.com/umutxyp/Seo-Promt-Master/actions/workflows/test.yml/badge.svg)](.github/workflows/test.yml)
 [![Docs: Google Search Central](https://img.shields.io/badge/docs-Google%20·%20Bing%20·%20Yandex%20·%20Apple-4285F4.svg)](docs/README.md)
 [![Works with](https://img.shields.io/badge/skill%20for-Claude%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot-000.svg)](#-install-as-a-skill)
@@ -42,6 +42,7 @@ No account, no API key, and zero dependencies. Node 18+ is the only requirement 
 
 - **November 2026 core update** (started 10 November, still rolling out): the knowledge base now carries every Google core, spam and Discover update since March 2024, and how to measure one without fooling yourself — [`docs/09`](docs/09-2024-2026-updates.md). Diagnosing a drop? Use the [traffic-drop prompt](prompt-library/07-monitoring-and-diagnosis.md#diagnose-a-traffic-drop).
 - **Discover has its own core updates** since February 2026, and **site reputation abuse** manual actions no longer apply in the EEA since August 2026 — [`docs/09`](docs/09-2024-2026-updates.md), [`docs/14`](docs/14-quality-eeat-and-spam.md).
+- **2.2.0** — every doc re-checked against Google's, Bing's and the AI operators' own pages; a sitemap ramp-up for new sites; robots.txt 429 treated as the server error Google treats it as; 30 crawlers in the access matrix.
 - **2.1.0** — every engine, not just Google: a per-crawler robots.txt matrix for 24 crawlers, a GEO Score, and 47 prompts. See the [changelog](CHANGELOG.md).
 
 ---

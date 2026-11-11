@@ -1,6 +1,6 @@
 {
   "name": "seo-prompt-master",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Open-source technical SEO and GEO (AI search) audit: a zero-dependency CLI, an AI agent skill, 47 SEO prompts and a cited knowledge base of Google, Bing and AI-crawler rules.",
   "type": "module",
   "bin": {
