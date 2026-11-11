@@ -6,6 +6,7 @@
 `ItemList`/`CollectionPage` for the directory listing pages; `WebPage`+`BreadcrumbList` baseline on every entry; the type-appropriate schema for whatever entity each entry actually represents (a `LocalBusiness` for a business directory, `SoftwareApplication` for a tools directory, etc. — don't force a generic type when a more specific one from `docs/08`'s cheat-sheet fits).
 
 ## Vertical-specific priorities
+- ✅ **Grow a new directory's index gradually** — a seed sitemap of the best few hundred entries, then small daily or every-few-days batches that pass the index threshold, paused when *Discovered – currently not indexed* grows (`docs/06`). Directories are where publishing the whole database on day one hurts most.
 - ✅ **Every entry page needs to earn its own index-worthiness**, same principle as V15: a directory entry that's just a name, a link, and a one-line auto-generated description is thin content — add genuine editorial value (why it's included, a real evaluation, category context) or consolidate low-value entries rather than indexing thousands of near-empty pages.
 - ✅ **Outbound links to listed entities are exactly `docs/03`'s UGC/qualify-outbound-links territory** if entries are user-submitted (`rel="ugc"`), or can be plain followed links if editorially curated and vetted — decide deliberately, don't default to unqualified links at scale.
 - ✅ **Category/filter pages** (by location, by type, by rating) are the faceted-navigation pattern (`docs/03`) — apply the same crawl-budget discipline as e-commerce/marketplace filters.

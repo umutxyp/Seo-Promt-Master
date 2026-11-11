@@ -70,6 +70,7 @@ Any site with tens of thousands of generated entity pages sits close to the scal
 - ✅ Does each page carry **real, unique, human-supplied data** — a description, reviews, a command list, membership figures?
 - ✅ Is someone actually looking for this page, or does it exist to fill an index?
 - ✅ Are empty entries kept out of the index by a **threshold**, not published by default?
+- ✅ On a new domain or a big launch, does inventory reach the index **gradually** — a seed set, then small batches that pass the threshold — rather than all at once? (`docs/06`)
 
 **Define the index threshold as a product rule, not an SEO rule.** If a listing is only publishable when approved and not deleted, then "approved and not deleted" should be the same condition that governs its presence in the sitemap, the category pages and the index. When the product rule and the index rule are one rule, quality control stops being a separate thing anyone has to remember.
 

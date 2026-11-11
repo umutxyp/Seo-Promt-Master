@@ -14,6 +14,7 @@
    - **Routing convention** — file-based (`app/`, `pages/`, `routes/`), config-based, or controller-based.
    - **i18n** — is the site multilingual? What locales, and what URL strategy (subdirectory `/de/`, subdomain, ccTLD, or none)? Where is the locale list defined?
    - **Where SEO lives** — search for a central metadata helper, `sitemap`, `robots`, `hreflang`/`alternates`, and any existing JSON-LD (`application/ld+json`).
+   - **Site maturity and inventory size** — is the domain new (weeks or months old, few external links) or established? How many URLs could the sitemap list, and how many are actually indexed (Search Console *Pages* report, if the user can share it)? A new domain with thousands of candidate URLs, or a large share in *Discovered – currently not indexed*, means the sitemap must be **ramped up, not dumped** (`docs/06`). Ask the user if you can't tell.
 
 3. **Locate the verification commands.** Find the scripts for typecheck, lint, and build (e.g. `package.json` scripts, `Makefile`, `composer`, `manage.py`). You will run these after every change.
 
@@ -38,6 +39,7 @@ Write a short report (to chat and/or the top of `SEO-AUDIT-PROGRESS.md`):
 - Routing convention + where routes are defined
 - Multilingual? locales + URL strategy
 - Existing SEO infrastructure (what's already there — metadata helper, sitemap, robots, JSON-LD)
+- Site maturity: new or established domain, candidate URL count vs indexed count, and whether a sitemap ramp-up applies (`docs/06`)
 - Verification commands (typecheck / lint / build)
 - Matched vertical(s) from `verticals/`, if any
 

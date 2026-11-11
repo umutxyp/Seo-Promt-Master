@@ -5,7 +5,46 @@ the scoring changed in a way that makes old output no longer comparable.
 
 ## Unreleased
 
-### Knowledge base
+### `seo-audit.mjs`
+
+- **A robots.txt answering 429 is a server error.** It was reported as an
+  ordinary 4xx ("your rules are ignored"); Google treats 429 like a 5xx and
+  stops crawling the site, so it is now a P1 that says so.
+- **Bing's Crawl-delay from the default group is caught.** Bing applies a
+  `Crawl-delay` in `User-agent: *` even when a `bingbot` group exists.
+- **The AIPREF training token** (`User-agent: __usage_ai-training`) counts as
+  a deliberate AI-crawler position, like per-bot groups and `Content-Signal`.
+- **30 crawlers, up from 24:** Meta-WebIndexer, Meta-ExternalFetcher,
+  Amzn-SearchBot, Amzn-User, MistralAI-Index and MistralAI-Training, with the
+  Amazonbot, MistralAI-User and Bingbot descriptions corrected.
+
+### Knowledge base — every doc checked against the engines' current documentation
+
+All 18 docs and the 24 verticals were re-read claim by claim against Google,
+Bing, Apple, Yandex and the AI operators' own pages (November 2026). The
+changes that matter most:
+
+- **Grow a new site's sitemap, don't dump it** (`docs/06`, the workflow, the
+  sitemap prompt, `verticals/15`, `16`, `23`): a seed set of the best few
+  hundred URLs, then small batches that pass the index threshold, paused when
+  *Discovered – currently not indexed* grows — with Google's documented
+  reasons, and the schedule clearly marked as practice.
+- **FAQ rich results are gone for every site** (7 May 2026), as are the
+  sitelinks search box and the rich results retired in 2025. Product,
+  review, LocalBusiness, SoftwareApplication, Recipe, JobPosting and Article
+  required fields now match Google's pages; ratings aggregated from other
+  websites are never allowed, even with attribution.
+- **AI features have an opt-out:** the Search Console "Search generative AI"
+  setting (`docs/09`, `docs/15`), and Google's own Generative AI performance
+  report. Snippet controls govern AI answers at Google, Bing and Apple.
+- **robots.txt status codes** as Google documents them (429, the 30-day rule,
+  redirects), 429/503 for one or two days at most, and Google's real
+  crawl-budget thresholds (`docs/12`).
+- **AI crawler table** (`docs/10`): Google's user-triggered fetchers, Amazon,
+  Mistral and Meta search crawlers, AIPREF, OpenAI's ads bot.
+- Smaller corrections across `docs/01`, `03`, `05`, `07`, `11`, `13`, `14`,
+  `16`, `17`, `18` and the verticals — policy names, Google News inclusion,
+  Change of Address, disavow, redirects, moved and dead source links.
 
 - **Google's update timeline is current again.** `docs/09` listed core updates
   only up to August 2024; it now carries every ranking update from March 2024 to

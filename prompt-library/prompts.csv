@@ -66,6 +66,7 @@ Rules:
 - no <priority> or <changefreq> (Google ignores them)
 - hreflang via xhtml:link if the site is multilingual
 - reference it from robots.txt with an absolute Sitemap: line
+- if the domain is new or this is a large new section, ramp it up instead of listing everything (docs/06): start with a seed set of the best few hundred URLs, then admit small batches (e.g. 5-10 URLs every 1-3 days, best first) that pass the index threshold, grow the batch only while earlier batches get indexed, and pause when ""Discovered/Crawled - currently not indexed"" grows. URLs waiting their turn stay unpublished or noindex, because leaving them out of the sitemap does not hide them. Site age and indexed count: {{new domain? / URLs indexed vs candidates}}
 
 Give me the generator code that fits the project's routing, then a verification command that fetches the sitemap and checks a sample of 20 URLs for 200 + self-canonical + no noindex.
 Data source for URLs and timestamps: {{database table / CMS / filesystem}}.","Technical SEO","prompt-library/02-technical-seo.md"
