@@ -196,9 +196,9 @@ Visible content (paste the real fields): {{title, author, date, price, rating co
 Rules:
 - baseline on every page: WebPage + BreadcrumbList. Add the type-specific node on top, combined in one @graph with @id references.
 - include every property Google documents as required for that type, and the recommended ones where the data exists
-- ONLY data that's visible on the page. No invented ratings, no reviews from elsewhere, no hidden FAQs.
+- ONLY data that's visible on the page. No invented ratings, no reviews or ratings aggregated from other websites (even with attribution), no hidden FAQs.
 - real schema.org types only (no made-up types such as ""GameServer"")
-- FAQPage and HowTo are valid markup, but the FAQ rich result is limited to government and health sites, and the HowTo rich result is gone. Don't promise a rich result for either.
+- FAQPage and HowTo are valid markup, but Google removed both rich results (HowTo in 2023, FAQ in May 2026), as well as the sitelinks search box. Don't promise a rich result for any of them.
 Return the JSON-LD, the server-side code that injects it for {{framework}} (escape the output safely), and how to validate it (Rich Results Test plus the schema.org validator).","Structured data","prompt-library/04-structured-data.md"
 "Validate existing JSON-LD","Validate this JSON-LD against Google's structured-data guidelines and schema.org:
 1. Does it parse? Is @context present? Does every node have an @type?
@@ -216,12 +216,12 @@ Visible page text:
 - Organization (or the most specific subtype: LocalBusiness, NewsMediaOrganization, Corporation…) or Person
 - name exactly as used everywhere; url; logo; description; foundingDate / address / contactPoint where they apply
 - sameAs: ONLY profiles we control, consistently named. Mine: {{Wikidata, LinkedIn, GitHub, X, YouTube, Crunchbase…}}
-- WebSite node (with SearchAction if the site has search), linked by @id
+- WebSite node (name, url; SearchAction is optional — Google retired the sitelinks search box in Nov 2024), linked by @id
 - for authors: a Person node with jobTitle, sameAs and worksFor, used in every Article's author field
 Also list where the name, logo and description must be made consistent off-site (profiles, directories), because AI engines check consistency across the open web.","Structured data","prompt-library/04-structured-data.md"
 "Check Product / merchant markup","Audit the Product markup on these pages: {{URLs or paste JSON-LD}}
-Check: name, image, and offers (price, priceCurrency, availability kept in sync with real stock). If there's no offers, the markup needs review or aggregateRating instead.
-Ratings: aggregateRating only when genuine reviews are rendered on the page (ratingValue, ratingCount/reviewCount, bestRating). Is the review count high enough for stars to appear? Never mark up incentivized reviews.
+Check: name, image, and offers (price and priceCurrency required; availability recommended and kept in sync with real stock). If there's no offers, the markup needs review or aggregateRating instead.
+Ratings: aggregateRating only when genuine reviews are rendered on the page (ratingValue plus ratingCount or reviewCount; bestRating/worstRating if the scale isn't 1–5). No ratings aggregated from other websites, no fake or undisclosed incentivized reviews. If the business controls its own reviews, a LocalBusiness/Organization page gets no stars.
 Variants: is one canonical pattern used site-wide?
 Out of stock: availability must be accurate, and the page must not soft-404.
 Return the issues and a corrected template.","Structured data","prompt-library/04-structured-data.md"

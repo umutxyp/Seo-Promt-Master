@@ -8,7 +8,7 @@
   - **SSR** → content-heavy, SEO-critical, e-commerce (full HTML → fast first load + strong indexing).
   - **SSG** → infrequently changing content (build-time HTML, cacheable, very fast); ❌ not for highly dynamic apps.
   - **CSR** → highly interactive apps; ⚠️ slow first load + SEO challenges → **not** for content that must rank.
-- ⚠️ Googlebot renders JS in **three phases: crawl → render → index.** Every 200 page is queued for rendering unless a robots directive blocks it. A `noindex` makes Google **skip rendering/JS entirely**.
+- ⚠️ Googlebot renders JS in **three phases: crawl → render → index.** Every 200 page is queued for rendering unless a robots directive blocks it. A `noindex` in the served HTML **may** make Google skip rendering and JS — so JavaScript can't be relied on to remove it. Pages answering **non-200** (a 404, for example) may not be rendered either, so an error page's client-side content is never seen.
 - ✅ Even though Googlebot runs JS, prefer SSR/pre-render (speed + not all crawlers run JS).
 
 ## The CSR trap (most common real bug)
@@ -27,7 +27,7 @@ If a list/detail page fetches its data client-side (`useEffect` + `fetch`) with 
 
 - ✅ Return meaningful HTTP status codes: real **404** for missing, 401 for auth. Avoid **soft-404** (200 for a "not found" page).
 - ✅ Use the History API (real URLs), not `#`-fragment routing. Give each screen a unique URL.
-- ⚠️ Text injected via CSS `content` is **ignored** — content must be in the DOM.
+- ✅ Put indexable text in the DOM itself, not in CSS-generated `content:` — practical advice; don't count on text that exists only in a stylesheet.
 - ✅ Use content-fingerprinted asset filenames (`main.2bb85551.js`) so Google re-fetches updates.
 
 ## Core Web Vitals (Google's targets)
@@ -54,7 +54,7 @@ TTFB (Time to First Byte, < 800 ms is web.dev's "good") is **not** a Core Web Vi
 - JavaScript SEO basics — https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics
 - Dynamic rendering (workaround) — https://developers.google.com/search/docs/crawling-indexing/javascript/dynamic-rendering
 - Rendering on the web — https://developers.google.com/solutions/content-driven/hosting/rendering
-- Core Web Vitals — https://web.dev/articles/vitals · https://web.dev/blog/top-cwv-2023
+- Core Web Vitals — https://web.dev/articles/vitals · https://web.dev/articles/top-cwv
 - Mobile-first indexing best practices — https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing
 - Chrome UX Report (CrUX) — https://developer.chrome.com/docs/crux
 - Responsive web design basics (viewport) — https://web.dev/articles/responsive-web-design-basics

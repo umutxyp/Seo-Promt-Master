@@ -3,7 +3,7 @@
 **Applies to:** clinics, hospitals, telehealth, health-information content sites, medical directories.
 
 ## Primary schema.org types
-`MedicalOrganization`/`Physician`/`Hospital` (LocalBusiness subtypes, see V03) for practice pages; `MedicalWebPage` and `Article`/`MedicalCondition` markup for informational content, only when the page genuinely matches the medical-content pattern Google documents — don't apply medical-specific schema to generic blog content.
+`MedicalOrganization` (an `Organization` subtype) or its more specific `Physician`/`Hospital` types — use a `LocalBusiness`-family type such as `MedicalClinic` when the practice is a physical location (see V03) for practice pages; `MedicalWebPage` and `Article`/`MedicalCondition` markup for informational content, only when the page genuinely matches the medical-content pattern Google documents — don't apply medical-specific schema to generic blog content.
 
 ## Vertical-specific priorities
 - ✅ **This is the highest-stakes YMYL category — E-E-A-T is not optional polish here, it's the primary lever.** Every piece of medical content needs a visible, credentialed author (real name, real credentials, linked bio) or clear institutional review byline (`docs/09`). Anonymous or generic "Staff Writer" bylines on medical advice content is the single most common, most damaging pattern in this vertical.

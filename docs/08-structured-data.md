@@ -18,19 +18,20 @@
 | Page type | Recommended schema |
 |---|---|
 | Any page | `WebPage` + `BreadcrumbList` |
-| Home | + `WebSite` (with `SearchAction`) + `Organization` (add `sameAs` linking to Wikidata/LinkedIn/Crunchbase/official social profiles — the strongest entity-disambiguation signal for both classic knowledge-panel eligibility and GEO cross-engine entity resolution, `docs/10`) |
+| Home | + `WebSite` + `Organization` (add `sameAs` linking to Wikidata/LinkedIn/Crunchbase/official social profiles — the strongest entity-disambiguation signal for both classic knowledge-panel eligibility and GEO cross-engine entity resolution, `docs/10`) |
 | Article / blog post | `Article` / `BlogPosting` / `NewsArticle` |
-| Product / item with ratings | `Product` + `AggregateRating` + `Review` — required `Product` properties: `name`, `image`, `offers` (with `price`, `priceCurrency`, `availability`). `aggregateRating` needs `ratingValue`, `ratingCount`, `bestRating`/`worstRating`; Google generally wants a **minimum review count (commonly ~10+)** before showing stars, and reviews must **genuinely exist on the page** — don't mark up reviews sourced from elsewhere without attribution, and never mark up incentivized/compensated reviews (a live policy-enforcement area — Google has been actively removing violating reviews and banner-flagging offending listings) |
-| Local business (physical location) | `LocalBusiness` (or a more specific subtype like `ProfessionalService`/`Restaurant` — prefer the specific subtype, it improves rich-result and AI entity-classification eligibility over generic `LocalBusiness`). Required: `name`, `url`; strongly expected: `address`, `telephone`, `openingHours`, `sameAs`. **NAP consistency is critical:** the name/address/phone in this schema must match the Google Business Profile listing **exactly** (same formatting, abbreviations, capitalization) — a mismatch undermines trust signals rather than helping them |
+| Product / item with ratings | `Product` + `AggregateRating` + `Review`. **Merchant listings** require `name`, `image`, `offers` (the `Offer` requires `price` and `priceCurrency`; `availability` is recommended — keep it accurate anyway). **Product snippets** require `name` plus one of `review`, `aggregateRating` or `offers`. `aggregateRating` requires `ratingValue` and one of `ratingCount`/`reviewCount`; `bestRating`/`worstRating` are recommended (5 and 1 are assumed). Reviews must **genuinely exist on the page**; ❌ **don't aggregate reviews or ratings from other websites**, even with attribution; ❌ no fake or **undisclosed** incentivized reviews (a disclosed incentive is allowed, July 2026); use one way of indicating what is reviewed |
+| Local business (physical location) | `LocalBusiness` (or a more specific subtype like `ProfessionalService`/`Restaurant` — prefer the specific subtype, it improves rich-result and AI entity-classification eligibility over generic `LocalBusiness`). Required: `name`, `address`; recommended: `url`, `telephone`, `geo`, `priceRange`, `openingHoursSpecification`. Keep name, address and phone **consistent** with the Google Business Profile. ⚠️ **No stars for self-serving reviews:** if the business controls the reviews about itself (its own testimonials, an embedded widget of its reviews), `LocalBusiness`/`Organization` pages are ineligible for the review-star feature |
 | Listing / category | `ItemList` / `CollectionPage` |
 | User / author profile | `ProfilePage` + `Person` |
 | Forum thread | `DiscussionForumPosting` (2024+ recommended) or `QAPage` |
-| FAQ (visible Q&A) | `FAQPage` — ⚠️ since Aug 2023 the **rich result** is restricted to well-known, authoritative government and health sites; other sites can still emit valid `FAQPage` markup, but don't promise a rich-result CTR lift for it |
-| Downloadable app/tool | `SoftwareApplication` / `WebApplication` |
+| FAQ (visible Q&A) | `FAQPage` — ❌ **the FAQ rich result is gone for every site** since **7 May 2026** (restricted to government and health sites from Aug 2023; documentation removed June 2026). The markup is still valid schema.org and harmless, but it earns no Google rich result — never sell it as a CTR lever |
+| Downloadable app/tool | `SoftwareApplication` / `WebApplication` — the rich result requires `name`, `offers.price` (`0` if free) and `aggregateRating` or `review`; `applicationCategory` (a supported value such as `GameApplication`) and `operatingSystem` are recommended |
 | Glossary / catalog of terms | `DefinedTermSet` + `DefinedTerm` |
 | Video | `VideoObject` |
-| How-to, recipe, event, etc. | matching type per Google's gallery — ⚠️ `HowTo` rich results were also deprecated (Sept 2023, desktop); markup is still valid schema.org, just no longer eligible for that rich result |
+| How-to, recipe, event, etc. | matching type per Google's gallery — ⚠️ `HowTo` rich results were removed on desktop and mobile (Sept 2023). `Event` must take place in a **physical location** and be bookable by the public (online-event properties were removed in June 2025) |
 
+- ⚠️ **Retired rich results — don't recommend them for Google:** sitelinks search box (`WebSite` + `SearchAction`, Nov 2024); FAQ (May 2026); HowTo (2023); Course Info, Claim Review, Estimated Salary, Learning Video, Special Announcement and Vehicle Listing (phased out by Sept 2025); Practice problem (Jan 2026); Dataset is used only by Dataset Search. (Book Actions was on the June 2025 list, but Google later removed its deprecation notice — check the gallery before advising either way.) The markup stays valid schema.org; it just earns nothing in Google Search.
 - ⚠️ Don't invent types. `GameServer`, `Studio`, etc. are **not** real schema.org types and Google ignores them. Check https://schema.org before using a type.
 
 ## Validate
@@ -45,3 +46,9 @@
 - Merchant listing / Product structured data — https://developers.google.com/search/docs/appearance/structured-data/merchant-listing
 - Review snippet policies — https://developers.google.com/search/docs/appearance/structured-data/review-snippet
 - Local Business structured data — https://developers.google.com/search/docs/appearance/structured-data/local-business
+- Product snippet — https://developers.google.com/search/docs/appearance/structured-data/product-snippet
+- Software app — https://developers.google.com/search/docs/appearance/structured-data/software-app
+- Event (physical location, online properties removed) — https://developers.google.com/search/docs/appearance/structured-data/event
+- Search documentation updates (FAQ, sitelinks search box, practice problem, review snippet changes) — https://developers.google.com/search/updates
+- Simplifying the search results page (June 2025 retirements) — https://developers.google.com/search/blog/2025/06/simplifying-search-results
+- Practice problem and dataset (Nov 2025) — https://developers.google.com/search/blog/2025/11/update-on-our-efforts

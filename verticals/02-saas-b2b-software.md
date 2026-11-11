@@ -3,7 +3,7 @@
 **Applies to:** subscription software products, developer tools, B2B platforms with a marketing site + app.
 
 ## Primary schema.org types
-`SoftwareApplication` (set `applicationCategory` e.g. `BusinessApplication`/`DeveloperApplication`, `operatingSystem` e.g. `Web`) on the product page; `Organization` with `sameAs`; `FAQPage` on pricing/help pages (mind the 2023 rich-result eligibility restriction, `docs/08`); `Review`/`AggregateRating` only if genuine reviews (e.g. embedded from G2/Capterra with real attribution) render on the page.
+`SoftwareApplication` (set `applicationCategory` e.g. `BusinessApplication`/`DeveloperApplication`, `operatingSystem` e.g. `Web`) on the product page; `Organization` with `sameAs`; `FAQPage` on pricing/help pages is valid but earns no Google rich result since May 2026 (`docs/08`). For the `SoftwareApplication` rich result Google requires `name`, `offers.price` (`0` if free) and `aggregateRating` or `review` — and those reviews must be your own users' reviews on your page: ❌ ratings embedded from G2/Capterra or other websites must not be aggregated into your markup, attribution or not.
 
 ## Vertical-specific priorities
 - ✅ **One landing page per feature/use-case, not one generic homepage.** "Automated invoicing software," "client portal software for agencies" etc. each deserve their own indexable, internally-linked page — this is the single highest-leverage content-structure decision for SaaS SEO, and it's a Phase 1/routes-inventory concern (are these feature pages even discoverable/public-index?), not just a content one.

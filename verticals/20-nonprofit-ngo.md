@@ -3,7 +3,7 @@
 **Applies to:** charities, foundations, advocacy organizations, community NGOs.
 
 ## Primary schema.org types
-`NGO`/`Organization` (with `nonprofitStatus` where applicable) site-wide, `sameAs` to registries/verification bodies (e.g. a national charity-registration database) and social profiles; `DonateAction`/`Offer`-style markup on donation pages where a concrete, visible donation flow exists; `Event` for fundraisers with a real date/location.
+`NGO`/`Organization` (with `nonprofitStatus` where applicable) site-wide, `sameAs` to registries/verification bodies (e.g. a national charity-registration database) and social profiles; `DonateAction`/`Offer`-style markup on donation pages where a concrete, visible donation flow exists; `Event` for fundraisers with a real date and a **physical location**, bookable by the public (Google no longer supports online-event markup).
 
 ## Vertical-specific priorities
 - ✅ **Trust and transparency signals are this vertical's E-E-A-T** (`docs/09`): a visible, substantive "About/Mission" page, real leadership bios, financial transparency (annual report links, registered-charity status) do for a nonprofit what author credentials do for content sites — this is the highest-leverage addition here, more than any schema trick.

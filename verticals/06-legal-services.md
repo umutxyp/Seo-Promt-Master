@@ -3,7 +3,7 @@
 **Applies to:** law firms, legal-information content sites, legal directories.
 
 ## Primary schema.org types
-`LegalService` (a `LocalBusiness` subtype, see V03) for firm/practice pages; `Attorney`/`Person` with credentials for individual lawyer bios; `FAQPage` for common-question content (mind the 2023 eligibility restriction, `docs/08`).
+`LegalService` (a `LocalBusiness` subtype, see V03) for firm/practice pages; `Person` with credentials (`jobTitle`, `hasCredential`, `worksFor`) for individual lawyer bios — not `Attorney`, which schema.org has deprecated in favour of `LegalService` and which describes a business, not a person; `FAQPage` for common-question content is valid but earns no Google rich result since May 2026 (`docs/08`).
 
 ## Vertical-specific priorities
 - ✅ **YMYL E-E-A-T applies as strictly here as in healthcare** (`docs/09`): attorney bios need real bar admission/jurisdiction info, credentials, and years of practice — not just a headshot and a name.

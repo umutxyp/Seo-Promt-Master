@@ -3,7 +3,7 @@
 **Applies to:** online course platforms, schools/universities, individual instructor sites.
 
 ## Primary schema.org types
-`Course` for individual course pages; a `Course List` page needs **at least 3 courses** to be eligible for the Course-list carousel, per Google's documented technical requirement (`docs/08`). ⚠️ **Google retired the individual course-info rich result (start date/price/instructor snippet) in mid-2025** — don't promise that specific rich result; the Course List carousel is what's still active. `EducationalOrganization` for institution pages.
+`Course` for individual course pages; a `Course List` page needs **at least 3 courses** to be eligible for the Course-list carousel, per Google's documented technical requirement (`docs/08`). ⚠️ **Google retired the individual course-info rich result (start date/price/instructor snippet) in mid-2025** — don't promise that specific rich result; the Course List carousel is what's still active, and it is available in **English only** (in all regions where Google Search is available). `EducationalOrganization` for institution pages.
 
 ## Vertical-specific priorities
 - ✅ **Content must be genuinely educational with defined learning objectives** — this is Google's stated eligibility bar for Course markup, not a formality; a marketing page dressed up as a "course" won't qualify.

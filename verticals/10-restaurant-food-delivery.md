@@ -3,7 +3,7 @@
 **Applies to:** individual restaurant sites, food-delivery platforms, recipe/food-blog content.
 
 ## Primary schema.org types
-`Restaurant` (`LocalBusiness` subtype, see V03) with `menu`/`hasMenu`, `priceRange`, `servesCuisine`; `Recipe` for recipe content — **Recipe rich results are still fully, actively supported in 2026**, requiring at minimum `name`, `image`, `author`, and, for the full rich result, `aggregateRating`, `cookTime`, `prepTime`, `recipeYield`, `recipeIngredient`, `recipeInstructions`.
+`Restaurant` (`LocalBusiness` subtype, see V03) with `menu`/`hasMenu`, `priceRange`, `servesCuisine`; `Recipe` for recipe content — **Recipe rich results are still fully, actively supported in 2026**, requiring `name` and `image`, with `author` recommended along with, for the full rich result, `aggregateRating`, `cookTime`, `prepTime`, `recipeYield`, `recipeIngredient`, `recipeInstructions`.
 
 ## Vertical-specific priorities
 - ✅ **Menu content must be real, crawlable HTML, not a PDF or an image.** A menu shipped only as a downloadable PDF or a photo is invisible to both classic search and AI answer engines — this is a more specific instance of `docs/07`'s "text in images isn't read" rule with outsized impact in this vertical, since "menu" queries are extremely common.

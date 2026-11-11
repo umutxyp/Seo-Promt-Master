@@ -3,7 +3,7 @@
 **Applies to:** job listing platforms, company career pages, staffing/recruitment sites.
 
 ## Primary schema.org types
-`JobPosting` — required fields per Google for Jobs: `title`, `description`, `datePosted`, `hiringOrganization`, `jobLocation` (or `jobLocationType: TELECOMMUTE` for fully remote roles), and `validThrough`.
+`JobPosting` — required fields per Google for Jobs: `title`, `description`, `datePosted`, `hiringOrganization` and `jobLocation`. Fully remote roles use `jobLocationType: TELECOMMUTE` **plus** `applicantLocationRequirements` (at least one country). `validThrough` is recommended, and required whenever the posting has an expiry date.
 
 ## Vertical-specific priorities
 - ✅ **`validThrough` and expired-listing removal is the single highest-impact, most commonly mishandled item in this vertical.** Every posting needs an expiration date (rolling/evergreen postings may omit `validThrough` rather than setting an arbitrary future date). When a job closes, do **one** of: set `validThrough` to a past date, return a real 404/410 for the page, or remove the `JobPosting` markup entirely. Leaving expired postings live with active schema is explicitly called out as degrading trust — repeated violations measurably reduce a domain's standing with Google for Jobs, making this a P1-class finding, not P3 hygiene.

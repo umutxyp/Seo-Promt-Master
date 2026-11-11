@@ -3,7 +3,7 @@
 **Applies to:** the marketing/web presence for an iOS/Android app (distinct from the SaaS web-app pattern in V02, though they can overlap).
 
 ## Primary schema.org types
-`SoftwareApplication` (`applicationCategory: MobileApplication`, `operatingSystem: iOS`/`Android`) with `aggregateRating`/`review` **only if genuinely pulled from real app-store reviews with attribution**, not fabricated averages; `Organization` for the developer/publisher.
+`SoftwareApplication` (or the `MobileApplication` type) with a supported `applicationCategory` value such as `GameApplication` or `UtilitiesApplication`, `operatingSystem: iOS`/`Android`, `offers.price` (`0` if free) and `aggregateRating`/`review` — Google requires a rating or review for the rich result, but ❌ app-store ratings may not be aggregated into your markup ("Don't aggregate reviews or ratings from other websites"); only reviews collected and shown on your own page qualify; `Organization` for the developer/publisher.
 
 ## Vertical-specific priorities
 - ✅ **App Store/Play Store listings and the marketing website are two separate indexable surfaces** — don't assume optimizing one covers the other. The web landing page still needs the full standard audit (`docs/01`–`07`) independent of app-store-specific ASO (App Store Optimization, which is a distinct discipline this repo doesn't cover).

@@ -3,7 +3,7 @@
 **Applies to:** a Discord bot's own marketing/docs website whose core function is entertainment/media — music playback, media commands, multi-platform streaming (e.g. a Beatra-type product). Distinct from V21 because the query intent skews toward end-users ("best discord music bot," "discord bot to play spotify") rather than server-admin security research, and the competitive field (dozens of near-identical music bots) is much more commoditized.
 
 ## Primary schema.org types
-`SoftwareApplication` (`applicationCategory: MultimediaApplication`, `operatingSystem: Web`); `Organization` with `sameAs`; `FAQPage` for setup/permissions/platform-support questions (2023 eligibility caveat, `docs/08`).
+`SoftwareApplication` (`applicationCategory: MultimediaApplication`, `operatingSystem: Web`, plus `offers.price` — `0` if free — and a genuine on-page `aggregateRating` or `review`, which the rich result requires); `Organization` with `sameAs`; `FAQPage` for setup/permissions/platform-support questions is valid but earns no Google rich result since May 2026 (`docs/08`).
 
 ## Vertical-specific priorities
 - ✅ **Differentiation content is the top SEO priority in a commoditized field.** With dozens of largely-interchangeable music bots competing, generic "add our bot" pages rank poorly — pages that concretely address specific differentiators (multi-platform source support e.g. Spotify/SoundCloud/YouTube, audio quality, filters/effects, playlist features, uptime/reliability) targeting the exact phrases users search for those features perform far better than a single generic feature list.

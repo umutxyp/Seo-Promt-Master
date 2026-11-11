@@ -12,7 +12,7 @@ and its phases in order.
 and web.dev. Cite the section behind every recommendation (`docs/13 §soft 404`).
 If a claim is not in there, say it is not covered rather than recalling it —
 much of the SEO advice in training data predates INP replacing FID, the removal
-of FAQ rich results for most sites, and `rel=next/prev` falling out of use.
+of FAQ rich results (May 2026), and `rel=next/prev` falling out of use.
 
 **Industry overlays:** `verticals/01`–`24`, additive to the core audit.
 **Other engines:** `docs/18` (Bing, Yandex, Apple/Safari, Brave).

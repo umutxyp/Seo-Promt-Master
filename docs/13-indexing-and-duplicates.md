@@ -14,7 +14,7 @@
 | Urgent removal (legal, accident) | GSC Removals (~6 months) **plus** a permanent fix | Removals alone |
 | Non-HTML file (PDF, image) | `X-Robots-Tag` HTTP header | meta tag (there is no HTML to put it in) |
 
-Directive values: `noindex`, `nofollow`, `none`, `noarchive`, `nosnippet`, `max-snippet:[n]`, `max-image-preview:[none|standard|large]`, `max-video-preview:[n]`, `notranslate`, `noimageindex`, `unavailable_after:[date]`, `indexifembedded`.
+Directive values: `noindex`, `nofollow`, `none`, `nosnippet`, `max-snippet:[n]`, `max-image-preview:[none|standard|large]`, `max-video-preview:[n]`, `notranslate`, `noimageindex`, `unavailable_after:[date]`, `indexifembedded`. (`noarchive` is no longer used by Google Search — the cached link is gone — but Bing still reads it, `docs/18`.) Google also obeys a robots meta tag found in `<body>`, not only in `<head>`.
 
 - ⚠️ **The most expensive single mistake in this document:** a staging-wide `noindex` reaching production. Put a "is there a `noindex` in prod?" assertion in the deploy pipeline — see `tools/seo-smoke.sh`.
 
@@ -26,11 +26,13 @@ Directive values: `noindex`, `nofollow`, `none`, `noarchive`, `nosnippet`, `max-
 - ✅ **One** canonical per page. Two, and Google may discard both.
 - ✅ Canonical and hreflang must agree: each language version is canonical **to itself** (`docs/02`).
 - ✅ Paginated pages are canonical to **themselves**, never to page 1.
-- ❌ Don't inject canonical with JavaScript if you can emit it server-side.
+- ❌ Don't inject canonical with JavaScript if you can emit it server-side. If you must use JavaScript, set the **same** value as the HTML — or leave it out of the HTML entirely and set it only with JavaScript, so there is exactly one.
 
 ### When Google picks a different canonical
 
 Your `rel=canonical` is a **strong hint, not an instruction**. Google weighs it against internal link counts, sitemap membership, HTTPS preference, URL "cleanliness", redirects and the hreflang cluster. GSC reporting *"Google chose a different canonical than the user"* means your signals disagree with each other.
+
+After you fix the signals, expect a lag: Google may hold pages in a duplicate cluster for **up to two weeks** before re-evaluating.
 
 The fix is never "set the canonical harder". It is to align **all five**: internal links, sitemap entry, canonical tag, redirect target and hreflang — on one URL.
 
@@ -43,7 +45,7 @@ The fix is never "set the canonical harder". It is to align **all five**: intern
 | Case | `/Product` and `/product` | 301, lowercase everywhere |
 | Index file | `/` and `/index.html` | 301 |
 | Tracking parameters | `?utm_source=`, `?fbclid=` | self-canonical to the clean URL |
-| Sort / filter | `?sort=price` | canonical + robots.txt where needed |
+| Sort / filter | `?sort=price` | canonical **or** robots.txt — not both: a blocked URL's canonical is never read |
 | Pagination | `?page=2` | self-canonical, **do not `noindex`** |
 | Session IDs | `;jsessionid=` | remove from the URL |
 | Print / AMP variant | `/print/a` | canonical to the main page |
@@ -61,10 +63,10 @@ The biggest crawl-budget sink there is: 8 filters × 5 values is thousands of UR
 |---|---|---|
 | Has real search demand, produces unique content (`/shoes/red`) | **Yes** | Static path, own title/description/H1, in the sitemap |
 | Rare combinations (`?color=red&size=42&brand=x`) | No | `noindex, follow` or robots.txt |
-| Sort / view (`?sort=price&view=grid`) | No | Canonical to the base URL + robots.txt |
+| Sort / view (`?sort=price&view=grid`) | No | Canonical to the base URL, **or** robots.txt if crawl load matters more — not both |
 | Pagination (`?page=3`) | Yes | Self-canonical, leave crawlable |
 
-Recipe: valuable facets go in the **path**, worthless ones stay in the **query string** and get blocked there; normalise parameter order so `?a=1&b=2` is never also `?b=2&a=1`; give empty-result facet pages a `noindex` and a useful alternative rather than a soft 404.
+Recipe: valuable facets go in the **path**, worthless ones stay in the **query string** and get blocked there; normalise parameter order so `?a=1&b=2` is never also `?b=2&a=1`; return a real **404** for filter combinations with no results — Google's own instruction — rather than a 200 soft 404.
 
 ## Soft 404s and status-code hygiene
 
@@ -86,7 +88,7 @@ A **soft 404** is "not found / no results / product removed" served with **200**
 
 | State | Meaning | Action |
 |---|---|---|
-| Discovered – currently not indexed | Known, not judged worth crawling | Raise internal link strength, quality and server speed; reduce page count |
+| Discovered – currently not indexed | Found but **not crawled yet** — typically Google expected crawling to overload the site and rescheduled | Raise server capacity and speed, cut low-value URL inventory, strengthen internal links to what matters; on a new site, grow the sitemap gradually (`docs/06`) |
 | Crawled – currently not indexed | Crawled, not judged worth indexing | **A quality problem.** Consolidate or deepen; do not add more pages |
 | Alternate page with proper canonical tag | Expected for variants | Fine — just confirm the canonical points where you think |
 | Duplicate, Google chose different canonical | Signals disagree | Align all five signals (above) |
@@ -114,8 +116,11 @@ Cleanup: inventory every URL (crawl + sitemap + GSC + logs + analytics) → scor
 - [ ] Staging is `noindex` + auth; production carries no `noindex`
 
 ## Sources
-- Canonicalization troubleshooting — https://developers.google.com/search/docs/crawling-indexing/canonicalization
+- Canonicalization — https://developers.google.com/search/docs/crawling-indexing/canonicalization
+- Canonicalization troubleshooting (duplicate clusters held up to two weeks) — https://developers.google.com/search/docs/crawling-indexing/canonicalization-troubleshooting
+- Page indexing report ("Discovered – currently not indexed") — https://support.google.com/webmasters/answer/7440203
+- JavaScript SEO basics (canonical with JS, non-200 rendering) — https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics
 - Robots meta tag / X-Robots-Tag — https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
 - Faceted navigation — https://developers.google.com/crawling/docs/faceted-navigation
-- Soft 404 errors — https://developers.google.com/search/docs/crawling-indexing/http-network-errors
+- Soft 404 errors — https://developers.google.com/crawling/docs/troubleshooting/http-status-codes
 - Consolidate duplicate URLs — https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls

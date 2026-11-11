@@ -3,7 +3,7 @@
 **Applies to:** news outlets, magazines, media sites publishing time-sensitive articles at volume.
 
 ## Primary schema.org types
-`NewsArticle` (preferred over generic `Article` for news content) with the required fields: `headline`, `author` (name + URL), `datePublished` and `dateModified` in ISO 8601 **with timezone**, `publisher` (name + logo), and a main `image` — provide it in all three common aspect ratios (1:1, 4:3, 16:9) since different Google News surfaces prefer different crops. JSON-LD is Google's explicitly preferred format over Microdata/RDFa for this type.
+`NewsArticle` (preferred over generic `Article` for news content). Google lists **no required properties** for Article markup — add the ones that apply: `headline`, `author` (name + URL), `datePublished` and `dateModified` in ISO 8601 **with timezone**, and a main `image` — provide it in all three common aspect ratios (1:1, 4:3, 16:9) since different Google News surfaces prefer different crops. JSON-LD is Google's explicitly preferred format over Microdata/RDFa for this type.
 
 ## Vertical-specific priorities
 - ✅ **Google News inclusion since late 2025 is no longer a manual per-site application** — visibility is earned by sustained signals of reliable publishing, transparent ownership, high-quality reporting, and stable site performance, registered through Google Publisher Center. Don't treat this as a one-time submission task; treat it as an ongoing quality bar.

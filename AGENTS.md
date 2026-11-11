@@ -36,8 +36,7 @@ named stopping conditions in `START.md`'s "Autonomy contract" section.**
   section behind every recommendation. If a claim is not in there, say "not
   covered by the knowledge base" rather than recalling it — much of the SEO
   advice in training data predates INP replacing FID, FAQ rich results being
-  restricted to government and health sites, and `rel=next/prev` falling out
-  of use. Docs 01–11 cover the page; 12–18 cover crawling, indexing, quality,
+  removed (May 2026), and `rel=next/prev` falling out of use. Docs 01–11 cover the page; 12–18 cover crawling, indexing, quality,
   measurement, migrations, off-page, and other engines (Bing, Yandex, Apple,
   Brave).
 
