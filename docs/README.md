@@ -12,7 +12,7 @@ This is the **source of truth** for SEO Prompt Master. Every recommendation the 
 | 06 | [Sitemaps](06-sitemaps.md) | XML sitemap, sitemap index, size limits, `lastmod` |
 | 07 | [Image SEO](07-image-seo.md) | alt text, responsive images, lazy loading, image sitemaps |
 | 08 | [Structured Data](08-structured-data.md) | JSON-LD, schema.org types, policies, validation |
-| 09 | [2024–2026 Updates](09-2024-2026-updates.md) | Helpful Content, core updates, AI Overviews, Starter Guide changes |
+| 09 | [2024–2026 Updates](09-2024-2026-updates.md) | Helpful Content, core and spam update timeline, measuring an update, Discover core updates, AI Overviews, Starter Guide changes |
 | 10 | [AI Crawlers & GEO](10-ai-crawlers-and-geo.md) | GPTBot/ClaudeBot/PerplexityBot robots.txt directives, getting cited by AI answer engines |
 | 11 | [SEO Score & GEO Score](11-scoring-rubric.md) | Deterministic 0–100 scoring rubric, P1-caps-the-page rule, self-recheck requirement |
 | 12 | [Crawling & robots.txt](12-crawling-and-robots.md) | RFC 9309 semantics, response-code behaviour, Google's crawlers, crawl budget, log analysis |

@@ -10,6 +10,7 @@
 - ✅ **News sitemap freshness is far stricter than the standard sitemap rule in `docs/06`** — a dedicated news sitemap should be kept pruned to roughly the last 48 hours of content, updated continuously, not the general "accurate lastmod, resubmit occasionally" pattern.
 - ✅ **Timezones on every date field** — a missing or wrong timezone on `datePublished`/`dateModified` is a specifically-called-out, common, high-impact bug in this vertical given how much ranking for news queries depends on precise recency.
 - ✅ Correction/update transparency (visible "Updated: <date>" with what changed) is an E-E-A-T signal specific to news content (`docs/09`) — silent edits to published news content undermine trust signals.
+- ⚠️ **Discover has its own core updates since February 2026** (`docs/09`), and publishers carry most of the exposure. The stated targets — sensational headlines and clickbait down, locally relevant and in-depth original reporting up — mean a headline written for the click rather than the story is now a ranking liability in Discover. Track the Discover performance report separately from Search, and keep `max-image-preview:large` with 1200 px+ lead images on every article.
 
 ## GEO notes
 Breaking-news and current-events queries are a category where AI Overviews lean heavily on publication recency and NewsArticle-marked, timezone-correct dates — the freshness discipline above is directly a GEO lever, not just a classic-SEO one.
@@ -17,3 +18,5 @@ Breaking-news and current-events queries are a category where AI Overviews lean 
 ## Sources
 - schema.org NewsArticle — https://schema.org/NewsArticle
 - Publisher Center — best practices for article pages — https://support.google.com/news/publisher-center/answer/9607104
+- February 2026 Discover core update — https://developers.google.com/search/blog/2026/02/discover-core-update
+- Get on Discover — https://developers.google.com/search/docs/appearance/google-discover

@@ -89,8 +89,10 @@ Keep that log in the repository next to the docs, and mark known core updates on
                     canonical, unreachable sitemap, CWV collapse.
                     → Fast to fix, fast to recover.
 3. MANUAL ACTION?   GSC → Manual actions / Security issues.
-4. ALGORITHMIC?     Does the date line up with a core or spam update? Site-wide
-                    or one section? Which query types were lost?
+4. ALGORITHMIC?     Does the date line up with a core, spam or Discover update?
+                    (Timeline in docs/09; current list on Google's Search
+                    Status Dashboard.) Site-wide or one section? Which query
+                    types were lost? Search, Discover, or both?
 5. SERP CHANGE?     AI Overview appeared? New SERP feature? New competitor?
                     (Position unchanged, CTR down.)
 6. SEASONAL?        Compare demand in Google Trends. If demand fell, you didn't.
@@ -99,7 +101,8 @@ Keep that log in the repository next to the docs, and mark known core updates on
 | Shape of the drop | Likely cause |
 |---|---|
 | Sudden, steep, one day | Technical or manual action |
-| Gradual over 1–2 weeks | Core update rollout |
+| Gradual over 1–2 weeks | Core update rollout — measure only after it completes (`docs/09`) |
+| Discover down, Search flat | Discover core update or Discover-specific issue (`docs/09`) |
 | Position flat, clicks down | SERP feature / AI Overview / CTR |
 | Impressions down, position flat | Demand fell, or queries lost |
 | One folder or template | That section's quality or a template bug |
@@ -118,5 +121,7 @@ Keep that log in the repository next to the docs, and mark known core updates on
 ## Sources
 - Get started with Search Console — https://developers.google.com/search/docs/monitor-debug/search-console-start
 - Search Console bulk data export — https://support.google.com/webmasters/answer/12917675
+- Search Status Dashboard, ranking update history — https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history
+- Google Search core updates (when and how to measure) — https://developers.google.com/search/docs/appearance/core-updates
 - Debugging search traffic drops — https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops
 - Bing Webmaster Tools — https://www.bing.com/webmasters

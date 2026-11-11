@@ -20,10 +20,10 @@ Everything else in `docs/` is mechanical and verifiable. This is the part an aud
 
 ## The "Who, How, Why" test
 
-Google's helpful-content framing, refreshed December 2025:
+Google's helpful-content self-assessment ("Who, How, and Why"):
 
 - **Who** produced it, and is that visible?
-- **How** was it produced? **If automation or AI played a role, disclose it.** If you claim testing, where is the evidence?
+- **How** was it produced? **If automation or AI played a role, make that self-evident** — Google says disclosures are useful wherever a reader might reasonably ask "how was this created?". If you claim testing, where is the evidence?
 - **Why** does it exist? The answer needs to be "to help someone", not "to collect search traffic".
 
 - ⚠️ **"Helpful content" is not a separate system or penalty.** Since March 2024 it is part of core ranking. "Hit by HCU" now means "hit by a core update", and the recovery path is not a one-off repair — it is raising the site-wide quality ratio.
@@ -51,7 +51,9 @@ Violations lead to algorithmic demotion or a **manual action**.
 | 15 | Thin affiliation | Affiliate content with no original value |
 | 16 | User-generated spam | Forum/comment/profile spam — the site owner is responsible either way |
 
-**Enforcement focus in 2026:** the June 2026 spam update deliberately did *not* target link spam or site reputation abuse; it targeted content-level violations — cloaking, doorways, expired-domain abuse, hacked content, hidden text, keyword stuffing and **scaled content abuse**. Scaled content abuse has been the most aggressively enforced item since 2024, and increasingly overlaps with unedited bulk AI output.
+**Spam updates in 2026** (March, June, August, September — dates in `docs/09`): Google announces them only as "normal" spam updates for all languages and does **not** name which policies each one targets. Press readings that a given update did or did not hit link spam or site reputation abuse are interpretation, not Google statements — don't build a diagnosis on them. **Scaled content abuse** (introduced with the March 2024 policies) is the policy that unedited bulk AI output most often runs into.
+
+**Site reputation abuse in the EEA:** since **30 Aug 2026**, manual actions under this policy no longer affect results for people searching **in the European Economic Area** (a European Commission requirement); they still apply everywhere else, and the action still appears in Search Console. A site serving EEA and non-EEA audiences must still treat the policy as in force.
 
 ### The line on AI-assisted content
 
@@ -81,7 +83,7 @@ For UGC specifically: moderate or `noindex` low-quality posts, `noindex` empty p
 4. Submit a reconsideration request: honest, detailed, evidenced.
 5. Expect days to weeks. A rejection means the cleanup was not deep enough.
 
-**Algorithmic decline**: no notification, empty manual actions report. Recovery usually waits for the next core update (months), and fixing a handful of pages does not do it — the site-wide quality ratio has to move. Delete or merge the worthless, deepen the rest.
+**Algorithmic decline**: no notification, empty manual actions report. Recovery often shows at the next core update (months) — though Google runs smaller, unannounced core updates that can pick improvements up sooner (`docs/09`) — and fixing a handful of pages does not do it — the site-wide quality ratio has to move. Delete or merge the worthless, deepen the rest.
 
 ## Checklist
 - [ ] Author information, about, contact, privacy and terms pages are real and populated
@@ -98,3 +100,6 @@ For UGC specifically: moderate or `noindex` low-quality posts, `noindex` empty p
 - Creating helpful, reliable, people-first content — https://developers.google.com/search/docs/fundamentals/creating-helpful-content
 - Search Quality Rater Guidelines — https://guidelines.raterhub.com/searchqualityevaluatorguidelines.pdf
 - Search Essentials — https://developers.google.com/search/docs/essentials
+- Ranking systems guide (helpful content system became part of core ranking, March 2024) — https://developers.google.com/search/docs/appearance/ranking-systems-guide
+- Site reputation policy update for the EEA (28 Aug 2026) — https://developers.google.com/search/blog/2026/08/update-site-reputation-policy
+- Search Status Dashboard, ranking update history — https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history

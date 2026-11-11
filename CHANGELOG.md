@@ -5,6 +5,29 @@ the scoring changed in a way that makes old output no longer comparable.
 
 ## Unreleased
 
+### Knowledge base
+
+- **Google's update timeline is current again.** `docs/09` listed core updates
+  only up to August 2024; it now carries every ranking update from March 2024 to
+  the November 2026 core update (started 10 November, still rolling out), with
+  the durations Google published, and points at the Search Status Dashboard as
+  the authoritative list.
+- **How to measure an update** (`docs/09`): wait for completion plus a full
+  week, compare with the week before the rollout began, and don't compare a
+  seasonal peak against an ordinary week. Smaller core updates run unannounced,
+  so recovery need not wait for the next named one (`docs/09`, `docs/14`).
+- **Discover core updates** (`docs/09`, `verticals/12`): the February 2026
+  update, Google's stated goals, and what they mean for images, titles and
+  clickbait. Traffic-drop diagnosis (`docs/15`, the monitoring prompt) now
+  separates a Discover drop from a Search drop.
+- **Site reputation abuse in the EEA** (`docs/14`): since 30 August 2026, its
+  manual actions no longer affect results for searches in the EEA.
+- Fixed: `docs/09` said the helpful content system was "folded into quarterly
+  quality signals through 2024–2025"; it became part of core ranking in March
+  2024, as `docs/14` already said. `docs/14` no longer dates the "Who, How, and
+  Why" guidance to December 2025, and no longer presents a press reading of the
+  June 2026 spam update's targets as Google's own statement.
+
 ### Security
 
 - **TLS certificates are verified by default, and `--insecure` says what it

@@ -11,6 +11,7 @@
 - ✅ **Faceted navigation (filters/sort) is the #1 crawl-budget risk** on large catalogs — apply `docs/03`'s faceted-nav rules (canonical to unfiltered, `Disallow` non-valuable combinations) aggressively; this is usually the single biggest P1 category on an e-commerce audit.
 - ✅ **Variant/SKU canonicalization:** color/size variants on separate URLs should either self-canonicalize (if each variant deserves its own ranking) or canonicalize to a parent product — pick one pattern site-wide, don't mix.
 - ✅ Image SEO (`docs/07`) matters more here than most verticals — product photos are a primary discovery surface (Google Images, Shopping).
+- ⚠️ **Core updates and peak season collide.** Google has shipped core updates in November and December in most recent years (`docs/09`), so a rollout often ends right before Black Friday or the holidays. A week-over-week comparison then measures the season, not the update — compare year-over-year for the same weeks, or use a control set of pages, before deciding the update cost you anything.
 
 ## GEO notes
 Product pages with complete, accurate `Offer` data are what AI shopping assistants and answer engines lift into comparison answers — incomplete/stale price-availability data is treated the same as missing data by both Google and AI crawlers (`docs/10`).
