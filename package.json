@@ -1,7 +1,7 @@
 {
   "name": "seo-prompt-master",
   "version": "2.1.0",
-  "description": "Google SEO + multi-engine + GEO knowledge base as an AI skill, with a zero-dependency live audit tool.",
+  "description": "Open-source technical SEO and GEO (AI search) audit: a zero-dependency CLI, an AI agent skill, 47 SEO prompts and a cited knowledge base of Google, Bing and AI-crawler rules.",
   "type": "module",
   "bin": {
     "seo-audit": "tools/seo-audit.mjs",
@@ -29,7 +29,7 @@
   "engines": {
     "node": ">=18"
   },
-  "keywords": ["seo", "geo", "ai-search", "audit", "prompts", "claude", "codex", "cursor", "robots.txt", "sitemap", "hreflang", "structured-data"],
+  "keywords": ["seo", "seo-audit", "technical-seo", "seo-checker", "geo", "generative-engine-optimization", "ai-search", "audit", "prompts", "core-web-vitals", "robots.txt", "sitemap", "hreflang", "canonical", "structured-data", "schema-org", "indexnow", "claude-code", "codex", "cursor", "gemini-cli", "copilot"],
   "author": "Umut Bayraktar (https://github.com/umutxyp)",
   "license": "MIT",
   "repository": {

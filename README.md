@@ -2,9 +2,11 @@
 
 # 🔍 SEO Prompt Master
 
-### Google SEO, every other search engine, and AI answer engines — as an AI skill, a prompt library, and a tool that actually runs.
+### Open-source technical SEO and GEO (AI search) audit — a zero-dependency CLI, an AI agent skill, 47 SEO prompts and a cited knowledge base of Google's rules.
 
 **Install it into your project, and every coding agent you use — Claude Code, Codex, Cursor, Gemini CLI, Copilot — gains an SEO + GEO auditor. It maps your routes, checks them against the official rules of Google, Bing, Yandex, Apple and the AI crawlers, fixes the gaps, and proves the fixes with a real audit against your live server.**
+
+<sub>robots.txt · XML sitemaps · canonicals · hreflang · structured data / schema.org · Core Web Vitals · soft 404s · AI crawlers (GPTBot, ClaudeBot, PerplexityBot) · AI Overviews · Google core updates · Bing & IndexNow</sub>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-78c51c.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-2.1.0-4285F4.svg)](CHANGELOG.md)
@@ -13,9 +15,13 @@
 [![Works with](https://img.shields.io/badge/skill%20for-Claude%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot-000.svg)](#-install-as-a-skill)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**[Usage guide](GUIDE.md)** · **[Türkçe kullanım rehberi](GUIDE.tr.md)** · **[Prompt library](prompt-library/README.md)** · **[Knowledge base](docs/README.md)**
+**[Usage guide](GUIDE.md)** · **[Türkçe kullanım rehberi](GUIDE.tr.md)** · **[Prompt library](prompt-library/README.md)** · **[Knowledge base](docs/README.md)** · **[Wiki](https://github.com/umutxyp/Seo-Promt-Master/wiki)**
 
 </div>
+
+---
+
+**Contents:** [Quick start](#-quick-start--pick-one) · [What's new](#-whats-new) · [What is this?](#what-is-this) · [Install](#-install-as-a-skill) · [The tools](#-the-tools) · [Sample report](#-sample-report) · [Prompt library](#-the-prompt-library) · [Workflow](#-the-workflow) · [FAQ](#-faq) · [Author](#-author)
 
 ---
 
@@ -29,6 +35,14 @@
 | **To read the rules** | [`docs/README.md`](docs/README.md) — a current, cited reference to SEO and GEO | — |
 
 No account, no API key, and zero dependencies. Node 18+ is the only requirement for the tool.
+
+---
+
+## 🆕 What's new
+
+- **November 2026 core update** (started 10 November, still rolling out): the knowledge base now carries every Google core, spam and Discover update since March 2024, and how to measure one without fooling yourself — [`docs/09`](docs/09-2024-2026-updates.md). Diagnosing a drop? Use the [traffic-drop prompt](prompt-library/07-monitoring-and-diagnosis.md#diagnose-a-traffic-drop).
+- **Discover has its own core updates** since February 2026, and **site reputation abuse** manual actions no longer apply in the EEA since August 2026 — [`docs/09`](docs/09-2024-2026-updates.md), [`docs/14`](docs/14-quality-eeat-and-spam.md).
+- **2.1.0** — every engine, not just Google: a per-crawler robots.txt matrix for 24 crawlers, a GEO Score, and 47 prompts. See the [changelog](CHANGELOG.md).
 
 ---
 
@@ -71,7 +85,7 @@ If your project already has an `AGENTS.md` or `GEMINI.md`, the installer appends
 
 ---
 
-## 🛠️ The tools
+## 🔧 The tools
 
 ```bash
 # The thorough pass — sample the sitemap, audit each page, compute SEO + GEO scores
@@ -99,6 +113,40 @@ Both have zero dependencies. The auditor needs Node 18+; the smoke test needs `c
 **What it deliberately cannot see** — so it stays your job: content quality (`docs/14`), off-page authority (`docs/17`), and real field Core Web Vitals, which come from CrUX rather than from fetching a page (`docs/05`). A high score means the technical foundation is sound, not that the site will rank.
 
 See [`tools/README.md`](tools/README.md) for every flag.
+
+---
+
+## 📋 Sample report
+
+This is what `seo-audit.mjs --md report.md` writes, shortened. The run below is against the deliberately broken fixture site in [`tests/fixtures.mjs`](tests/fixtures.mjs) — the same site the test suite checks the tool against.
+
+```text
+## SEO Score: 43/100 (6 pages fetched, full sitemap coverage)
+6 pages scored · 4 capped at 60 by a P1 · site-level penalty 29.
+
+| Category                        | P1 | P2 | P3 | ≈ points lost |
+| Indexability & crawl foundation |  3 |  2 |  1 |          18.3 |
+| Rendering & mobile parity       |  2 |  0 |  2 |          12.7 |
+| Structured data                 |  0 |  1 |  5 |           2.7 |
+
+## GEO Score: 36/100 (provisional — automated) · capped at 60 by a GEO blocker
+
+## Crawler access (robots.txt, resolved per RFC 9309)
+| Googlebot | Search engine | ✅ allowed | `*`      |
+| Bingbot   | Search engine | ⛔ blocked | `bingbot` |
+| GPTBot    | AI training   | ✅ allowed | `*`      |
+  … 24 crawlers in all
+
+### P1 — blockers (6)
+- robots.txt blocks Bingbot from the homepage (via `User-agent: bingbot`). That removes
+  the site from Bing and from everything built on Bing's index: DuckDuckGo and Yahoo
+  results, Copilot answers.                         Rule: docs/18
+- Page is `noindex` for Google (X-Robots-Tag header).   /a          Rule: docs/01
+- hreflang points to /fr/one, which does not point back. A one-way set is discarded
+  in full.                                          /en/one     Rule: docs/02
+```
+
+Every finding names the URL, the rule in `docs/` it comes from, and the score category it cost. The full report also lists P2/P3 findings and a JSON version (`--json`) for CI.
 
 ---
 
@@ -179,11 +227,36 @@ Metadata · Canonical + hreflang · Robots and indexing (meta **and** header) ·
 
 Most SEO checklists are shallow, generic, or quietly out of date. This one is:
 
-- **Current** (reviewed October 2026; Google's update timeline tracked through the November 2026 core update). It is explicit about what changed: INP replaced FID in March 2024; FAQ rich results are limited to government and health sites; `HowTo` rich results are gone; `rel=next/prev` has been unused by Google since 2019; Google doesn't support IndexNow but Bing and Yandex do; Bing still obeys `Crawl-delay`; `llms.txt` is not a ranking or citation lever. Advice that repeats the old version is out of date, and the knowledge base says so.
+- **Current** (reviewed October 2026; Google's update timeline tracked through the November 2026 core update — see [What's new](#-whats-new)). It is explicit about what changed: INP replaced FID in March 2024; FAQ rich results are limited to government and health sites; `HowTo` rich results are gone; `rel=next/prev` has been unused by Google since 2019; Google doesn't support IndexNow but Bing and Yandex do; Bing still obeys `Crawl-delay`; `llms.txt` is not a ranking or citation lever. Advice that repeats the old version is out of date, and the knowledge base says so.
 - **Not Google-only.** Google is the reference engine, but Bing's index sits behind DuckDuckGo, Yahoo and Copilot, and Applebot sits behind Siri and Safari's suggestions. [`docs/18`](docs/18-other-search-engines.md) covers where the engines differ, and the auditor checks all of them.
 - **Cited.** Every claim links to official documentation. If something isn't in `docs/`, the agent is told to say "not covered by the knowledge base" rather than recall it from training data.
 - **Executable and tested.** An agent can run it against your code *and* your server. The tools are themselves tested against a healthy and a deliberately broken fixture site on every push.
 - **Honest about its limits.** It separates ranking factors from hygiene, logs deliberate skips, and names what it can't measure.
+
+---
+
+## ❓ FAQ
+
+**What is GEO?**
+Generative Engine Optimization: making a site readable and citable by AI answer engines — Google AI Overviews and AI Mode, ChatGPT search, Perplexity, Copilot. Most of it is classic technical SEO done properly; the rest is crawler policy and extractable content. [`docs/10`](docs/10-ai-crawlers-and-geo.md) covers what works and what doesn't.
+
+**Is it free? Do I need an API key?**
+Yes, MIT-licensed. No account, no API key, no dependencies — the auditor is one Node 18+ file, and the prompts work in any assistant.
+
+**Does it work with ChatGPT, Gemini or other assistants without a coding agent?**
+Yes. Paste [`START.md`](START.md) into the chat and say "begin at Phase 0", or copy a single prompt from the [prompt library](prompt-library/README.md). A coding agent adds the part where it reads and fixes your code.
+
+**Which frameworks does it support?**
+Any site that serves HTTP — the auditor only fetches pages. The fix recipes cover Next.js, Nuxt, SvelteKit, Astro, Remix, WordPress, Laravel, Django and Rails ([framework recipes](prompt-library/08-framework-recipes.md)), and [24 industry overlays](verticals/README.md) cover e-commerce, SaaS, local business, news and more.
+
+**My traffic dropped after a Google core update. What now?**
+Check the date against the update timeline in [`docs/09`](docs/09-2024-2026-updates.md), rule out a technical cause first with the auditor, and don't measure until the rollout is complete plus a week. The [traffic-drop prompt](prompt-library/07-monitoring-and-diagnosis.md#diagnose-a-traffic-drop) walks through it step by step.
+
+**Do I need an `llms.txt` file for AI search?**
+No. Google ignores it, and Google, OpenAI, Anthropic and Meta have not committed to reading it in their search or answer systems ([`docs/10`](docs/10-ai-crawlers-and-geo.md)). Having one isn't penalized either.
+
+**Will a score of 100 make my site rank?**
+No. The scores measure technical readiness — whether search engines and AI crawlers can crawl, render, index and understand your pages. Content quality, backlinks and competition decide ranking, and the tool says so in every report.
 
 ---
 
