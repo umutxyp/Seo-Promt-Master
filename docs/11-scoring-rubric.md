@@ -31,8 +31,8 @@ This doc turns every other `docs/` section into two **deterministic, out-of-100 
 | Extractable rendering | 20 | `docs/10`, `docs/05` | The same server-rendered-content requirement as the SEO Score's rendering category, re-scored here because AI crawlers generally don't execute JS either |
 | Extractable content structure | 15 | `docs/10` | Key pages lead sections with a direct, self-contained, quotable answer; comparative/enumerable content uses lists or tables |
 | Entity authority | 20 | `docs/08`, `docs/09`, `docs/10` | `Organization`/`Person` JSON-LD with `sameAs` to Wikidata/LinkedIn/Crunchbase/socials, a substantive About page, visible author bylines with credentials (E-E-A-T) |
-| Classic-SEO prerequisite | 15 | `docs/10` | This is **the project's own SEO Score**, reused: AI Overviews cite overwhelmingly from pages that already rank organically, so GEO cannot outscore SEO by more than this weighting allows — set this row's points to `round(SEO Score × 0.15)` |
-| No wasted/counterproductive GEO effort | 10 | `docs/10` | No `llms.txt`-as-fix, no other unsourced "AI SEO" tactic recommended or implemented that this repo's knowledge base doesn't back |
+| Classic-SEO prerequisite | 15 | `docs/10` | This is **the project's own SEO Score**, reused: AI Overviews tend to cite pages that already rank organically (a third-party observation, not a Google statement), so GEO cannot outscore SEO by more than this weighting allows — set this row's points to `round(SEO Score × 0.15)` |
+| No wasted/counterproductive GEO effort | 10 | `docs/10` | No `llms.txt`-as-fix, no other unsourced "AI SEO" tactic recommended or implemented that this repo's knowledge base doesn't back. An existing `llms.txt` kept for other services costs nothing — Google says it neither harms nor helps |
 
 ## Reporting format
 

@@ -6,14 +6,15 @@ An audit that ends at "I changed it" is half an audit. This is how a change is p
 
 - ✅ Use a **Domain property** (DNS verification) — it covers every subdomain and protocol. Add URL-prefix properties on top when you want a section (`/tr/`, `/forum/`) analysed separately.
 - ✅ Submit every sitemap, turn on email notifications, and set up the **BigQuery bulk export** — the UI caps at 1,000 rows and 16 months, which is not enough for real analysis.
-- ✅ Set up **Bing Webmaster Tools** too. It is not about Bing traffic: Bing's index is what ChatGPT and Copilot draw on, and its **AI Performance** panel is the only first-party report of AI citations that exists (`docs/10`).
+- ✅ Check **Settings → Search generative AI**: the site must be included for AI Overviews and AI Mode (`docs/09`). Inclusion is the default, but an inherited *Exclude* explains a site that never appears in AI answers.
+- ✅ Set up **Bing Webmaster Tools** too. It is not only about Bing traffic: Bing's index powers Copilot answers and most DuckDuckGo and Yahoo results (`docs/18`), and its **AI Performance** panel reports AI citations alongside Google's own Generative AI reports.
 
 ## Which report answers which question
 
 | Report | Question | Then what |
 |---|---|---|
 | Performance → Search results | What are we shown for, and what gets clicked? | Query/page/country/device breakdowns |
-| Performance → **Generative AI** | Which pages appear in AI Overviews / AI Mode? | Impressions only — no clicks, CTR or queries; data starts May 2026, no backfill |
+| Performance → **Generative AI** | Which pages appear in AI Overviews / AI Mode? | Impressions by page, country, device and date; filter *Web: text-based* vs *Web: multimodal*. Discover has its own generative AI report. Rolled out worldwide 31 Aug 2026 |
 | Performance → Discover / News | Discover traffic | Image and headline work |
 | **Pages** (Indexing) | What is indexed, and why is the rest not? | `docs/13` state table |
 | Sitemaps | Submitted vs discovered | Under 80% indexed means a quality problem, not a sitemap problem |
@@ -44,6 +45,8 @@ SELECT query,
        SUM(impressions) AS impressions
 FROM `project.searchconsole.searchdata_url_impression`
 WHERE data_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 28 DAY)
+  AND search_type = 'WEB'   -- the table also holds Discover and News rows
+  AND query != ''           -- anonymised queries are empty strings
 GROUP BY query
 HAVING url_count > 1 AND impressions > 500
 ORDER BY impressions DESC
@@ -124,4 +127,7 @@ Keep that log in the repository next to the docs, and mark known core updates on
 - Search Status Dashboard, ranking update history — https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history
 - Google Search core updates (when and how to measure) — https://developers.google.com/search/docs/appearance/core-updates
 - Debugging search traffic drops — https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops
-- Bing Webmaster Tools — https://www.bing.com/webmasters
+- Bing Webmaster Tools — https://www.bing.com/webmasters/about
+- Generative AI performance report — https://support.google.com/webmasters/answer/16984139
+- Search generative AI control — https://support.google.com/webmasters/answer/16908024
+- BigQuery export sample queries (`search_type = 'WEB'`, `query != ''`) — https://support.google.com/webmasters/answer/12917174

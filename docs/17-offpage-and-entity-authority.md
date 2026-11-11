@@ -7,7 +7,7 @@ The only chapter in this knowledge base about things that happen on other people
 Backlink count alone stopped being the axis. Authority now stands on three legs:
 
 1. **Editorial links** — relevant, given voluntarily by an authoritative source.
-2. **Unlinked brand mentions** — your brand, product or founder named in credible contexts. These feed Google's entity understanding and, separately, an AI system's sense that it knows who you are.
+2. **Unlinked brand mentions** — your brand, product or founder named in credible contexts. These feed Google's entity understanding and, separately, an AI system's sense that it knows who you are. Earn them; Google's generative AI guide warns that seeking *inauthentic* mentions isn't as helpful as it might seem.
 3. **Entity consistency** — the same name, description and profiles everywhere: Wikidata, LinkedIn, X, GitHub, YouTube, industry directories.
 
 - ⚠️ AI answer engines look for a **consistent, verifiable entity across the open web** before citing a brand. That does not replace classic link authority; it sits on top of it (`docs/10`).
@@ -30,7 +30,7 @@ Backlink count alone stopped being the axis. Authority now stands on three legs:
 <a href="..." rel="ugc">         <!-- user-generated -->
 ```
 
-- ❌ **A paid link without `rel="sponsored"` is a link spam policy violation** (`docs/14`), on both sides of the transaction.
+- ❌ **A paid link without `rel="sponsored"` or `rel="nofollow"` is a link spam policy violation** (`docs/14`), on both sides of the transaction. `sponsored` is the preferred value; either qualifies the link.
 
 ## Tactics that work
 
@@ -55,11 +55,13 @@ Warning signs: an unexplained link spike; more than ~30% of anchors being one ex
 
 ```txt
 # disavow.txt
-spam-example.com/bad-page
+http://spam.example.com/stuff/comments.html
 domain:entirely-spam-domain.com
 ```
 
 - ⚠️ Google says **most sites never need this**; spam links are already ignored.
+- ⚠️ The disavow tool works only with a **URL-prefix property**, not a Domain property — add one if `docs/15`'s Domain-property setup is all you have.
+- ⚠️ Entries are full URLs (with the scheme) or `domain:` lines.
 - Use it only if you have taken a manual action, or you knowingly bought bad links.
 - ❌ Misuse causes **lasting damage** — disavowing good links takes months to undo. Domain-level entries are safer than per-URL ones.
 
@@ -83,13 +85,13 @@ Slower than links, and more durable:
 | New and lost links | Tool alerts + a weekly look |
 | Unlinked mentions | Alerts on the brand name |
 | Brand search volume | GSC → Queries, brand-filtered, over time |
-| AI citations | Bing Webmaster Tools AI Performance; manual prompt tests |
+| AI citations | Search Console Generative AI report (Google); Bing Webmaster Tools AI Performance; manual prompt tests |
 
 - ⚠️ Third-party authority scores (DA/DR/AS) are **not Google metrics**. Use them to compare, never as a target.
 
 ## Checklist
 - [ ] GSC Links report reviewed on a schedule
-- [ ] Every paid link carries `rel="sponsored"`; UGC links carry `rel="ugc nofollow"`
+- [ ] Every paid link carries `rel="sponsored"` (or `nofollow`); UGC links carry `rel="ugc nofollow"`
 - [ ] There is a plan for producing linkable assets (data, tools, reports)
 - [ ] `sameAs` profiles complete and consistent (`docs/08`)
 - [ ] Anchor distribution looks natural

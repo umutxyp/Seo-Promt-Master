@@ -30,7 +30,7 @@ Google's helpful-content self-assessment ("Who, How, and Why"):
 
 ## The spam policies (2026)
 
-Violations lead to algorithmic demotion or a **manual action**.
+Violations lead to algorithmic demotion or a **manual action**. Since May 2026 the policies explicitly cover **attempts to manipulate generative AI responses** in Google Search, not only rankings.
 
 | # | Policy | Short form |
 |---|---|---|
@@ -42,24 +42,26 @@ Violations lead to algorithmic demotion or a **manual action**.
 | 6 | Keyword stuffing | Unnatural keyword or location lists |
 | 7 | Link spam | Buying/selling links, excessive exchange, automated links, PBNs |
 | 8 | Machine-generated traffic | Unauthorised automated querying / rank scraping |
-| 9 | Malicious behavior | Malware, unwanted software, back-button hijacking |
+| 9 | Malicious practices | Malware, unwanted software, back-button hijacking |
 | 10 | Misleading functionality | Pages that do not do what they promise |
 | 11 | **Scaled content abuse** | Producing many low-value pages at scale, by any method |
 | 12 | Scraping | Republishing others' content without adding value |
-| 13 | Site reputation abuse | Third-party content exploiting a host's authority ("parasite SEO") |
+| 13 | Site reputation policy ("site reputation abuse") | Third-party content exploiting a host's authority ("parasite SEO") |
 | 14 | Sneaky redirects | Sending users somewhere the crawler was not sent |
 | 15 | Thin affiliation | Affiliate content with no original value |
 | 16 | User-generated spam | Forum/comment/profile spam — the site owner is responsible either way |
 
 **Spam updates in 2026** (March, June, August, September — dates in `docs/09`): Google announces them only as "normal" spam updates for all languages and does **not** name which policies each one targets. Press readings that a given update did or did not hit link spam or site reputation abuse are interpretation, not Google statements — don't build a diagnosis on them. **Scaled content abuse** (introduced with the March 2024 policies) is the policy that unedited bulk AI output most often runs into.
 
-**Site reputation abuse in the EEA:** since **30 Aug 2026**, manual actions under this policy no longer affect results for people searching **in the European Economic Area** (a European Commission requirement); they still apply everywhere else, and the action still appears in Search Console. A site serving EEA and non-EEA audiences must still treat the policy as in force.
+**Site reputation policy in the EEA:** since **30 Aug 2026**, manual actions under this policy no longer affect results for people searching **in the European Economic Area** (a European Commission requirement); they still apply everywhere else, and the action still appears in Search Console. A site serving EEA and non-EEA audiences must still treat the policy as in force.
 
 ### The line on AI-assisted content
 
 > Google judges the **result**, not the production method. AI-assisted, edited, accurate, genuinely useful content is compliant. Unedited, scaled, value-free production is **scaled content abuse** and is demoted.
 
 The practical test: *is the human effort that went into this page proportional to the value it gives the reader?*
+
+Google's generative-AI content guidance (updated Oct 2026) is concrete: **manually fact-check and review all AI-generated content** — including titles, meta descriptions, structured data and alt text, not just body copy — and it points to the rater guidelines on scaled content abuse and low-effort main content.
 
 ## Directory, listing and UGC sites
 
@@ -83,6 +85,9 @@ For UGC specifically: moderate or `noindex` low-quality posts, `noindex` empty p
 4. Submit a reconsideration request: honest, detailed, evidenced.
 5. Expect days to weeks. A rejection means the cleanup was not deep enough.
 
+- ❌ **Don't move the offending content to a subdomain or subdirectory.** Google may treat that as an attempt to circumvent the policy and widen the action.
+- ⚠️ Competitors' and users' **spam reports can now lead to manual actions** (April 2026) — they are no longer only used to improve algorithms.
+
 **Algorithmic decline**: no notification, empty manual actions report. Recovery often shows at the next core update (months) — though Google runs smaller, unannounced core updates that can pick improvements up sooner (`docs/09`) — and fixing a handful of pages does not do it — the site-wide quality ratio has to move. Delete or merge the worthless, deepen the rest.
 
 ## Checklist
@@ -98,7 +103,10 @@ For UGC specifically: moderate or `noindex` low-quality posts, `noindex` empty p
 ## Sources
 - Spam policies — https://developers.google.com/search/docs/essentials/spam-policies
 - Creating helpful, reliable, people-first content — https://developers.google.com/search/docs/fundamentals/creating-helpful-content
-- Search Quality Rater Guidelines — https://guidelines.raterhub.com/searchqualityevaluatorguidelines.pdf
+- Search Quality Rater Guidelines — https://static.googleusercontent.com/media/guidelines.raterhub.com/en//searchqualityevaluatorguidelines.pdf
+- Using generative AI content — https://developers.google.com/search/docs/fundamentals/using-gen-ai-content
+- Report spam (reports may lead to manual action) — https://developers.google.com/search/help/report-quality-issues
+- Manual actions report (policy circumvention) — https://support.google.com/webmasters/answer/9044175
 - Search Essentials — https://developers.google.com/search/docs/essentials
 - Ranking systems guide (helpful content system became part of core ranking, March 2024) — https://developers.google.com/search/docs/appearance/ranking-systems-guide
 - Site reputation policy update for the EEA (28 Aug 2026) — https://developers.google.com/search/blog/2026/08/update-site-reputation-policy
