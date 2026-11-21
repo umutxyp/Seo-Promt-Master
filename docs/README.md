@@ -18,8 +18,8 @@ This is the **source of truth** for SEO Prompt Master. Every recommendation the 
 | 12 | [Crawling & robots.txt](12-crawling-and-robots.md) | RFC 9309 semantics, response-code behaviour, Google's crawlers, crawl budget, log analysis |
 | 13 | [Indexing & duplicates](13-indexing-and-duplicates.md) | noindex vs Disallow vs 410, canonical conflicts, duplicate taxonomy, faceted nav, soft 404s, GSC index states |
 | 14 | [Quality, E-E-A-T & spam](14-quality-eeat-and-spam.md) | The 16 spam policies, scaled content abuse, AI-content line, directory thresholds, manual action recovery |
-| 15 | [Measurement & verification](15-measurement-and-verification.md) | Search Console reports, BigQuery, KPI set, proving a change, traffic-drop diagnosis |
-| 16 | [Migrations & incidents](16-migrations-and-incidents.md) | URL inventory, redirect maps, rollback criteria, hack response |
+| 15 | [Measurement & verification](15-measurement-and-verification.md) | Search Console reports, the Search Analytics API, BigQuery, recognising Google traffic in analytics, KPI set, proving a change, traffic-drop diagnosis |
+| 16 | [Migrations & incidents](16-migrations-and-incidents.md) | URL inventory, redirect maps, rollback criteria, moving behind a CDN, hack response |
 | 17 | [Off-page & entity authority](17-offpage-and-entity-authority.md) | Link quality, digital PR, disavow, brand and entity building |
 | 18 | [Beyond Google](18-other-search-engines.md) | Bing (+ DuckDuckGo, Yahoo, Copilot), Yandex, Apple/Safari, Brave, Naver, Seznam, Baidu, IndexNow |
 

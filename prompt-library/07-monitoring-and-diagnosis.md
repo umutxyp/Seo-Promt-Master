@@ -10,8 +10,8 @@ When something changed and you need to know why, and how to stop it happening ag
 
 ```text
 Act as an SEO incident analyst. Organic traffic dropped {{x%}} starting {{date}}. Work through these steps in order, and don't skip ahead:
-1. Is it real? Analytics or tag change? Did Search Console impressions fall too, or only clicks?
-2. Is it technical? A 5xx spike, a robots.txt change, a leaked noindex (check the meta tags AND the X-Robots-Tag header), a broken canonical, an unreachable sitemap, a WAF blocking Googlebot or Bingbot. If you can, run: npx github:umutxyp/Seo-Promt-Master --url {{url}} and bash tools/seo-smoke.sh {{url}}
+1. Is it real? Analytics or tag change? Did Search Console impressions fall too, or only clicks? If analytics fell but Search Console clicks did not, it is measurement: a consent banner, a redirect that drops the referrer, a channel rule. Analytics sessions never equal Search Console clicks exactly.
+2. Is it technical? A 5xx spike, a robots.txt change, a leaked noindex (check the meta tags AND the X-Robots-Tag header), a broken canonical, an unreachable sitemap, a WAF or a newly added CDN challenging Googlebot or Bingbot. If you can, run: npx github:umutxyp/Seo-Promt-Master --url {{url}} and bash tools/seo-smoke.sh {{url}}
 3. Is there a manual action or a security issue in Search Console?
 4. Is it algorithmic? Does the date line up with a core, spam or Discover update? Check the dates on Google's Search Status Dashboard (status.search.google.com), not from memory. If an update is still rolling out, say so and don't conclude until it has finished plus one full week. Is it site-wide or one section? Did Search and Discover fall together, or only one?
 5. Did the SERP change? Position flat but clicks down usually means an AI Overview or a SERP feature.

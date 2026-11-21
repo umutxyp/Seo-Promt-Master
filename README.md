@@ -9,7 +9,7 @@
 <sub>robots.txt · XML sitemaps · canonicals · hreflang · structured data / schema.org · Core Web Vitals · soft 404s · AI crawlers (GPTBot, ClaudeBot, PerplexityBot) · AI Overviews · Google core updates · Bing & IndexNow</sub>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-78c51c.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.2.0-4285F4.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.2.1-4285F4.svg)](CHANGELOG.md)
 [![Tests](https://github.com/umutxyp/Seo-Promt-Master/actions/workflows/test.yml/badge.svg)](.github/workflows/test.yml)
 [![Docs: Google Search Central](https://img.shields.io/badge/docs-Google%20·%20Bing%20·%20Yandex%20·%20Apple-4285F4.svg)](docs/README.md)
 [![Works with](https://img.shields.io/badge/skill%20for-Claude%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot-000.svg)](#-install-as-a-skill)
@@ -42,6 +42,7 @@ No account, no API key, and zero dependencies. Node 18+ is the only requirement 
 
 - **November 2026 core update** (started 10 November, still rolling out): the knowledge base now carries every Google core, spam and Discover update since March 2024, and how to measure one without fooling yourself — [`docs/09`](docs/09-2024-2026-updates.md). Diagnosing a drop? Use the [traffic-drop prompt](prompt-library/07-monitoring-and-diagnosis.md#diagnose-a-traffic-drop).
 - **Discover has its own core updates** since February 2026, and **site reputation abuse** manual actions no longer apply in the EEA since August 2026 — [`docs/09`](docs/09-2024-2026-updates.md), [`docs/14`](docs/14-quality-eeat-and-spam.md).
+- **2.2.1** — what Google published since: moving behind a CDN without overloading the origin or blocking Googlebot ([`docs/16`](docs/16-migrations-and-incidents.md)), recognising Google Search traffic in analytics and logs, and the Search Analytics API's new branded, multimodal and multi-country filters ([`docs/15`](docs/15-measurement-and-verification.md)).
 - **2.2.0** — every doc re-checked against Google's, Bing's and the AI operators' own pages; a sitemap ramp-up for new sites; robots.txt 429 treated as the server error Google treats it as; 30 crawlers in the access matrix.
 - **2.1.0** — every engine, not just Google: a per-crawler robots.txt matrix for 24 crawlers, a GEO Score, and 47 prompts. See the [changelog](CHANGELOG.md).
 
@@ -228,7 +229,7 @@ Metadata · Canonical + hreflang · Robots and indexing (meta **and** header) ·
 
 Most SEO checklists are shallow, generic, or quietly out of date. This one is:
 
-- **Current** (reviewed October 2026; Google's update timeline tracked through the November 2026 core update — see [What's new](#-whats-new)). It is explicit about what changed: INP replaced FID in March 2024; FAQ rich results are gone (May 2026); `HowTo` rich results are gone; `rel=next/prev` has been unused by Google since 2019; Google doesn't support IndexNow but Bing and Yandex do; Bing still obeys `Crawl-delay`; `llms.txt` is not a ranking or citation lever. Advice that repeats the old version is out of date, and the knowledge base says so.
+- **Current** (reviewed November 2026; Google's update timeline tracked through the November 2026 core update — see [What's new](#-whats-new)). It is explicit about what changed: INP replaced FID in March 2024; FAQ rich results are gone (May 2026); `HowTo` rich results are gone; `rel=next/prev` has been unused by Google since 2019; Google doesn't support IndexNow but Bing and Yandex do; Bing still obeys `Crawl-delay`; `llms.txt` is not a ranking or citation lever. Advice that repeats the old version is out of date, and the knowledge base says so.
 - **Not Google-only.** Google is the reference engine, but Bing's index sits behind DuckDuckGo, Yahoo and Copilot, and Applebot sits behind Siri and Safari's suggestions. [`docs/18`](docs/18-other-search-engines.md) covers where the engines differ, and the auditor checks all of them.
 - **Cited.** Every claim links to official documentation. If something isn't in `docs/`, the agent is told to say "not covered by the knowledge base" rather than recall it from training data.
 - **Executable and tested.** An agent can run it against your code *and* your server. The tools are themselves tested against a healthy and a deliberately broken fixture site on every push.

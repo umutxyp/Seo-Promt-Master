@@ -13,7 +13,7 @@ An audit that ends at "I changed it" is half an audit. This is how a change is p
 
 | Report | Question | Then what |
 |---|---|---|
-| Performance → Search results | What are we shown for, and what gets clicked? | Query/page/country/device breakdowns |
+| Performance → Search results | What are we shown for, and what gets clicked? | Query/page/country/device breakdowns; the **Branded / Non-branded** filter; the **multimodal** search type (Lens, Circle to Search, image uploads, Chrome's "Search this image" — since 24 Sep 2026) |
 | Performance → **Generative AI** | Which pages appear in AI Overviews / AI Mode? | Impressions by page, country, device and date; filter *Web: text-based* vs *Web: multimodal*. Discover has its own generative AI report. Rolled out worldwide 31 Aug 2026 |
 | Performance → Discover / News | Discover traffic | Image and headline work |
 | **Pages** (Indexing) | What is indexed, and why is the rest not? | `docs/13` state table |
@@ -31,7 +31,8 @@ An audit that ends at "I changed it" is half an audit. This is how a change is p
 2. **High impressions, low CTR** — a title/description problem, or an AI Overview absorbing the click.
 3. **Pages declining over the last 3 months vs the previous 3** — the refresh queue.
 4. **One query, several URLs** — cannibalisation. Merge or differentiate.
-5. **Filter out brand queries** — otherwise brand growth masks whether SEO is actually working.
+5. **Filter out brand queries** — otherwise brand growth masks whether SEO is actually working. Search Console has a built-in **Branded / Non-branded** filter for this: it covers the brand name in every language, its misspellings and the site's own products, and is classified by an AI-assisted system rather than a regex — so expect the occasional misfiled query.
+   - ⚠️ The filter exists only for **top-level properties** (not URL-path or subdomain properties) with enough query volume. Where it is missing, fall back to a query regex.
 
 - ⚠️ **GSC limits:** ~2 days of latency, 16 months of history, anonymised queries omitted, and totals do not reconcile when you combine the page and query dimensions.
 
@@ -53,9 +54,39 @@ ORDER BY impressions DESC
 LIMIT 100;
 ```
 
+### The same data from the Search Analytics API
+
+Since **16 Nov 2026** the API carries what the report's filters do, so dashboards no longer need a brand regex or one request per country:
+
+- ✅ **`brandedClassification`** — group or filter by branded vs non-branded.
+  - ⚠️ Only for eligible properties (the same rule as the filter above). For any other property **the response has no rows** — an empty result means "not eligible", not "no branded traffic".
+- ✅ **`type: webMultimodal`** — performance from Google Lens, Circle to Search and image uploads. Google is adding it to BigQuery for properties with the bulk export on.
+- ✅ **`filterLists`** — several countries or devices in one request (a DACH or LATAM view without stitching responses together).
+
 ## Analytics
 
 Set up, at minimum: organic channel split by engine, landing-page performance, conversion events, on-site search terms, and an **AI referral segment** — traffic whose source host is `chatgpt.com`, `perplexity.ai`, `copilot.microsoft.com`, `gemini.google.com` or `claude.ai`. That segment is the only place AI *traffic* (as opposed to AI impressions) shows up at all.
+
+### Recognising Google Search traffic in analytics and logs
+
+Google Search sends an **origin-only** `Referer`: the scheme and host, never the path or the query. The search terms are only in Search Console.
+
+| Where the click happened | `Referer` |
+|---|---|
+| Google Search on the web | `https://www.google.com/` or a local domain (`https://www.google.co.uk/`, `https://www.google.co.jp/`) |
+| Google app on Android | `android-app://com.google.android.googlequicksearchbox/https/www.google.com` when the app opens the link in a browser tab; otherwise the web value |
+| Google app on iOS | the web value |
+
+- ⚠️ **Discover and Google Images send the same values**, so a referrer match counts them as Search. Only Search Console separates Discover from Search (`docs/09`).
+- ⚠️ **A blank `Referer` is normal**, and lands the visit in "direct": private browsing and anti-fingerprinting, results opened in a new tab in some browsers, a native search widget handing off to a browser, privacy extensions.
+- ✅ In raw logs, match the header **on landing-page requests only**. Images, CSS and JavaScript carry your own page's URL as their referrer.
+- ✅ If Google traffic shows up as referral or direct, look first at your own configuration: custom channel rules, referral exclusions, filters.
+
+**Analytics will not equal Search Console clicks**, and that alone is not a fault:
+
+- Search Console counts a **click** on the result; analytics counts a **session** only after the page loads and the tag runs — consent choices and ad blockers remove some.
+- A **client-side redirect** (JavaScript, meta refresh) can replace the referrer with your own URL, and a redirect that sends a stricter `Referrer-Policy` can drop it. Redirects that lose the query string lose `gclid` too.
+- Search Console is **organic only**; analytics may be counting Google Ads clicks in the same total.
 
 ## The KPI set
 
@@ -88,6 +119,8 @@ Keep that log in the repository next to the docs, and mark known core updates on
 ```
 1. IS IT REAL?      Analytics broken? Tag lost? Did GSC impressions drop too?
                     If impressions held, the problem is measurement or CTR.
+                    Analytics down but GSC clicks flat is measurement: a consent
+                    banner, a new redirect dropping the referrer, a channel rule.
 2. IS IT TECHNICAL? 5xx spike, robots.txt change, leaked noindex, broken
                     canonical, unreachable sitemap, CWV collapse.
                     → Fast to fix, fast to recover.
@@ -131,3 +164,7 @@ Keep that log in the repository next to the docs, and mark known core updates on
 - Generative AI performance report — https://support.google.com/webmasters/answer/16984139
 - Search generative AI control — https://support.google.com/webmasters/answer/16908024
 - BigQuery export sample queries (`search_type = 'WEB'`, `query != ''`) — https://support.google.com/webmasters/answer/12917174
+- Identify Google Search traffic (Referer values, why numbers differ) — https://developers.google.com/search/docs/monitor-debug/identify-google-search-traffic
+- Branded queries filter — https://developers.google.com/search/blog/2025/11/search-console-branded-filter
+- Web multimodal Search performance reporting — https://developers.google.com/search/blog/2026/09/web-multimodal-in-sc
+- Search Analytics API: branded, multimodal and multi-value filters (Nov 2026) — https://developers.google.com/search/blog/2026/11/search-analytics-api-update

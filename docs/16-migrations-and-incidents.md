@@ -40,12 +40,24 @@ The two situations where SEO work is time-critical and mistakes are expensive to
 4. Scan production for `noindex`.
 5. Submit the new sitemap — and **leave the old one in place for a while** so Google recrawls the old URLs and sees the redirects.
 6. Domain change: use GSC's **Change of Address** tool — for **every verified variant** of the old domain (subdomains, `www` and non-`www`), even ones you don't actively use. It isn't needed for HTTP→HTTPS or `www`↔non-`www` moves.
-7. Repoint analytics, monitoring and CDN configuration.
+7. Repoint analytics, monitoring and CDN configuration. If the move puts the site behind a CDN for the first time, see *Moving behind a CDN* below.
 
 **First 72 hours:** watch 5xx, 404 spikes, CWV regressions, traffic anomalies.
 **First 4 weeks:** watch old URLs move to "Page with redirect" in the Pages report, and the new URLs' indexing curve.
 
 **Expected behaviour:** 2–6 weeks of fluctuation is normal. Still 20%+ down after 8 weeks means the migration is wrong — re-audit the inventory and the redirect map rather than waiting longer.
+
+## Moving behind a CDN
+
+No URL changes, so it looks like the safe migration. The risk is in the first days, and it comes from how crawling reacts.
+
+- ⚠️ **Crawling speeds up the moment DNS points at the edge.** Google raises a host's crawl capacity limit when responses are fast and stable, and lowers it when they slow down (`docs/12`). A CDN edge looks like a large hardware upgrade.
+- ⚠️ **A new CDN's cache is empty.** The first request for each URL at each edge location is a cache miss that goes straight to the origin. Visitors warm a small set of popular pages quickly; crawlers walk the breadth of the inventory — so the faster crawl lands on the origin, the very load the CDN was bought to remove.
+- ❌ **Don't answer the spike with blanket bot protection.** Google's crawlers fail CAPTCHAs and challenge pages; to Google the site looks restricted or broken, crawling backs off, and pages start to drop out of Search.
+- ✅ **Exempt verified crawlers** in the CDN and firewall — most have a "known / verified bots" rule; Google's can be checked against its published IP ranges (`docs/12`). To keep a specific bot out, name it in robots.txt or a targeted rule instead of blocking every automated client.
+- ✅ **Pre-warm the cache** before routing all traffic through the CDN: fetch the highest-traffic pages, the pages about to peak (a launch, a sale) and the most-crawled URLs through it, at a controlled pace.
+- ✅ **If the origin still can't cope, brake briefly:** return `429` or `503` for a few hours — **1–2 days at most** (`docs/12`).
+- ✅ Afterwards, watch **Crawl stats** (practice, not Google guidance): a jump in 403s or in average response time that starts on the day of the switch points at the CDN's rules, not at the content.
 
 ## Redirect rules
 
@@ -92,6 +104,7 @@ Decide these before you need them, so nobody is negotiating during an incident:
 - Site moves with URL changes — https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes
 - Site moves without URL changes — https://developers.google.com/search/docs/crawling-indexing/site-move-no-url-changes
 - Debugging search traffic drops — https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops
+- Moving to a CDN without overwhelming your origin or blocking Googlebot (Nov 2026) — https://developers.google.com/search/blog/2026/11/crawling-cdn
 - Help for hacked sites — https://web.dev/articles/hacked
 - Malware and unwanted software — https://developers.google.com/search/docs/monitor-debug/security/malware
 - Site moves with URL changes (Change of Address for all variants; 301/308) — https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes

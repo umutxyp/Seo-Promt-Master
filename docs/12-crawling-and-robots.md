@@ -66,6 +66,7 @@ actual crawling = min(crawl capacity limit, crawl demand)
 ```
 
 - **Capacity limit** is how much your server can take without degrading. It rises when responses are fast and **falls quickly** on 5xx, 429 and timeouts — and recovers slowly.
+  - ⚠️ That is why crawling **increases** right after a site moves behind a CDN: the edge answers fast, the limit goes up, and every uncached URL is still fetched from the origin (`docs/16`).
 - **Demand** is how much Google *wants* to crawl you, from three inputs: perceived unique inventory (duplicates inflate it wastefully), popularity, and staleness (how often content genuinely changes).
 
 **Who needs to care:** Google writes its crawl-budget guide for **1M+ unique pages changing about weekly**, **10,000+ pages changing daily**, or sites with a large share of URLs stuck in *Discovered – currently not indexed*. Below that, hygiene is usually enough — but a **new site** with few links has little crawl demand at any size, which is why `docs/06` ramps its sitemap up gradually.
@@ -110,7 +111,7 @@ Look for: crawl requests concentrated on worthless paths, important templates cr
 GSC → **Settings → Crawl stats**: total request trend, average response time, response-code distribution, file type, purpose (discovery vs refresh), and Googlebot type.
 
 - ⚠️ Serving Googlebot 429/500/503 slows crawling, but only as an emergency brake: Google advises against doing it for **longer than 1–2 days** — if Googlebot sees these codes on the same URL for multiple days, the URL may be dropped from the index.
-- ⚠️ WAF and bot-protection rules that catch Googlebot show up as a sudden 403/503 spike in Crawl Stats. On Cloudflare, verify the "Verified Bots" allow rule.
+- ⚠️ WAF and bot-protection rules that catch Googlebot show up as a sudden 403/503 spike in Crawl Stats. On Cloudflare, verify the "Verified Bots" allow rule. Google's crawlers cannot pass a CAPTCHA or a challenge page; a blanket rule left on makes pages drop out of Search (`docs/16`).
 
 ## Checklist
 - [ ] robots.txt returns 200, is under 500 KiB, and has an absolute `Sitemap:` line
@@ -127,5 +128,6 @@ GSC → **Settings → Crawl stats**: total request trend, average response time
 - Verifying Googlebot — https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests
 - How Google interprets robots.txt (status codes, size limit) — https://developers.google.com/crawling/docs/robots-txt/robots-txt-spec
 - Reduce Googlebot's crawl rate (429/500/503 for 1–2 days at most) — https://developers.google.com/crawling/docs/crawlers-fetchers/reduce-crawl-rate
+- Moving to a CDN: crawl rate, cold caches and bot protection (Nov 2026) — https://developers.google.com/search/blog/2026/11/crawling-cdn
 - RFC 9309, Robots Exclusion Protocol — https://www.rfc-editor.org/rfc/rfc9309.html
 - HTTP status codes and network errors — https://developers.google.com/crawling/docs/troubleshooting/http-status-codes

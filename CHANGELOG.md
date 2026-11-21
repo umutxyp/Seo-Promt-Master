@@ -3,6 +3,34 @@
 Versions follow semver. A major version means the workflow, the file layout or
 the scoring changed in a way that makes old output no longer comparable.
 
+## 2.2.1 — 2026-11-21
+
+What Google has published since the 2.2.0 review. The November 2026 core update
+is still rolling out (started 10 November; the Search Status Dashboard shows no
+completion yet), so `docs/09` keeps it as "rolling out" — its duration goes into
+the timeline once Google marks it complete, and nothing about its effects is
+recorded before then.
+
+- **Moving behind a CDN** (`docs/16`, `docs/12`, the infrastructure checklist):
+  why crawling speeds up the moment a site is behind an edge network, why a cold
+  cache sends that crawl to the origin, and what to do about it — exempt
+  verified crawlers from bot challenges, pre-warm the cache, and use 429/503 for
+  1–2 days at most. From Google's post of 11 November 2026.
+- **Recognising Google Search traffic in analytics and logs** (`docs/15`): the
+  `Referer` values Search sends, why Discover and Images look the same, why the
+  header is sometimes blank, and why analytics sessions never equal Search
+  Console clicks. From the page Google added on 12 November 2026.
+- **Search Analytics API** (`docs/15`): `brandedClassification`,
+  `type: webMultimodal` and `filterLists`, added on 16 November 2026 — with the
+  trap that an ineligible property returns no rows rather than an error.
+- **The Performance report's Branded / Non-branded filter and multimodal search
+  type** (`docs/15`) were missing from the report table; "filter out brand
+  queries" now says how, and where the filter is unavailable.
+- The traffic-drop prompt separates a measurement problem (analytics down,
+  Search Console flat) from a real drop, and names a newly added CDN as a
+  technical cause.
+- Fixed: the README still said "reviewed October 2026".
+
 ## 2.2.0 — 2026-11-11
 
 The knowledge base re-checked claim by claim against the engines' own

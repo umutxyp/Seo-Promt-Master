@@ -17,6 +17,7 @@ Shared systems that affect **many pages at once**. Fix these first — they give
 - [ ] References the sitemap (`Sitemap:` line) — `docs/06`
 - [ ] AI crawlers (GPTBot, Google-Extended, ClaudeBot, PerplexityBot, OAI-SearchBot, etc.) are deliberately addressed, not left to template defaults — `docs/10`
 - [ ] Bingbot, Applebot and every other search engine the project wants are allowed; no `Crawl-delay` throttling Bing — `docs/18`
+- [ ] CDN / WAF bot protection exempts verified search crawlers (no CAPTCHA or challenge page for Googlebot or Bingbot) — `docs/12`, `docs/16`
 
 ## Other engines
 - [ ] Bing Webmaster Tools verified, sitemaps submitted — `docs/18`
